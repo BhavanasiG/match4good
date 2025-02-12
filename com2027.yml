@@ -1,14 +1,15 @@
-project_name: Project Name
+project_name: MatchForGood (current consideration)
 
 project_description: |
-  Short description (100 words) about the web app proposed and developed. You can provide a brief overview of the project here, including which UN's SDGs this project is tackling.
-
-  Line breaks are permitted.
+  MatchForGood is a platform focusing on generating social impact through volunteer contributions. This project enables charities to contribute to the good health and wellbeing of the communities (3) and reducing inequalities both in and through volunteering work (10). Our clients are dedicated to improving social outcomes for all. We connect outstanding volunteers with high impact organisations. 
 
 group_members:
-  - Member 1
-  - Member 2
-  - Member 3
-  - Member 4
+  - Ganesh Bhavanasi
+  - Leonardo Forchini
+  - Damy Matuwidi
+  - Patrick Noble
+  - Melvin Mahasivam
+  - Mithush Shivathaas
+  - Akshayan Thavarjah
 
 group_image: team.jpg
