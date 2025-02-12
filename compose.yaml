@@ -1,0 +1,40 @@
+services:  
+  postgres_db:
+    image: postgres:alpine
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: prisma
+    networks:
+      - prisma-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 2s
+      retries: 20
+    
+  migrate:
+    build:
+      dockerfile: MigrationDockerfile
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    networks:
+      - prisma-network
+
+  server:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      postgres_db:
+        condition: service_healthy
+    networks:
+      - prisma-network
+
+networks:
+  prisma-network:
