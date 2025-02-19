@@ -1,5 +1,6 @@
 import DynamicLoginLogoutButton from "@/lib/components/login";
 import { getUser } from "@/lib/prisma";
+import Link from "next/link";
 
 export default async function App() {
   const user = await getUser();
@@ -9,7 +10,12 @@ export default async function App() {
       <p>Hello, World!</p>
       <DynamicLoginLogoutButton />
 
-      {user && <p>{user.username}</p>}
+      {user && (
+        <>
+          <br />
+          <Link href="/user">{user.username}</Link>
+        </>
+      )}
     </div>
   );
 }

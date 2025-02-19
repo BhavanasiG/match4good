@@ -1,6 +1,7 @@
 "use server";
 
 import prisma, { getUser } from "@/lib/prisma";
+import { redirect } from "next/navigation";
 
 type Data = {
   username: string;
@@ -8,13 +9,12 @@ type Data = {
 
 export default async function updateUser({ username }: Data) {
   const user = await getUser();
-  console.log(user);
 
   if (!user) {
     return;
   }
 
-  const updateUser = await prisma.user.update({
+  await prisma.user.update({
     where: {
       user_id: user.user_id,
     },
@@ -23,5 +23,5 @@ export default async function updateUser({ username }: Data) {
     },
   });
 
-  console.log(updateUser);
+  return redirect("/user");
 }

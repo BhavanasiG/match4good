@@ -10,7 +10,7 @@ export default async function App({ user }: Props) {
 
   return (
     <div>
-      <h1>Hello {user.username}</h1>
+      <h1>{user.username}</h1>
 
       <div>
         {user.owner_of.length > 0 && (
