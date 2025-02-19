@@ -15,10 +15,23 @@ datasource db {
 }
 
 model User {
-  id      Int    @id @default(autoincrement())
-  user_id String @unique
-  email   String
-  name    String
+  id       Int    @id @default(autoincrement())
+  user_id  String @unique
+  username String @unique
+
+  owner_of  Organization[] @relation("ownership")
+  member_of Organization[] @relation("membership")
+}
+
+model Organization {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+
+  owner   User @relation("ownership", fields: [ownerId], references: [id])
+  ownerId Int
+
+  members User[] @relation("membership")
 }
 
 model Opportunity {
