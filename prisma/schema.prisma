@@ -15,7 +15,6 @@ datasource db {
 }
 
 model User {
-<<<<<<< HEAD
   id       Int    @id @default(autoincrement())
   user_id  String @unique
   username String @unique
@@ -35,14 +34,6 @@ model Organization {
   members User[] @relation("membership")
 }
 
-=======
-  id      Int    @id @default(autoincrement())
-  user_id String @unique
-  email   String
-  name    String
-}
-
->>>>>>> 997e2c4e342fa74fba2d8f44966b4d363d6beb0d
 model Opportunity {
   id      Int    @id @default(autoincrement())
   opp_name String
