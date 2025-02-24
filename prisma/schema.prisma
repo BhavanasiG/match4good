@@ -20,3 +20,12 @@ model User {
   email   String
   name    String
 }
+
+model Opportunity {
+  id      Int    @id @default(autoincrement())
+  opp_name String
+  opp_description String?
+  opp_start_date DateTime
+  opp_end_date DateTime
+
+}
