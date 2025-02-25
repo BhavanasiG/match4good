@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+import CreateListingButton from "@/lib/components/createListing";
 import DynamicLoginLogoutButton from "@/lib/components/login";
 import { getUser } from "@/lib/prisma";
 import Link from "next/link";
@@ -10,6 +10,11 @@ export default async function App() {
     <div>
       <p>Hello, World!</p>
       <DynamicLoginLogoutButton />
+      <p> Create an opportunity</p>
+      <em>
+        {" "}
+        <CreateListingButton />{" "}
+      </em>
 
       {user && (
         <>
@@ -19,10 +24,4 @@ export default async function App() {
       )}
     </div>
   );
-=======
-import App from "./components/app";
-
-export default async function Home() {
-  return <App />;
->>>>>>> 997e2c4e342fa74fba2d8f44966b4d363d6beb0d
 }
