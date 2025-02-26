@@ -1,15 +1,51 @@
-merging:
-  stage: test
-  only: [ merge_requests ]
-  script:
-     - "[[ \"$CI_MERGE_REQUEST_TARGET_BRANCH_NAME\" =~ ^release$ ]] && [[ ! \"$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME\" =~ ^trunk$ ]] && echo 'Only trunk can be merged to release' && exit 1"
-     - exit 0
+image: node:latest
 
-pages:
-  stage: deploy
+stages:
+  - check
+  - docker
+  - install
+  - lint
+  - test
+  - deploy
+
+check:
+  stage: check
+  only: [merge_requests]
   script:
-      - apk add python3 py3-yaml py3-mako
-      - python3 /shared/com2027_site.py
+    - '[[ "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" =~ ^release$ ]] && [[ ! "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME" =~ ^trunk$ ]] && echo ''Only trunk can be merged to release'' && exit 1'
+    - exit 0
+
+install:
+  stage: install
+  only: [merge_requests]
+  needs: ["check"]
+  script:
+    - npm ci
+  artifacts:
+    paths:
+      - node_modules
+
+lint:
+  stage: lint
+  only: [merge_requests]
+  needs: ["install"]
+  script:
+    - npm run lint
+
+test:
+  stage: test
+  only: [merge_requests]
+  needs: ["install"]
+  script:
+    - npm run test
+
+deploy:
+  stage: deploy
+  only: [ merge_requests ]
+  needs: ["check"]
+  script:
+    - apk add python3 py3-yaml py3-mako
+    - python3 /shared/com2027_site.py
   artifacts:
     paths:
       - public

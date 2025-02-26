@@ -12,3 +12,5 @@ yarn-error.log
 .env
 next-env.d.ts
 generated
+.swc
+.husky
