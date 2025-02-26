@@ -1,4 +1,4 @@
-import User from "@/lib/components/user";
+import User from "@/components/user";
 import prisma from "@/lib/prisma";
 
 export default async function App({

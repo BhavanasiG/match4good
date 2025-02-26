@@ -1,4 +1,4 @@
-import DynamicLoginLogoutButton from "@/lib/components/login"
+import DynamicLoginLogoutButton from "@/components/login"
 import Link from "next/link"
 import Image from "next/image"
 

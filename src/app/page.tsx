@@ -1,5 +1,4 @@
-//import { getUser } from "@/lib/prisma";
-//import Link from "next/link";
+// import { getUser } from "@/lib/prisma";
 
 export default async function App() {
   // const user = await getUser();
@@ -7,15 +6,6 @@ export default async function App() {
   return (
     <div>
       <p>Hello, World!</p>
-
-      {/*
-      {user && (
-        <>
-          <br />
-          <Link href="/user">{user.username}</Link>
-        </>
-      )}
-      */}  
     </div>
   );
 }

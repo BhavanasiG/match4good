@@ -1,4 +1,4 @@
-import User from "@/lib/components/user";
+import User from "@/components/user";
 import { getUser } from "@/lib/prisma";
 import Link from "next/link";
 
