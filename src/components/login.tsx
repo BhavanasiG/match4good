@@ -7,8 +7,8 @@ import { auth0 } from "@/lib/auth0";
 export async function LoginButton() {
   return (
     <>
-      <a href="/auth/login?screen_hint=signup">Sign Up</a>
-      <a href="/auth/login">Log In</a>
+      <a href="/auth/login?screen_hint=signup" className="my-auto ml-4 sm:ml-8 font-medium">Sign Up</a>
+      <a href="/auth/login" className="my-auto ml-4 sm:ml-8 font-medium">Log In</a>
     </>
   );
 }
@@ -18,7 +18,7 @@ export async function LoginButton() {
  * @returns
  */
 export async function LogoutButton() {
-  return <a href="/auth/logout">Log Out</a>;
+  return <a href="/auth/logout" className="my-auto ml-4 sm:ml-8 font-medium">Log Out</a>;
 }
 
 /**
