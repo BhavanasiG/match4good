@@ -5,9 +5,5 @@ import Link from "next/link";
  * @returns
  */
 export default async function CreateListingButton() {
-  return (
-    <>
-      <Link href="/listing/new">Create Volunteering Opportunity</Link>
-    </>
-  );
+  return <Link href="/listing/new">Create Volunteering Opportunity</Link>;
 }
