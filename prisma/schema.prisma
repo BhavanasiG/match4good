@@ -28,8 +28,20 @@ model Organization {
   name        String  @unique
   description String?
 
-  owner   User @relation("ownership", fields: [ownerId], references: [id])
-  ownerId Int
+  owner    User @relation("ownership", fields: [owner_id], references: [id])
+  owner_id Int  @map("ownerId")
 
-  members User[] @relation("membership")
+  members  User[]    @relation("membership")
+  listings Listing[]
+}
+
+model Listing {
+  id            Int      @id @default(autoincrement())
+  name          String
+  description   String?
+  startDateTime DateTime
+  endDateTime   DateTime
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId Int          @map("organizationId")
 }
