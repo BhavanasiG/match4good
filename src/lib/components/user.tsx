@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 export type Props = { user: User | null };
 
+// todo: TSDoc for this function. What is this function doing?
 export default async function App({ user }: Props) {
   if (!user) {
     return notFound();
