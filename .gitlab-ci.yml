@@ -10,14 +10,16 @@ stages:
 
 check:
   stage: check
-  only: [merge_requests]
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   script:
-    - '[[ "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" =~ ^release$ ]] && [[ ! "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME" =~ ^trunk$ ]] && echo ''Only trunk can be merged to release'' && exit 1'
-    - exit 0
+    - '[[ "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" =~ ^release$ ]] && [[ ! "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME" =~ ^trunk$ ]] && echo "Only trunk can be merged to release" && exit 1'
+    - echo "Merge check passed."
 
 install:
   stage: install
-  only: [merge_requests]
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   needs: ["check"]
   script:
     - npm ci
@@ -27,21 +29,24 @@ install:
 
 lint:
   stage: lint
-  only: [merge_requests]
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   needs: ["install"]
   script:
     - npm run lint
 
 test:
   stage: test
-  only: [merge_requests]
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   needs: ["install"]
   script:
     - npm run test
 
 deploy:
   stage: deploy
-  only: [ merge_requests ]
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_REF_NAME == "release"'
   needs: ["check"]
   script:
     - apk add python3 py3-yaml py3-mako
@@ -49,5 +54,3 @@ deploy:
   artifacts:
     paths:
       - public
-  only:
-    - release
