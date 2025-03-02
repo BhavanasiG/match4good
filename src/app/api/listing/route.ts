@@ -4,11 +4,11 @@ import prisma from "@/lib/prisma";
 export async function GET() {
   try {
     const listings = await prisma.listing.findMany({
-      include: { organization: true }, // Fetch organization info too if needed
+      include: { organization: true },
     });
 
     return NextResponse.json(listings);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to fetch listings" }, { status: 500 });
   }
 }
