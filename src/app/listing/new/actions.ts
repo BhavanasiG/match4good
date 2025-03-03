@@ -12,6 +12,11 @@ export interface CreateListingData {
   organization_id: number;
 }
 
+/**
+ * This method returns an array containing the organizations a user is linked
+ * with or null
+ * @returns Array of organizations linked with user or null if no user logged in
+ */
 async function getUserOrganizations(): Promise<Organization[] | null> {
   // Makes sense to do appropriate checks before checking for organizaions
   // linked with user
