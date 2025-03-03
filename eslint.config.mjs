@@ -10,6 +10,17 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  {
+    rules: {
+      "@typescript-eslint/naming-convention": [
+        "error",
+        { selector: "variable", format: ["snake_case"] },
+        { selector: "typeLike", format: ["StrictPascalCase"] },
+        { selector: "function", format: ["strictCamelCase"] },
+      ],
+    },
+  },
+
   ...compat.extends("next/core-web-vitals", "next/typescript"),
 ];
 
