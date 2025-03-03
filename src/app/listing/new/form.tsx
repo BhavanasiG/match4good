@@ -103,14 +103,14 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
         </div>
 
         <div>
-          <label htmlFor="startDateTime">
+          <label htmlFor="start_datetime">
             Opprtunity start date and time (24hr):
           </label>
           <br />
           <input
             type="datetime-local"
-            name="startDateTime"
-            id="startDateTime"
+            name="start_datetime"
+            id="start_datetime"
             onChange={onChange}
             value={form_data.start_datetime}
             required
@@ -119,14 +119,14 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
         </div>
 
         <div>
-          <label htmlFor="endDateTime">
+          <label htmlFor="end_datetime">
             Opportunity end date and time (24hr):
           </label>
           <br />
           <input
             type="datetime-local"
-            name="endDateTime"
-            id="endDateTime"
+            name="end_datetime"
+            id="end_datetime"
             onChange={onChange}
             value={form_data.end_datetime}
             required
@@ -134,13 +134,13 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
         </div>
 
         <div>
-          <label htmlFor="organisationId">
+          <label htmlFor="organisation_id">
             Select Organisation opportunity should be listed for:
           </label>
           <br />
           <select
-            name="organizationId"
-            id="organizationId"
+            name="organisation_id"
+            id="organisation_id"
             onChange={onChange}
             value={form_data.organization_id}
             required
