@@ -8,7 +8,24 @@ export interface CreateListingFormProps {
   user: User;
 }
 
-export default function CreateListingForm({ user }: CreateListingFormProps) {
+/**
+ * Creates form and handles form submission for creating volunteer oppportunity
+ * by validating the input fields
+ *
+ * Completes/Ensures these **client-side** actions:
+ * - Ensures the name field is not empty.
+ * - Checks that both start and end dates and times are provided.
+ * - Validates that the end date and time is the same as or
+ * after the start date and time.
+ * - Displays an appropriate error message if validation fails.
+ * - Logs the form data to the console if all validations pass
+ * and passes to the server to create new record in database
+ * - Listing is linked to one of the user's organisation
+ * @param param0 The user (object) for which a new listing form will be
+ * generated
+ * @returns HTML form that allows user to create a new listing
+ */
+export default function createListingForm({ user }: CreateListingFormProps) {
   const user_orgs = [...new Set([...user.owner_of, ...user.member_of])];
 
   const [error, setError] = useState<string>("");
