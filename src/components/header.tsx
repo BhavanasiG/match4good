@@ -2,6 +2,10 @@ import DynamicLoginLogoutButton from "@/components/login";
 import Link from "next/link";
 import Image from "next/image";
 
+/**
+ * Creates the common header component for the site
+ * @returns Header component for the site
+ */
 export default function Header() {
   return (
     <header>
