@@ -4,7 +4,7 @@ import { auth0 } from "@/lib/auth0";
  * This component has a link to the sign-up page and the log in page
  * @returns
  */
-export async function LoginButton() {
+export function LoginButton() {
   return (
     <>
       <a
@@ -24,7 +24,7 @@ export async function LoginButton() {
  * This component is a link to the log out endpoint
  * @returns
  */
-export async function LogoutButton() {
+export function LogoutButton() {
   return (
     <a href="/auth/logout" className="my-auto ml-4 sm:ml-8 font-medium">
       Log Out

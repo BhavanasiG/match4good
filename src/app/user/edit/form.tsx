@@ -8,7 +8,7 @@ export type Props = {
   user: User;
 };
 
-export default function Form({ user }: Props) {
+export default function EditUserForm({ user }: Props) {
   const [username, setUsername] = useState(user.username);
 
   return (

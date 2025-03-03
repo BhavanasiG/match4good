@@ -9,24 +9,24 @@ export interface CreateListingFormProps {
 }
 
 export default function CreateListingForm({ user }: CreateListingFormProps) {
-  const userOrgs = [...new Set([...user.owner_of, ...user.member_of])];
+  const user_orgs = [...new Set([...user.owner_of, ...user.member_of])];
 
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
 
-  const [formData, setFormData] = useState<CreateListingData>({
+  const [form_data, setFormData] = useState<CreateListingData>({
     name: "",
     description: "",
-    startDateTime: new Date().toISOString(),
-    endDateTime: new Date().toISOString(),
-    organizationId: userOrgs.length == 0 ? 0 : userOrgs[0].id,
+    start_datetime: new Date().toISOString(),
+    end_datetime: new Date().toISOString(),
+    organization_id: user_orgs.length == 0 ? 0 : user_orgs[0].id,
   });
 
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     console.log(name, value);
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData((prev_data) => ({
+      ...prev_data,
       // Ensure organizationId is a number
       [name]: name === "organizationId" ? Number(value) : value,
     }));
@@ -37,42 +37,42 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
     setError("");
     setSuccess("");
 
-    const startDateTime = new Date(formData.startDateTime);
-    const endDateTime = new Date(formData.endDateTime);
+    const start_datetime = new Date(form_data.start_datetime);
+    const end_datetime = new Date(form_data.end_datetime);
     const now = new Date();
 
     // We need to validate the user's inputs
-    if (!formData.name.trim()) {
+    if (!form_data.name.trim()) {
       setError("Name is required");
       return;
     }
 
-    if (!formData.startDateTime || !formData.endDateTime) {
+    if (!form_data.start_datetime || !form_data.end_datetime) {
       setError("Both start and end dates are required");
       return;
     }
-    if (startDateTime < now) {
+    if (start_datetime < now) {
       setError("Start date cannot be in the past");
       return;
     }
 
-    if (startDateTime > endDateTime) {
+    if (start_datetime > end_datetime) {
       setError("End date must be same as or after the start date");
       return;
     }
 
-    if (!userOrgs.some((org) => org.id === formData.organizationId)) {
+    if (!user_orgs.some((org) => org.id === form_data.organization_id)) {
       setError("Invalid organization selected.");
       return;
     }
 
-    const status = await createListing(formData);
+    const status = await createListing(form_data);
     setError(status);
   };
 
   return (
     <div className="create-listing-form">
-      <form onSubmit={onSubmit}>
+      <form onSubmit={() => onSubmit}>
         <div>
           <label htmlFor="name">Opportunity name:</label>
           <br />
@@ -80,8 +80,8 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
             type="text"
             name="name"
             id="name"
-            onChange={onChange}
-            value={formData.name}
+            onChange={() => onChange}
+            value={form_data.name}
             required
           />
           <br />
@@ -96,8 +96,8 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
             type="text"
             name="description"
             id="description"
-            onChange={onChange}
-            value={formData.description}
+            onChange={() => onChange}
+            value={form_data.description}
           />
           <br />
         </div>
@@ -111,8 +111,8 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
             type="datetime-local"
             name="startDateTime"
             id="startDateTime"
-            onChange={onChange}
-            value={formData.startDateTime}
+            onChange={() => onChange}
+            value={form_data.start_datetime}
             required
           />
           <br />
@@ -127,8 +127,8 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
             type="datetime-local"
             name="endDateTime"
             id="endDateTime"
-            onChange={onChange}
-            value={formData.endDateTime}
+            onChange={() => onChange}
+            value={form_data.end_datetime}
             required
           />
         </div>
@@ -141,14 +141,14 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
           <select
             name="organizationId"
             id="organizationId"
-            onChange={onChange}
-            value={formData.organizationId}
+            onChange={() => onChange}
+            value={form_data.organization_id}
             required
           >
             <option value="" disabled>
               --Select an organization--
             </option>
-            {userOrgs.map((org) => (
+            {user_orgs.map((org) => (
               <option key={org.id} value={org.id}>
                 {org.name}
               </option>

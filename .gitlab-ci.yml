@@ -23,9 +23,11 @@ install:
   needs: ["check"]
   script:
     - npm ci
+    - npx prisma generate
   artifacts:
     paths:
       - node_modules
+      - generated
 
 lint:
   stage: lint
