@@ -72,7 +72,7 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
 
   return (
     <div className="create-listing-form">
-      <form onSubmit={() => onSubmit}>
+      <form onSubmit={onSubmit}>
         <div>
           <label htmlFor="name">Opportunity name:</label>
           <br />
@@ -80,7 +80,7 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
             type="text"
             name="name"
             id="name"
-            onChange={() => onChange}
+            onChange={onChange}
             value={form_data.name}
             required
           />
@@ -96,7 +96,7 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
             type="text"
             name="description"
             id="description"
-            onChange={() => onChange}
+            onChange={onChange}
             value={form_data.description}
           />
           <br />
@@ -111,7 +111,7 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
             type="datetime-local"
             name="startDateTime"
             id="startDateTime"
-            onChange={() => onChange}
+            onChange={onChange}
             value={form_data.start_datetime}
             required
           />
@@ -127,7 +127,7 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
             type="datetime-local"
             name="endDateTime"
             id="endDateTime"
-            onChange={() => onChange}
+            onChange={onChange}
             value={form_data.end_datetime}
             required
           />
@@ -141,7 +141,7 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
           <select
             name="organizationId"
             id="organizationId"
-            onChange={() => onChange}
+            onChange={onChange}
             value={form_data.organization_id}
             required
           >

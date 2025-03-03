@@ -9,22 +9,22 @@ export default function Footer() {
           <Link href={"/"}>
             <Image
               alt="Match4Good Logo"
-              src="logo_white.svg"
+              src="/logo_white.svg"
               className="sm:hidden my-auto w-full h-8 md:h-11"
               width={0}
               height={0}
             />
             <Image
               alt="Match4Good Logo"
-              src="logo_extended_white.svg"
+              src="/logo_extended_white.svg"
               className="hidden sm:block my-auto w-full h-8 md:h-11"
               width={0}
               height={0}
             />
           </Link>
           <p className="flex">
-            <span className="hidden sm:block">Copyright&nbsp;</span>© Match4Good
-            2025
+            <span className="hidden sm:block">Copyright&nbsp;</span>©
+            Match4Good 2025
           </p>
         </div>
         <div className="flex flex-col text-center">
