@@ -31,6 +31,13 @@ async function getUserOrganizations(): Promise<Organization[] | null> {
   return user_orgs;
 }
 
+/**
+ * This function takes in form data, validates it and, if valid,
+ * creates a new lisiting.
+ * @param form_data Form data inputted/submitted by user.
+ * @returns redirection to new created listing (if valid data inputted),
+ * else returns an error message.
+ */
 export async function createListing(form_data: CreateListingData) {
   if (!form_data.name.trim()) {
     return "Name is required";
