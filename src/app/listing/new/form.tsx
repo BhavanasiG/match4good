@@ -25,7 +25,7 @@ export interface CreateListingFormProps {
  * generated
  * @returns HTML form that allows user to create a new listing
  */
-export default function createListingForm({ user }: CreateListingFormProps) {
+export default function CreateListingForm({ user }: CreateListingFormProps) {
   const user_orgs = [...new Set([...user.owner_of, ...user.member_of])];
 
   const [error, setError] = useState<string>("");
