@@ -3,6 +3,7 @@ import { auth0 } from "@/lib/auth0";
 
 const prisma = new PrismaClient();
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const globalForPrisma = global as unknown as { prisma: typeof prisma };
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;

@@ -1,7 +1,7 @@
 import { getUser } from "@/lib/prisma";
-import Form from "./form";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import EditUserForm from "./form";
 
 export default async function App() {
   const user = await getUser();
@@ -16,7 +16,7 @@ export default async function App() {
 
       <div>
         <h2>Change your information</h2>
-        <Form user={user} />
+        <EditUserForm user={user} />
         <Link href="/user">Cancel</Link>
       </div>
     </div>

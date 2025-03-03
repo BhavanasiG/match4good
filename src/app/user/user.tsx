@@ -3,10 +3,10 @@ import { User } from "@/lib/prisma";
 export type Props = { user: User };
 
 /**
- * Displays basic user information such as username, owned organizations, 
+ * Displays basic user information such as username, owned organizations,
  * and orgs the user is a member of.
  * @param Props accepts a prisma user object to display
- * @returns 
+ * @returns
  */
 export async function UserInfo({ user }: Props) {
   return (
