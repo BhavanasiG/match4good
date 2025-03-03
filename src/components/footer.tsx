@@ -1,6 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 
+/**
+ * The function creates the footer to be used on the website
+ * @returns Common footer for webpages
+ */
 export default function Footer() {
   return (
     <header>
