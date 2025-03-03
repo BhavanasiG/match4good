@@ -8,7 +8,7 @@ export type Props = { user: User };
  * @param Props accepts a prisma user object to display
  * @returns
  */
-export async function UserInfo({ user }: Props) {
+export function UserInfo({ user }: Props) {
   return (
     <div>
       <h1>{user.username}</h1>
