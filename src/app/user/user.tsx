@@ -1,13 +1,14 @@
 import { User } from "@/lib/prisma";
-import { notFound } from "next/navigation";
 
-export type Props = { user: User | null };
+export type Props = { user: User };
 
-export default async function App({ user }: Props) {
-  if (!user) {
-    return notFound();
-  }
-
+/**
+ * Displays basic user information such as username, owned organizations, 
+ * and orgs the user is a member of.
+ * @param Props accepts a prisma user object to display
+ * @returns 
+ */
+export async function UserInfo({ user }: Props) {
   return (
     <div>
       <h1>{user.username}</h1>

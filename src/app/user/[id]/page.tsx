@@ -1,4 +1,5 @@
-import User from "@/components/user";
+import { notFound } from "next/navigation";
+import { UserInfo } from "../user";
 import prisma from "@/lib/prisma";
 
 export default async function App({
@@ -6,13 +7,17 @@ export default async function App({
 }: {
   params: Promise<{ id: number }>;
 }) {
-  const username = (await params).id;
+  const id = (await params).id;
   const user = await prisma.user.findUnique({
     where: {
-      id: username,
+      id,
     },
     include: { member_of: true, owner_of: true },
   });
 
-  return <User user={user} />;
+  if (!user) {
+    return notFound();
+  }
+
+  return <UserInfo user={user} />;
 }
