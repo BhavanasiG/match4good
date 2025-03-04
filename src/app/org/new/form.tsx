@@ -3,9 +3,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { createOrg, CreateOrgFormData } from "./actions";
 
-export interface Props {}
-
-export default function CreateOrgForm({}: Props) {
+export default function CreateOrgForm() {
   const [form_data, setFormData] = useState<CreateOrgFormData>({
     name: "",
     description: undefined,
