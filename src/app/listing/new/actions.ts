@@ -31,6 +31,23 @@ async function getUserOrganizations(): Promise<Organization[] | null> {
   return user_orgs;
 }
 
+/**
+ * Creates form and handles form submission for creating volunteer oppportunity
+ * by validating the input fields
+ *
+ * Completes/Ensures these **server-side** actions:
+ * - Ensures the name field is not empty.
+ * - Checks that both start and end dates and times are provided.
+ * - Validates that the end date and time is the same as or
+ * after the start date and time.
+ * - Displays an appropriate error message if validation fails.
+ * - Logs the form data to the console if all validations pass
+ * and passes to the server to create new record in database
+ * - Listing is linked to one of the user's organisation
+ * @param form_data Form data inputted/submitted by user.
+ * @returns redirection to new created listing (if valid data inputted),
+ * else returns an error message.
+ */
 export async function createListing(form_data: CreateListingData) {
   if (!form_data.name.trim()) {
     return "Name is required";
