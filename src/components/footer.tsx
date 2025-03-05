@@ -1,9 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 
+/**
+ * The function creates the footer to be used on the website
+ * @returns Common footer for webpages
+ */
 export default function Footer() {
   return (
-    <header>
+    <footer>
       <div className="flex flex-row w-screen p-12 px-6 text-xs sm:text-sm md:text-base md:px-16 lg:px-24 border-t justify-between bg-lime-500 text-white">
         <div className="flex flex-col text-center">
           <Link href={"/"}>
@@ -37,6 +41,6 @@ export default function Footer() {
           <Link href={"/"}>Cookies Policy</Link>
         </div>
       </div>
-    </header>
+    </footer>
   );
 }
