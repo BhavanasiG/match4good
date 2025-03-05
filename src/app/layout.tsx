@@ -4,7 +4,7 @@ import "./globals.css";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 
-const InterSans = Inter({
+const inter_sans = Inter({
   variable: "--font-inter-sans",
   subsets: ["latin"],
 });
@@ -25,7 +25,7 @@ export default function rootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body
-        className={`${InterSans.variable} antialiased flex flex-col min-h-screen`}
+        className={`${inter_sans.variable} antialiased flex flex-col min-h-screen`}
       >
         <Header />
         <main className="grow">{children}</main>
