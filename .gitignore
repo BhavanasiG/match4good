@@ -3,4 +3,5 @@ node_modules/
 generated/
 .vscode
 .swc
-.husky/
+.husky/.vs/
+.vs/
