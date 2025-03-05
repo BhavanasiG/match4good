@@ -6,6 +6,7 @@ stages:
   - install
   - lint
   - test
+  - build
   - deploy
 
 check:
@@ -44,6 +45,14 @@ test:
   needs: ["install"]
   script:
     - npm run test
+
+build:
+  stage: build
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  needs: ["install"]
+  script:
+    - npm run build
 
 deploy:
   stage: deploy
