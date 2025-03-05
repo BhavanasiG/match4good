@@ -19,13 +19,16 @@ export default async function ListingsPage() {
               <h2 className="text-xl font-semibold">{listing.name}</h2>
               <p>{listing.description}</p>
               <p className="text-gray-500">
-                {new Date(listing.startDateTime).toLocaleDateString()} -{" "}
-                {new Date(listing.endDateTime).toLocaleDateString()}
+                {listing.start_datetime.toLocaleDateString()} -{" "}
+                {listing.start_datetime.toLocaleDateString()}
               </p>
               <p className="text-gray-600">
                 Organization: {listing.organization?.name || "Unknown"}
               </p>
-              <Link href={`/listing/${listing.id}`} className="text-blue-500 underline">
+              <Link
+                href={`/listing/${listing.id}`}
+                className="text-blue-500 underline"
+              >
                 View Details
               </Link>
             </li>
