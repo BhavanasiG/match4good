@@ -9,7 +9,7 @@ export default function Header() {
         <div className="flex">
           <Link href={"/"}>
             <Image
-              src={"logo_extended.svg"}
+              src={"/logo_extended.svg"}
               alt="Match4Good Logo"
               width={0}
               height={0}
