@@ -3,25 +3,34 @@ import React from "react";
 /* eslint-disable @typescript-eslint/naming-convention */
 const AboutUsPage = () => {
   return (
-    <div style={{ padding: "2rem", max_width: "800px", margin: "auto" }}>
+    <div 
+      style={{ 
+        padding: "2rem", 
+        /* eslint-disable-next-line @typescript-eslint/naming-convention */
+        maxWidth: "800px", 
+        margin: "auto" 
+      }}
+    >
       <h1>About Us</h1>
-      <p>Welcome to Match4Good! We are dedicated to connecting people with meaningful volunteering opportunities.</p>
+      <p>
+        Welcome to Match4Good! We are dedicated to connecting people with meaningful
+        volunteering opportunities.
+      </p>
 
       <h2>Our Mission</h2>
-      <p>Our goal is to create a platform that empowers individuals and organizations to collaborate and make a positive impact in their communities.</p>
+      <p>
+        Our mission is to make volunteering more accessible and impactful by
+        bridging the gap between volunteers and organizations in need.
+      </p>
 
-      <h2>What We Do</h2>
-      <ul>
-        <li>Connect volunteers with organizations</li>
-        <li>Provide an easy-to-use platform for managing volunteer work</li>
-        <li>Encourage social responsibility and community engagement</li>
-      </ul>
-
-      <h2>Our Team</h2>
-      <p>We are a passionate group of developers, designers, and social impact advocates committed to making a difference.</p>
+      <h2>Get Involved</h2>
+      <p>
+        Whether you’re an individual looking to volunteer or an organization seeking
+        volunteers, we are here to help!
+      </p>
 
       <h2>Contact Us</h2>
-      <p>If you have any questions, feel free to reach out at <a href="mailto:support@match4good.com">support@match4good.com</a>.</p>
+      <p>If you have any questions, reach out at support@match4good.com.</p>
     </div>
   );
 };
