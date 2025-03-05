@@ -83,8 +83,8 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
       return;
     }
 
-    const status = await createListing(form_data);
-    setError(status);
+    const error = await createListing(form_data);
+    setError(error);
   };
 
   return (
@@ -173,8 +173,8 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
           </select>
         </div>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        {success && <p style={{ color: "green" }}>{success}</p>}
+        {error && <p className={"text-red-600"}>{error}</p>}
+        {success && <p className={"text-red-600"}>{success}</p>}
 
         <br />
         <button type="submit">Submit</button>
