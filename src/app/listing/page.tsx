@@ -19,8 +19,8 @@ export default async function ListingsPage() {
               <h2 className="text-xl font-semibold">{listing.name}</h2>
               <p>{listing.description}</p>
               <p className="text-gray-500">
-                {listing.start_datetime.toLocaleDateString()} -{" "}
-                {listing.start_datetime.toLocaleDateString()}
+                {listing.startDateTime.toLocaleDateString()} -{" "}
+                {listing.endDateTime.toLocaleDateString()}
               </p>
               <p className="text-gray-600">
                 Organization: {listing.organization?.name || "Unknown"}

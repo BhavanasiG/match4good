@@ -1,6 +1,6 @@
 /* import Image from "next/image"; */
 
-export default async function App() {
+export default function App() {
   return (
     <>
       <section className="flex flex-col p-10 px-24">

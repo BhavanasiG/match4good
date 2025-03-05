@@ -20,8 +20,8 @@ export default async function ListingPage({ params }: ListingPageProps) {
       <h1 className="text-3xl font-bold">{listing.name}</h1>
       <p className="text-gray-700">{listing.description}</p>
       <p className="text-gray-500">
-        {new Date(listing.start_datetime).toLocaleDateString()} -{" "}
-        {new Date(listing.end_datetime).toLocaleDateString()}
+        {new Date(listing.startDateTime).toLocaleDateString()} -{" "}
+        {new Date(listing.endDateTime).toLocaleDateString()}
       </p>
       <p className="text-gray-600">
         Organization: {listing.organization?.name || "Unknown"}
