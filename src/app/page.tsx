@@ -1,5 +1,6 @@
 import CreateListingButton from "@/components/createListing";
 import DynamicLoginLogoutButton from "@/components/login";
+import ViewListingButton from "@/components/viewListing";
 
 export default function App() {
   return (
@@ -8,6 +9,8 @@ export default function App() {
       <DynamicLoginLogoutButton />
       <br />
       <CreateListingButton />
+      <br />
+      <ViewListingButton />
     </div>
   );
 }
