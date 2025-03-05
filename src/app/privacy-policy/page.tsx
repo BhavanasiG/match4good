@@ -1,8 +1,16 @@
 import React from "react";
 
+/* eslint-disable @typescript-eslint/naming-convention */
 const PrivacyPolicy = () => {
   return (
-    <div style={{ padding: "2rem", maxWidth: "800px", margin: "auto" }}>
+    <div 
+      style={{ 
+        padding: "2rem", 
+        /* eslint-disable-next-line @typescript-eslint/naming-convention */
+        maxWidth: "800px", 
+        margin: "auto" 
+      }}
+    >
       <h1>Privacy Policy</h1>
       <p>Last updated: March 2025</p>
       <p>Welcome to Match4Good! Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect your information.</p>
@@ -24,5 +32,7 @@ const PrivacyPolicy = () => {
     </div>
   );
 };
+/* eslint-enable @typescript-eslint/naming-convention */
 
 export default PrivacyPolicy;
+
