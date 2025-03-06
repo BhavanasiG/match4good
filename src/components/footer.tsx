@@ -32,7 +32,7 @@ export default function Footer() {
           </p>
         </div>
         <div className="flex flex-col text-center">
-          <Link href={"/"}>About Match4Good</Link>
+          <Link href={"/about-us"}>About Us</Link>
           <Link href={"/"}>Contact Us</Link>
         </div>
         <div className="flex flex-col text-center">
