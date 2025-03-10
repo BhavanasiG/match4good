@@ -1,15 +1,15 @@
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 
-interface ListingPageProps {
-  params: Promise<{ id: number }>;
-}
-
-export default async function ListingPage({ params }: ListingPageProps) {
-  const { id } = await params; // Await params to get its properties
+export default async function ListingPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
 
   const listing = await prisma.listing.findUnique({
-    where: { id },
+    where: { id: parseInt(id) },
     include: { organization: true },
   });
 
