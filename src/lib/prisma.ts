@@ -36,8 +36,6 @@ export async function getUser(
   });
 
   if (!user) {
-    // todo: nicer default username than session.user.sub
-    // email/name/nickname?
     if (session.user.name && session.user.name.includes(" ")) {
       user = await prisma.user.create({
         data: {
