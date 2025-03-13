@@ -9,7 +9,7 @@
     "lint": "next lint",
     "db:deploy": "npx prisma migrate deploy && npx prisma generate",
     "test": "jest",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^4.0.1",
