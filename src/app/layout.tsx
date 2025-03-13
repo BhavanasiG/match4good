@@ -4,9 +4,9 @@ import "./globals.css";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 
-const inter_sans = Inter({
-  variable: "--font-inter-sans",
+const inter = Inter({
   subsets: ["latin"],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -25,7 +25,7 @@ export default function rootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body
-        className={`${inter_sans.variable} antialiased flex flex-col min-h-screen`}
+        className={`${inter.className} antialiased flex flex-col min-h-screen`}
       >
         <Header />
         <main className="grow">{children}</main>
