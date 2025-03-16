@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from "react";
 
-const contact_us_page = () => {  // Changed from ContactUsPage
-  const [form_data, setFormData] = useState({  // Changed from formData
+/* eslint-disable @typescript-eslint/naming-convention */
+const ContactUsPage = () => {  
+  const [formData, setFormData] = useState({  
     name: "",
     email: "",
     subject: "",
@@ -10,12 +11,12 @@ const contact_us_page = () => {  // Changed from ContactUsPage
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...form_data, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", form_data);
+    console.log("Form submitted:", formData);
     alert("Message sent! We'll get back to you soon.");
     setFormData({ name: "", email: "", subject: "", message: "" });
   };
@@ -24,14 +25,15 @@ const contact_us_page = () => {  // Changed from ContactUsPage
     <div className="max-w-lg mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">Contact Us</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input type="text" name="name" value={form_data.name} onChange={handleChange} placeholder="Your Name" className="p-2 border rounded" required />
-        <input type="email" name="email" value={form_data.email} onChange={handleChange} placeholder="Your Email" className="p-2 border rounded" required />
-        <input type="text" name="subject" value={form_data.subject} onChange={handleChange} placeholder="Subject" className="p-2 border rounded" required />
-        <textarea name="message" value={form_data.message} onChange={handleChange} placeholder="Your Message" className="p-2 border rounded h-24" required />
+        <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your Name" className="p-2 border rounded" required />
+        <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Your Email" className="p-2 border rounded" required />
+        <input type="text" name="subject" value={formData.subject} onChange={handleChange} placeholder="Subject" className="p-2 border rounded" required />
+        <textarea name="message" value={formData.message} onChange={handleChange} placeholder="Your Message" className="p-2 border rounded h-24" required />
         <button type="submit" className="bg-lime-500 text-white py-2 rounded hover:bg-lime-600">Send Message</button>
       </form>
     </div>
   );
 };
+/* eslint-enable @typescript-eslint/naming-convention */
 
-export default contact_us_page; // Changed from ContactUsPage
+export default ContactUsPage; 
