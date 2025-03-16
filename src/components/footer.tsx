@@ -33,7 +33,7 @@ export default function Footer() {
         </div>
         <div className="flex flex-col text-center">
           <Link href={"/about-us"}>About Us</Link>
-          <Link href={"/"}>Contact Us</Link>
+          <Link href={"/contact-us"}>Contact Us</Link>
         </div>
         <div className="flex flex-col text-center">
           <Link href={"/"}>Terms and Conditions</Link>
