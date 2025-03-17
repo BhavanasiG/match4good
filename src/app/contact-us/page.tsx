@@ -1,8 +1,7 @@
 "use client";
 import React, { useState } from "react";
 
-/* eslint-disable @typescript-eslint/naming-convention */
-const ContactUsPage = () => {  
+export default function ContactUsPage() {  
   const [formData, setFormData] = useState({  
     name: "",
     email: "",
@@ -33,7 +32,4 @@ const ContactUsPage = () => {
       </form>
     </div>
   );
-};
-/* eslint-enable @typescript-eslint/naming-convention */
-
-export default ContactUsPage; 
+}
