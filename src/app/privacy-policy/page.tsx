@@ -6,7 +6,7 @@ export default function PrivacyPolicy() {
     <div 
       style={{ 
         padding: "2rem", 
-        maxWidth: "800px", 
+        max_width: "800px", 
         margin: "auto" 
       }}
     >
