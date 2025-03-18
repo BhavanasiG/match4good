@@ -6,7 +6,8 @@ export default function AboutUsPage() {
     <div 
       style={{ 
         padding: "2rem", 
-        max_width: "800px", 
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        maxWidth: "800px", 
         margin: "auto" 
       }}
     >
