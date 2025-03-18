@@ -50,7 +50,7 @@ build:
   stage: build
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-  needs: ["lint"]
+  needs: ["install", "lint"]
   script:
     - npm run build
 
