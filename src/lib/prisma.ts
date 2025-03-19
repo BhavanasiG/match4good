@@ -34,7 +34,8 @@ export async function getUser(
       member_of: organizations,
     },
   });
-
+  const username = (session.user.name && session.user.name.includes(" ")) ?? 
+  session.user.nickname ?? session.user.sub;
   if (!user) {
     if (session.user.name && session.user.name.includes(" ")) {
       user = await prisma.user.create({
