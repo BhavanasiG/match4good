@@ -3,5 +3,6 @@ node_modules/
 generated/
 .vscode
 .swc
-.husky/.vs/
+.husky/
 .vs/
+.eslintcache
