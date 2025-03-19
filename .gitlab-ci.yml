@@ -50,11 +50,11 @@ build:
   stage: build
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-  needs: ["install"]
+  needs: ["install", "lint"]
   script:
     - npm run build
 
-deploy:
+deploy_static:
   stage: deploy
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_REF_NAME == "release"'
