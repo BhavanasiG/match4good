@@ -1,8 +1,8 @@
 import { createServer } from "http";
 import next from "next";
 import { Server } from "socket.io";
-import onConnection from "./src/app/ws/onConnection.js";
-import handleServer from "./src/app/ws/handleServer.js";
+import onConnection from "./src/app/ws/onConnection.ts";
+import handleServer from "./src/app/ws/handleServer.ts";
 
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
