@@ -6,11 +6,7 @@ import handleServer from "./src/app/ws/handleServer.ts";
 import dotenv from "dotenv";
 
 const dev = process.env.NODE_ENV !== "production";
-if (dev) {
-  dotenv.config();
-} else {
-  dotenv.configDotenv({ path: ".env.prod" });
-}
+dotenv.config();
 
 const portenv = process.env.PORT;
 if (!portenv) {
