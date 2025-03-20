@@ -34,43 +34,25 @@ export async function getUser(
       member_of: organizations,
     },
   });
-  const username = (session.user.name && session.user.name.includes(" ")) ?? 
-  session.user.nickname ?? session.user.sub;
+
+  var user_name = null;
+
   if (!user) {
     if (session.user.name && session.user.name.includes(" ")) {
-      user = await prisma.user.create({
-        data: {
-          user_id: session.user.sub,
-          username: session.user.name,
-        },
-        include: {
-          owner_of: organizations,
-          member_of: organizations,
-        },
-      });
-    } else if (session.user.nickname) {
-      user = await prisma.user.create({
-        data: {
-          user_id: session.user.sub,
-          username: session.user.nickname,
-        },
-        include: {
-          owner_of: organizations,
-          member_of: organizations,
-        },
-      });
-    } else {
-      user = await prisma.user.create({
-        data: {
-          user_id: session.user.sub,
-          username: session.user.sub,
-        },
-        include: {
-          owner_of: organizations,
-          member_of: organizations,
-        },
-      });
+      user_name = session.user.name;
     }
+    const username = user_name ?? session.user.nickname ?? session.user.sub;
+
+    user = await prisma.user.create({
+      data: {
+        user_id: session.user.sub,
+        username: username,
+      },
+      include: {
+        owner_of: organizations,
+        member_of: organizations,
+      },
+    });
   }
 
   return user;
