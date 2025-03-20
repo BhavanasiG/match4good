@@ -25,6 +25,7 @@ RUN npx prisma generate
 # ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN npm run build
+RUN 
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -38,12 +39,15 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/public ./public
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/src/app/ws ./src/app/ws
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/generated ./generated
+COPY --from=builder --chown=nextjs:nodejs /app/server.js ./
 
 USER nextjs
 

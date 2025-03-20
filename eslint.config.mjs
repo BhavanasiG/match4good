@@ -16,7 +16,9 @@ const eslintConfig = [
   {
     languageOptions: {
       parserOptions: {
-        projectService: true,
+        projectService: {
+          allowDefaultProject: ["src/app/ws/*.js"],
+        },
         tsconfigRootDir: import.meta.dirname,
       },
     },
