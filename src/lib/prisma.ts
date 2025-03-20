@@ -35,11 +35,19 @@ export async function getUser(
     },
   });
 
+  let user_name = null;
+
   if (!user) {
-    // todo: nicer default username than session.user.sub
-    // email/name/nickname?
+    if (session.user.name && session.user.name.includes(" ")) {
+      user_name = session.user.name;
+    }
+    const username = user_name ?? session.user.nickname ?? session.user.sub;
+
     user = await prisma.user.create({
-      data: { user_id: session.user.sub, username: session.user.sub },
+      data: {
+        user_id: session.user.sub,
+        username: username,
+      },
       include: {
         owner_of: organizations,
         member_of: organizations,
