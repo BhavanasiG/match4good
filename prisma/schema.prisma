@@ -21,6 +21,8 @@ model User {
 
   owner_of  Organization[] @relation("ownership")
   member_of Organization[] @relation("membership")
+
+  application Application[]
 }
 
 model Organization {
@@ -35,6 +37,23 @@ model Organization {
   listings Listing[]
 }
 
+enum ApplicationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model Application {
+  id          Int               @id @default(autoincrement())
+  description String?
+  status      ApplicationStatus @default(PENDING)
+
+  listing    Listing @relation(fields: [listing_id], references: [id])
+  user       User    @relation(fields: [user_id], references: [id])
+  listing_id Int     @map("listingId")
+  user_id    Int     @map("userId")
+}
+
 model Listing {
   id             Int      @id @default(autoincrement())
   name           String
@@ -44,4 +63,6 @@ model Listing {
 
   organization    Organization @relation(fields: [organization_id], references: [id])
   organization_id Int
+
+  applications Application[]
 }
