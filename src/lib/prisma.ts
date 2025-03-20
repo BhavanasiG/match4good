@@ -35,7 +35,7 @@ export async function getUser(
     },
   });
 
-  var user_name = null;
+  let user_name = null;
 
   if (!user) {
     if (session.user.name && session.user.name.includes(" ")) {
