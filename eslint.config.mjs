@@ -75,7 +75,7 @@ export default defineConfig ([
       "jsdoc/no-empty-description": "error",
       "jsdoc/newline-after-description": "warn"
     },
-    plugins: { "react-hooks": reactHooks, jsdoc },
+    plugins: { "react-hooks": reactHooks },
   },
 
   ...compat.extends(
