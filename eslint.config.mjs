@@ -3,6 +3,7 @@ import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
 import reactHooks from "eslint-plugin-react-hooks";
 import tseslint from "typescript-eslint";
+import jsdoc from "eslint-plugin-jsdoc";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -49,14 +50,39 @@ export default defineConfig ([
       ],
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
+
+      "jsdoc/require-jsdoc": [
+        "error",
+        {
+          require: {
+            ArrowFunctionExpression: false,
+            ClassDeclaration: true,
+            FunctionDeclaration: true,
+            FunctionExpression: false,
+            MethodDefinition: true,
+          },
+        },
+      ],
+      "jsdoc/require-description": "error",
+      "jsdoc/require-param": "error",
+      "jsdoc/require-returns": "error",
+      "jsdoc/require-example": "warn",
+      "jsdoc/check-param-names": "error",
+      "jsdoc/check-tag-names": "warn",
+      "jsdoc/check-types": "warn",
+      "jsdoc/require-returns-check": "error",
+      "jsdoc/require-description-complete-sentence": "warn",
+      "jsdoc/no-empty-description": "error",
+      "jsdoc/newline-after-description": "warn"
     },
-    plugins: { "react-hooks": reactHooks },
+    plugins: { "react-hooks": reactHooks, jsdoc },
   },
 
   ...compat.extends(
     "next/core-web-vitals",
     "next/typescript",
-    "plugin:react-hooks/recommended"
+    "plugin:react-hooks/recommended",
+    "plugin:jsdoc/recommended"
   ),
 
   globalIgnores(["src/hooks/", "src/components/ui/"])
