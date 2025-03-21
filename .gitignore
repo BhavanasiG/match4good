@@ -6,3 +6,4 @@ generated/
 .husky/
 .vs/
 .eslintcache
+.env
