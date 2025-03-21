@@ -75,7 +75,7 @@ export default defineConfig([
       "jsdoc/no-empty-description": "off",
       "jsdoc/newline-after-description": "off",
     },
-    plugins: { "react-hooks": reactHooks, jsdoc },
+    plugins: { "react-hooks": reactHooks },
   },
   {
     files: ["**/*.page.ts", "**/*.page.tsx"],
