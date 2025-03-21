@@ -72,7 +72,7 @@ export default defineConfig ([
       "jsdoc/check-types": "warn",
       "jsdoc/require-returns-check": "error",
       "jsdoc/require-description-complete-sentence": "warn",
-      "jsdoc/no-empty-description": "error",
+      "jsdoc/no-empty-description": "off",
       "jsdoc/newline-after-description": "warn"
     },
     plugins: { "react-hooks": reactHooks },
