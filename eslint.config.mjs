@@ -3,6 +3,7 @@ import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
 import reactHooks from "eslint-plugin-react-hooks";
 import tseslint from "typescript-eslint";
+import { defineConfig, globalIgnores } from "eslint/config";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -11,7 +12,7 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-const eslintConfig = [
+export default defineConfig ([
   ...tseslint.configs.recommendedTypeChecked,
   {
     languageOptions: {
@@ -57,6 +58,6 @@ const eslintConfig = [
     "next/typescript",
     "plugin:react-hooks/recommended"
   ),
-];
 
-export default eslintConfig;
+  globalIgnores(["src/hooks/", "src/components/ui/"])
+]);
