@@ -72,13 +72,8 @@ export default defineConfig([
       "jsdoc/check-types": "warn",
       "jsdoc/require-returns-check": "error",
       "jsdoc/require-description-complete-sentence": "warn",
-<<<<<<< HEAD
       "jsdoc/no-empty-description": "off",
       "jsdoc/newline-after-description": "off",
-=======
-      "jsdoc/no-empty-description": "error",
-      "jsdoc/newline-after-description": "warn"
->>>>>>> fafac46 (Impelemented TSDoc requirement)
     },
     plugins: { "react-hooks": reactHooks, jsdoc },
   },
