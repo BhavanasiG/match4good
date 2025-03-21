@@ -1,12 +1,12 @@
+"use client";
 import React from "react";
 
-/* eslint-disable @typescript-eslint/naming-convention */
-const AboutUsPage = () => {
+export default function AboutUsPage() {
   return (
     <div 
       style={{ 
         padding: "2rem", 
-        /* eslint-disable-next-line @typescript-eslint/naming-convention */
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         maxWidth: "800px", 
         margin: "auto" 
       }}
@@ -33,7 +33,4 @@ const AboutUsPage = () => {
       <p>If you have any questions, reach out at support@match4good.com.</p>
     </div>
   );
-};
-/* eslint-enable @typescript-eslint/naming-convention */
-
-export default AboutUsPage;
+}

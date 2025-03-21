@@ -1,12 +1,12 @@
+"use client";
 import React from "react";
 
-/* eslint-disable @typescript-eslint/naming-convention */
-const PrivacyPolicy = () => {
+export default function PrivacyPolicy() {
   return (
     <div 
       style={{ 
         padding: "2rem", 
-        /* eslint-disable-next-line @typescript-eslint/naming-convention */
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         maxWidth: "800px", 
         margin: "auto" 
       }}
@@ -31,8 +31,4 @@ const PrivacyPolicy = () => {
       <p>If you have any questions, contact us at support@match4good.com.</p>
     </div>
   );
-};
-/* eslint-enable @typescript-eslint/naming-convention */
-
-export default PrivacyPolicy;
-
+}
