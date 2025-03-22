@@ -34,9 +34,7 @@ install:
 lint:
   stage: lint
   rules:
-    - if: '$CI_COMMIT_REF_NAME != "enfore-tsdoc"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-
+    - if: '$CI_COMMIT_REF_NAME != "enfore-tsdoc" && $CI_PIPELINE_SOURCE == "merge_request_event"'
   needs: ["install"]
   script:
     - echo $CI_COMMIT_REF_NAME
