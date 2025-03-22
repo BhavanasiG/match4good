@@ -20,7 +20,7 @@ export default async function Settings() {
 
   return (
     <div className="flex justify-center w-full">
-      <div className="flex flex-col p-12 md:px-24 w-screen max-w-4xl">
+      <div className="flex flex-col p-12 md:p-24 w-screen max-w-4xl">
         <h1 className="font-semibold text-3xl">Your Settings</h1>
         <div className="flex pt-6">
           <Tabs defaultValue="profile" className="w-full">

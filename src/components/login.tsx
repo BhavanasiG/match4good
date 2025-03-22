@@ -1,4 +1,6 @@
 import { auth0 } from "@/lib/auth0";
+import { Button } from "./ui/button";
+import Link from "next/link";
 
 /**
  * This component has a link to the sign-up page and the log in page
@@ -6,17 +8,14 @@ import { auth0 } from "@/lib/auth0";
  */
 export function LoginButton() {
   return (
-    <>
-      <a
-        href="/auth/login?screen_hint=signup"
-        className="my-auto ml-4 sm:ml-8 font-medium"
-      >
-        Sign Up
-      </a>
-      <a href="/auth/login" className="my-auto ml-4 sm:ml-8 font-medium">
-        Log In
-      </a>
-    </>
+    <div className="flex space-x-4">
+      <Link href="/auth/login">
+        <Button variant={"outline"}>Log In</Button>
+      </Link>
+      <Link href="/auth/login?screen_hint=signup">
+        <Button>Sign Up</Button>
+      </Link>
+    </div>
   );
 }
 
@@ -26,9 +25,9 @@ export function LoginButton() {
  */
 export function LogoutButton() {
   return (
-    <a href="/auth/logout" className="my-auto ml-4 sm:ml-8 font-medium">
-      Log Out
-    </a>
+    <Link href="/auth/logout" className="cursor-pointer">
+      <Button variant={"outline"}>Log Out</Button>
+    </Link>
   );
 }
 
