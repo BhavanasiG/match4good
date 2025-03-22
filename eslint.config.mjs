@@ -73,7 +73,7 @@ export default defineConfig ([
       "jsdoc/require-returns-check": "error",
       "jsdoc/require-description-complete-sentence": "warn",
       "jsdoc/no-empty-description": "off",
-      "jsdoc/newline-after-description": "warn"
+      "jsdoc/newline-after-description": "off"
     },
     plugins: { "react-hooks": reactHooks },
   },
@@ -81,6 +81,7 @@ export default defineConfig ([
   ...compat.extends(
     "next/core-web-vitals",
     "next/typescript",
+    "prettier",
     "plugin:react-hooks/recommended",
     "plugin:jsdoc/recommended"
   ),
