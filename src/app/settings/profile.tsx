@@ -101,7 +101,7 @@ export default function ProfileForm({ user } : Props) {
             <FormMessage />
           </FormItem>
         )} />
-        <Button type="submit">Save Changes</Button>
+        <Button type="submit" className="cursor-pointer">Save Changes</Button>
       </form>
     </Form>
   )

@@ -25,9 +25,9 @@ export default async function Settings() {
         <div className="flex pt-6">
           <Tabs defaultValue="profile" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="profile">Profile</TabsTrigger>
-              <TabsTrigger value="organizations">Organizations</TabsTrigger>
-              <TabsTrigger value="security">Security</TabsTrigger>
+              <TabsTrigger value="profile" className="cursor-pointer">Profile</TabsTrigger>
+              <TabsTrigger value="organizations" className="cursor-pointer">Organizations</TabsTrigger>
+              <TabsTrigger value="security" className="cursor-pointer">Security</TabsTrigger>
             </TabsList>
             <TabsContent value="profile">
               <Card>

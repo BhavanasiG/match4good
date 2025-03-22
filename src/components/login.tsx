@@ -1,5 +1,6 @@
 import { auth0 } from "@/lib/auth0";
 import { Button } from "./ui/button";
+import { Settings } from "lucide-react";
 import Link from "next/link";
 
 /**
@@ -10,10 +11,10 @@ export function LoginButton() {
   return (
     <div className="flex space-x-4">
       <Link href="/auth/login">
-        <Button variant={"outline"}>Log In</Button>
+        <Button variant={"outline"} className="cursor-pointer">Log In</Button>
       </Link>
       <Link href="/auth/login?screen_hint=signup">
-        <Button>Sign Up</Button>
+        <Button className="cursor-pointer">Sign Up</Button>
       </Link>
     </div>
   );
@@ -25,9 +26,16 @@ export function LoginButton() {
  */
 export function LogoutButton() {
   return (
-    <Link href="/auth/logout" className="cursor-pointer">
-      <Button variant={"outline"}>Log Out</Button>
-    </Link>
+    <div className="flex space-x-4 items-center">
+      <Link href="/auth/logout">
+        <Button variant={"outline"} className="cursor-pointer">Log Out</Button>
+      </Link>
+      <Link href="/settings">
+        <Button variant={"outline"} size={"icon"} className="cursor-pointer">
+          <Settings className="size-6" strokeWidth={1.8} />
+        </Button>
+      </Link>
+    </div>
   );
 }
 
