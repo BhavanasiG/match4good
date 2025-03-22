@@ -38,16 +38,17 @@ lint:
     - if: '$CI_COMMIT_REF_NAME != "enfore-tsdoc" && $CI_PIPELINE_SOURCE == "merge_request_event"'
   needs: ["install"]
   script:
-    - echo $CI_COMMIT_REF_NAME
-    - npm run lint
+    # - echo $CI_COMMIT_REF_NAME
+    - npm run format
+    - git diff --exit-code || (echo "Prettier found issues, please fix them locally and push again." && exit 1)
 
 prettier:
   stage: prettier
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_REF_NAME != "enfore-tsdoc" && $CI_PIPELINE_SOURCE == "merge_request_event"'
   needs: ["install"]
   script:
-    - npm run format:check
+    - npm run prettier
 
 
 test:
@@ -62,7 +63,7 @@ build:
   stage: build
   rules:
     - if: '$CI_COMMIT_REF_NAME != "enfore-tsdoc" && $CI_PIPELINE_SOURCE == "merge_request_event"'
-  needs: ["install", "lint"]
+  needs: ["install", "lint", "prettier"]
   script:
     - npm run build
 
