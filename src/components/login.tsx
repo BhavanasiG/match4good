@@ -1,6 +1,7 @@
 import { auth0 } from "@/lib/auth0";
 import { Button } from "./ui/button";
-import { Settings } from "lucide-react";
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTriggerIconless } from "./ui/navigation-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
 
 /**
@@ -26,16 +27,22 @@ export function LoginButton() {
  */
 export function LogoutButton() {
   return (
-    <div className="flex space-x-4 items-center">
-      <Link href="/auth/logout">
-        <Button variant={"outline"} className="cursor-pointer">Log Out</Button>
-      </Link>
-      <Link href="/settings">
-        <Button variant={"outline"} size={"icon"} className="cursor-pointer">
-          <Settings className="size-6" strokeWidth={1.8} />
-        </Button>
-      </Link>
-    </div>
+    <NavigationMenu>
+      <NavigationMenuList>
+        <NavigationMenuItem>
+          <NavigationMenuTriggerIconless className="p-0 hover:bg-white">
+            <Avatar className="size-8">
+              <AvatarImage src="https://avatars.githubusercontent.com/u/83641209?v=4" alt="profile image"/>
+              <AvatarFallback>DM</AvatarFallback>
+            </Avatar>
+          </NavigationMenuTriggerIconless>
+          <NavigationMenuContent>
+            <NavigationMenuLink href="/settings" className="font-medium">Settings</NavigationMenuLink>
+            <NavigationMenuLink href="/auth/logout" className="text-destructive font-medium hover:text-destructive">Log Out</NavigationMenuLink>
+          </NavigationMenuContent>  
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
   );
 }
 
