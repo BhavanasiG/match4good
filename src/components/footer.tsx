@@ -14,6 +14,10 @@ export default function Footer() {
           <Link href={"/"}>
             <Image alt="Match4Good Logo" src={"/logo_extended_white.svg"} className="my-auto w-full h-8 md:h-11" width={0} height={0} />
           </Link>
+          <p className="flex pt-2 mx-auto">
+            <span className="hidden sm:block">Copyright&nbsp;</span>©
+            Match4Good 2025
+          </p>
         </div>
         <div className="flex justify-center items-center">
           <div className="flex flex-col space-y-2">
