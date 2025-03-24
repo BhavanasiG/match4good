@@ -27,8 +27,8 @@ export default function Footer() {
             />
           </Link>
           <p className="flex pt-2 mx-auto">
-            <span className="hidden sm:block">Copyright&nbsp;</span>© Match4Good
-            2025
+            <span className="hidden sm:block">Copyright&nbsp;</span>©
+            Match4Good 2025
           </p>
         </div>
         <div className="flex flex-col text-center">

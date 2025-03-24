@@ -13,7 +13,7 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-export default defineConfig ([
+export default defineConfig([
   ...tseslint.configs.recommendedTypeChecked,
   {
     languageOptions: {
@@ -73,7 +73,7 @@ export default defineConfig ([
       "jsdoc/require-returns-check": "error",
       "jsdoc/require-description-complete-sentence": "warn",
       "jsdoc/no-empty-description": "off",
-      "jsdoc/newline-after-description": "off"
+      "jsdoc/newline-after-description": "off",
     },
     plugins: { "react-hooks": reactHooks },
   },
@@ -83,8 +83,8 @@ export default defineConfig ([
     "next/typescript",
     "prettier",
     "plugin:react-hooks/recommended",
-    "plugin:jsdoc/recommended"
+    "plugin:jsdoc/recommended",
   ),
 
-  globalIgnores(["src/hooks/", "src/components/ui/"])
+  globalIgnores(["src/hooks/", "src/components/ui/"]),
 ]);

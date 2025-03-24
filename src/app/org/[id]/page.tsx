@@ -18,20 +18,32 @@ export default function App() {
       <section className="flex-col basis-full p-10 px-24">
         <div className="flex flex-col basis-full border p-10">
           <h1 className="text-xl font-semibold">Description</h1>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione fugit minus, blanditiis a nesciunt voluptate soluta et excepturi hic inventore recusandae magnam eum nihil ut facilis at quam error. Tempora.</p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione
+            fugit minus, blanditiis a nesciunt voluptate soluta et excepturi hic
+            inventore recusandae magnam eum nihil ut facilis at quam error.
+            Tempora.
+          </p>
         </div>
       </section>
       <section className="flex flex-col basis-full p-10 px-24">
         <hr className="mb-10" />
-        <h1 className="text-2xl font-semibold mx-auto mb-10">Available listings</h1>
+        <h1 className="text-2xl font-semibold mx-auto mb-10">
+          Available listings
+        </h1>
         <div className="flex flex-col basis-full border p-10">
           <div className="flex justify-between">
             <h1 className="text-xl font-semibold">Description</h1>
             <p className="font-medium">Start time - End time</p>
           </div>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione fugit minus, blanditiis a nesciunt voluptate soluta et excepturi hic inventore recusandae magnam eum nihil ut facilis at quam error. Tempora.</p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione
+            fugit minus, blanditiis a nesciunt voluptate soluta et excepturi hic
+            inventore recusandae magnam eum nihil ut facilis at quam error.
+            Tempora.
+          </p>
         </div>
       </section>
     </>
-  )
+  );
 }

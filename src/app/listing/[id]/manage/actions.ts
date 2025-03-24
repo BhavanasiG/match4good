@@ -12,7 +12,7 @@ import { Application, ApplicationStatus } from "@/../generated/prisma_client";
  */
 export async function setApplicationStatus(
   application: Application,
-  status: ApplicationStatus
+  status: ApplicationStatus,
 ): Promise<boolean> {
   const user = await getUser(true);
 
