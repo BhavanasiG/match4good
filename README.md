@@ -1,6 +1,7 @@
 ## Getting Started
 
 ### Running the dev server
+
 Install dependencies first: `npm i`!
 
 You need a running Postgres instance: a connection at `localhost:5432` is expected.
@@ -10,5 +11,6 @@ Then run `npm run db:deploy` to modify the database to the current schema.
 Finally run `npm run dev` to actually run the webserver.
 
 ### Making a production build
+
 To run the deployment, use `docker compose up`.
 It should just work :)
