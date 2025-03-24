@@ -1,11 +1,15 @@
 import { User } from "@/lib/prisma";
 
 export type Props = { user: User };
+<<<<<<< HEAD
 /**
  * Displays organizations the user owns and is a part of
  * @param {User} user accepts a prisma user object to display
  * @returns {Element} - Returns a component that displays the user information
  */
+=======
+
+>>>>>>> e4ee13e (Applies prettier fixes)
 export default function OrganizationsForm({ user }: Props) {
   return (
     <div className="flex flex-col space-y-4">

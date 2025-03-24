@@ -48,11 +48,14 @@ const form_schema = z.object({
 
 export type Props = { user: User };
 
+<<<<<<< HEAD
 /**
  *
  * @param {User} param0 - user: The user object to display
  * @returns {Element} - Returns a form for updating the user's profile
  */
+=======
+>>>>>>> e4ee13e (Applies prettier fixes)
 export default function ProfileForm({ user }: Props) {
   /**
    * Make sure to include defaultValues for each form or
