@@ -3,7 +3,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu } from "lucide-react";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTriggerIconless } from "./ui/navigation-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 /**
  * Creates the common header component for the site
@@ -34,7 +33,7 @@ export default function Header() {
           <Image src={"/logo_extended.svg"} alt="Match4Good Logo" width={0} height={0} className="w-auto h-7"/>
         </Link>
       </div>
-      <div className="hidden sm:flex justify-center items-center space-x-4">
+      <div className="hidden sm:flex justify-center items-center space-x-2 md:space-x-4">
         <Link href="/">Jobs</Link>
         <Link href="/">Organizations</Link>
         <Link href="/about-us">About</Link>

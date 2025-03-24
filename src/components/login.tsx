@@ -10,11 +10,11 @@ import Link from "next/link";
  */
 export function LoginButton() {
   return (
-    <div className="flex space-x-4">
+    <div className="flex space-x-2 md:space-x-4">
       <Link href="/auth/login">
         <Button variant={"outline"} className="cursor-pointer">Log In</Button>
       </Link>
-      <Link href="/auth/login?screen_hint=signup">
+      <Link href="/auth/login?screen_hint=signup" className="hidden sm:block">
         <Button className="cursor-pointer">Sign Up</Button>
       </Link>
     </div>
