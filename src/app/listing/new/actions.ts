@@ -15,6 +15,7 @@ export interface CreateListingData {
 /**
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Retrieves an array of organizations the user is associated with.
  * @returns Array of organizations or null if no user is logged in.
  */
@@ -22,6 +23,8 @@ async function getUserOrganizations(): Promise<Organization[] | null> {
 =======
 =======
 >>>>>>> fe27b7e (Applies prettier fixes)
+=======
+>>>>>>> ec4fb0c (Applies prettier fixes)
  * This method returns an array containing the organizations a user is linked
  * with or null
  * @returns Array of organizations linked with user or null if no user logged in
@@ -30,9 +33,12 @@ async function getUserOrganizations(): Promise<Organization[] | null> {
   // Makes sense to do appropriate checks before checking for organizaions
   // linked with user
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> e4ee13e (Applies prettier fixes)
 =======
 >>>>>>> fe27b7e (Applies prettier fixes)
+=======
+>>>>>>> ec4fb0c (Applies prettier fixes)
   const user = await getUser(true);
   if (!user) {
     return null;
@@ -40,18 +46,23 @@ async function getUserOrganizations(): Promise<Organization[] | null> {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   // We use a set for de-duplication as it naturally has unique elements
 >>>>>>> e4ee13e (Applies prettier fixes)
 =======
   // We use a set for de-duplication as it naturally has unique elements
 >>>>>>> fe27b7e (Applies prettier fixes)
+=======
+  // We use a set for de-duplication as it naturally has unique elements
+>>>>>>> ec4fb0c (Applies prettier fixes)
   const user_orgs = [...new Set([...user.owner_of, ...user.member_of])];
 
   return user_orgs;
 }
 
 /**
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
  * Handles form submission for creating a volunteer opportunity.
@@ -64,6 +75,8 @@ async function getUserOrganizations(): Promise<Organization[] | null> {
 =======
 =======
 >>>>>>> fe27b7e (Applies prettier fixes)
+=======
+>>>>>>> ec4fb0c (Applies prettier fixes)
  * Creates form and handles form submission for creating volunteer oppportunity
  * by validating the input fields
  *
@@ -80,9 +93,12 @@ async function getUserOrganizations(): Promise<Organization[] | null> {
  * @returns redirection to new created listing (if valid data inputted),
  * else returns an error message.
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> e4ee13e (Applies prettier fixes)
 =======
 >>>>>>> fe27b7e (Applies prettier fixes)
+=======
+>>>>>>> ec4fb0c (Applies prettier fixes)
  */
 export async function createListing(form_data: CreateListingData) {
   if (!form_data.name.trim()) {
@@ -104,6 +120,7 @@ export async function createListing(form_data: CreateListingData) {
   if (start_datetime > end_datetime) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     return "End date must be the same as or after the start date";
 =======
     return "End date must be same as or after the start date";
@@ -111,10 +128,14 @@ export async function createListing(form_data: CreateListingData) {
 =======
     return "End date must be same as or after the start date";
 >>>>>>> fe27b7e (Applies prettier fixes)
+=======
+    return "End date must be same as or after the start date";
+>>>>>>> ec4fb0c (Applies prettier fixes)
   }
 
   const user_orgs = await getUserOrganizations();
   if (!user_orgs || user_orgs.length === 0) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     return "No organizations associated with the account";
@@ -124,12 +145,16 @@ export async function createListing(form_data: CreateListingData) {
 =======
     return "No organizations associated with account";
 >>>>>>> fe27b7e (Applies prettier fixes)
+=======
+    return "No organizations associated with account";
+>>>>>>> ec4fb0c (Applies prettier fixes)
   }
 
   if (!user_orgs.some((org) => org.id === form_data.organization_id)) {
     return "Invalid organization selected.";
   }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
   // Save the listing
@@ -141,11 +166,16 @@ export async function createListing(form_data: CreateListingData) {
   // We have to manually destructure data as we have converted the datetime
   // from a string to a date object since Prisma expects Date objects
 >>>>>>> fe27b7e (Applies prettier fixes)
+=======
+  // We have to manually destructure data as we have converted the datetime
+  // from a string to a date object since Prisma expects Date objects
+>>>>>>> ec4fb0c (Applies prettier fixes)
   const listing = await prisma.listing.create({
     data: {
       name: form_data.name,
       description: form_data.description,
       start_datetime: start_datetime,
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       end_datetime: end_datetime,
@@ -155,6 +185,9 @@ export async function createListing(form_data: CreateListingData) {
 =======
       end_datetime: start_datetime,
 >>>>>>> fe27b7e (Applies prettier fixes)
+=======
+      end_datetime: start_datetime,
+>>>>>>> ec4fb0c (Applies prettier fixes)
       organization_id: form_data.organization_id,
     },
   });

@@ -9,7 +9,7 @@ import prisma, { getUser } from "@/lib/prisma";
 
 export type Props = { username: string };
 
-export async function UpdateUser({ username } : Props) {
+export async function UpdateUser({ username }: Props) {
   const user = await getUser();
 
   if (!user) {

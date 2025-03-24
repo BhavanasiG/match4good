@@ -104,8 +104,11 @@ export default function CharityDetailPage() {
       </section>
     </>
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> e4ee13e (Applies prettier fixes)
 =======
 >>>>>>> fe27b7e (Applies prettier fixes)
+=======
+>>>>>>> ec4fb0c (Applies prettier fixes)
   );
 }
