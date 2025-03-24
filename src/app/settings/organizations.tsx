@@ -2,6 +2,7 @@ import { User } from "@/lib/prisma";
 
 export type Props = { user: User };
 <<<<<<< HEAD
+<<<<<<< HEAD
 /**
  * Displays organizations the user owns and is a part of
  * @param {User} user accepts a prisma user object to display
@@ -10,6 +11,9 @@ export type Props = { user: User };
 =======
 
 >>>>>>> e4ee13e (Applies prettier fixes)
+=======
+
+>>>>>>> fe27b7e (Applies prettier fixes)
 export default function OrganizationsForm({ user }: Props) {
   return (
     <div className="flex flex-col space-y-4">

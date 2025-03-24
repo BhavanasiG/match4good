@@ -103,6 +103,9 @@ export default function CharityDetailPage() {
         </div>
       </section>
     </>
+<<<<<<< HEAD
 >>>>>>> e4ee13e (Applies prettier fixes)
+=======
+>>>>>>> fe27b7e (Applies prettier fixes)
   );
 }
