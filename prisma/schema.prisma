@@ -22,8 +22,8 @@ model Organization {
   name        String    @unique
   description String?
   owner_id    Int
-  address     String    @default("") 
-  postcode    String    @default("") 
+  address     String?     
+  postcode    String?   
   listings    Listing[]
   owner       User      @relation("ownership", fields: [owner_id], references: [id])
   members     User[]    @relation("membership")
