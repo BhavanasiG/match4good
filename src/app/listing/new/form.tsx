@@ -9,7 +9,7 @@ export interface CreateListingFormProps {
 }
 
 /**
- * Creates form and handles form submission for creating volunteer oppportunity
+ * Creates form and handles form submission for creating a volunteer opportunity
  * by validating the input fields
  *
  * Completes/Ensures these **client-side** actions:
@@ -19,11 +19,10 @@ export interface CreateListingFormProps {
  * after the start date and time.
  * - Displays an appropriate error message if validation fails.
  * - Logs the form data to the console if all validations pass
- * and passes to the server to create new record in database
- * - Listing is linked to one of the user's organisation
- * @param param0 The user (object) for which a new listing form will be
- * generated
- * @returns HTML form that allows user to create a new listing
+ * and passes to the server to create a new record in the database.
+ * - Listing is linked to one of the user's organizations.
+ * @param param0 The user (object) for which a new listing form will be generated.
+ * @returns HTML form that allows the user to create a new listing.
  */
 export default function CreateListingForm({ user }: CreateListingFormProps) {
   const user_orgs = [...new Set([...user.owner_of, ...user.member_of])];
@@ -36,16 +35,16 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
     description: "",
     start_datetime: new Date().toISOString(),
     end_datetime: new Date().toISOString(),
-    organization_id: user_orgs.length == 0 ? 0 : user_orgs[0].id,
+    organization_id: user_orgs.length === 0 ? 0 : user_orgs[0].id, // Fix here
   });
 
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    console.log(name, value);
+    console.log(name, value); // Debugging
+
     setFormData((prev_data) => ({
       ...prev_data,
-      // Ensure organizationId is a number
-      [name]: name === "organizationId" ? Number(value) : value,
+      [name]: name === "organization_id" ? Number(value) : value, // Fix here
     }));
   };
 
@@ -58,7 +57,7 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
     const end_datetime = new Date(form_data.end_datetime);
     const now = new Date();
 
-    // We need to validate the user's inputs
+    // Validate inputs
     if (!form_data.name.trim()) {
       setError("Name is required");
       return;
@@ -74,7 +73,7 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
     }
 
     if (start_datetime > end_datetime) {
-      setError("End date must be same as or after the start date");
+      setError("End date must be the same as or after the start date");
       return;
     }
 
@@ -121,7 +120,7 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
 
         <div>
           <label htmlFor="start_datetime">
-            Opprtunity start date and time (24hr):
+            Opportunity start date and time (24hr):
           </label>
           <br />
           <input
@@ -151,13 +150,13 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
         </div>
 
         <div>
-          <label htmlFor="organisation_id">
-            Select Organisation opportunity should be listed for:
+          <label htmlFor="organization_id">
+            Select Organization opportunity should be listed for:
           </label>
           <br />
           <select
-            name="organisation_id"
-            id="organisation_id"
+            name="organization_id"
+            id="organization_id"
             onChange={onChange}
             value={form_data.organization_id}
             required
@@ -173,8 +172,8 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
           </select>
         </div>
 
-        {error && <p className={"text-red-600"}>{error}</p>}
-        {success && <p className={"text-red-600"}>{success}</p>}
+        {error && <p className="text-red-600">{error}</p>}
+        {success && <p className="text-green-600">{success}</p>}
 
         <br />
         <button type="submit">Submit</button>
