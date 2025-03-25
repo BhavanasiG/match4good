@@ -1,0 +1,10 @@
+# syntax=docker.io/docker/dockerfile:1
+
+FROM node:18-alpine AS base
+FROM base AS deps
+
+WORKDIR /app
+COPY prisma prisma
+COPY .env .env
+
+CMD ["npx", "prisma", "migrate", "deploy"]

@@ -1,15 +1,14 @@
-Welcome to your repo for COM2027, Group 9!
-=====================================================
+## Getting Started
 
-Feel free to change this README.
+### Running the dev server
+Install dependencies first: `npm i`!
 
-Getting started
----------------
+You need a running Postgres instance: a connection at `localhost:5432` is expected.
+How this is done is up to you, either directly or in a docker container.
+An easy way to get this running is with `docker run -p 5432:5432 -e POSTGRES_PASSWORD=prisma -d postgres`.
+Then run `npm run db:deploy` to modify the database to the current schema.
+Finally run `npm run dev` to actually run the webserver.
 
-Before you get started, you should update your com2027.yml file with your team members and project details. This will appear at [your static site](https://csee.pages.surrey.ac.uk/com2027/2024-25/Group9).
-
-You have two branches created for you, `trunk` and `release`. The final commit on `release` will be marked.
-
-Commits must be merged into `release` using a merge request, which requires two approvals. Force-pushing is disabled for both branches, as this can destroy your work. Only `trunk` can be merged into `release`.
-
-You may develop directly on `trunk`, although it is recommended that you branch from `trunk` and submit merge requests (or merge directly onto the branch). How you use `trunk` is up to your team.
+### Making a production build
+To run the deployment, use `docker compose up`.
+It should just work :)
