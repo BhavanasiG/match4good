@@ -9,34 +9,47 @@ export async function GET() {
       throw new Error("API Key is missing. Check .env.local");
     }
 
-    const registeredNumber = "1042119";
-    const suffix = "0";
-    const url = `https://api.charitycommission.gov.uk/register/api/allcharitydetailsV2/${registeredNumber}/${suffix}`;
+    // Example charity numbers (Replace with real ones)
+    const registeredNumbers = ["1000000", "1000001", "1000002", "1000003", "1000004"];
 
-    console.log("API URL:", url);
+    const charityData = [];
 
-    const res = await fetch(url, {
-      headers: {
-        "Ocp-Apim-Subscription-Key": apiKey,
-      },
-    });
+    for (const registeredNumber of registeredNumbers) {
+      const suffix = "0";
+      const url = `https://api.charitycommission.gov.uk/register/api/allcharitydetailsV2/${registeredNumber}/${suffix}`;
 
-    if (!res.ok) {
-      console.error("Failed to fetch charities, Status Code:", res.status);
-      throw new Error(`API request failed with status ${res.status}`);
+      console.log("Fetching charity:", url);
+
+      const res = await fetch(url, {
+        headers: {
+          "Ocp-Apim-Subscription-Key": apiKey,
+        },
+      });
+
+      if (!res.ok) {
+        console.error(`Failed to fetch charity ${registeredNumber}, Status:`, res.status);
+        continue; // Skip this charity and continue with others
+      }
+
+      const data = await res.json();
+      charityData.push(data); // Store the charity data
     }
 
-    const data = await res.json();
-    console.log("API Response:", data);
+    console.log("Fetched Charities:", charityData);
 
-    return NextResponse.json(data);
+    // Ensure only relevant details are returned
+    const processedData = charityData.slice(0, 5).map((charity) => ({
+      charity_name: charity.charity_name || "Unknown",
+      date_of_registration: charity.date_of_registration || "N/A",
+      removal_reason: charity.removal_reason || "N/A",
+    }));
+
+    return NextResponse.json(processedData);
   } catch (error) {
     console.error("Error in API route:", error);
 
     return NextResponse.json(
-      {
-        error: error instanceof Error ? error.message : "Unknown error",
-      },
+      { error: error instanceof Error ? error.message : "Unknown error" },
       { status: 500 }
     );
   }
