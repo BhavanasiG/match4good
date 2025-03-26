@@ -36,7 +36,7 @@ export async function getUser(
   });
 
   let user_name = null;
-  let email = session.user.email;
+  const email = session.user.email;
 
   if (!user) {
     if (session.user.name && session.user.name.includes(" ")) {
