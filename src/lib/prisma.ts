@@ -36,6 +36,7 @@ export async function getUser(
   });
 
   let user_name = null;
+  let email = session.user.email;
 
   if (!user) {
     if (session.user.name && session.user.name.includes(" ")) {
@@ -47,6 +48,7 @@ export async function getUser(
       data: {
         user_id: session.user.sub,
         username: username,
+        email: email,
       },
       include: {
         owner_of: organizations,
