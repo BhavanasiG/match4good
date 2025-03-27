@@ -2,12 +2,13 @@
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
+import * as L from "leaflet"; 
 
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
-const customIcon = new L.Icon({
+/* eslint-disable @typescript-eslint/naming-convention */
+const customIcon: L.Icon<L.IconOptions> = new L.Icon<L.IconOptions>({
   iconUrl: markerIcon.src,
   shadowUrl: markerShadow.src,
   iconSize: [25, 41],
@@ -21,24 +22,39 @@ interface MapProps {
   postcode: string;
 }
 
+// Define API response type
+interface GeocodeResult {
+  lat: string;
+  lon: string;
+}
+
 const MapComponent: React.FC<MapProps> = ({ address, postcode }) => {
   const [coordinates, setCoordinates] = useState<[number, number] | null>(null);
 
   useEffect(() => {
-    const fetchCoordinates = async () => {
+    const fetchCoordinates = async (): Promise<void> => {
       try {
-        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(postcode)}`);
-        const data = await response.json();
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(postcode)}`
+        );
 
-        if (data.length > 0) {
-          setCoordinates([parseFloat(data[0].lat), parseFloat(data[0].lon)]);
+        if (!response.ok) {
+          throw new Error(`API request failed with status: ${response.status}`);
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const data: GeocodeResult[] = await response.json();
+
+        if (Array.isArray(data) && data.length > 0) {
+          const lat = parseFloat(data[0]?.lat ?? "0"); // Ensure valid number
+          const lon = parseFloat(data[0]?.lon ?? "0");
+          setCoordinates([lat, lon]);
         }
       } catch (error) {
         console.error("Error fetching coordinates:", error);
       }
     };
 
-    fetchCoordinates();
+    void fetchCoordinates(); 
   }, [postcode]);
 
   if (!coordinates) {

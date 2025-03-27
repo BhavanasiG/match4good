@@ -4,12 +4,12 @@ import ListingInfo from "@/components/listingInfo";
 import MapComponent from "@/components/MapComponent"; // Import the map component
 import Link from "next/link";
 
-export default async function ListingPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const { id } = params;
+interface PageProps {
+  params: Promise<{ id: string }>; // Update params type to Promise
+}
+
+export default async function ListingPage({ params }: PageProps) {
+  const { id } = await params; // Await the params because it's now a Promise
 
   const user = await getUser(true);
 
@@ -20,7 +20,6 @@ export default async function ListingPage({
 
   if (!listing) return notFound();
 
-  // has the user applied for this listing?
   const applied =
     user != null
       ? (await prisma.application.count({
@@ -28,7 +27,6 @@ export default async function ListingPage({
         })) > 0
       : false;
 
-  // is the user in the organization?
   const in_org =
     user != null
       ? user.member_of.some((org) => org.id === listing.organization_id) ||
@@ -41,7 +39,6 @@ export default async function ListingPage({
         {/* Left side: Listing details */}
         <div>
           <ListingInfo listing={listing} />
-
           {user && !applied && (
             <>
               <Link href={`/listing/${id}/apply`} className="text-blue-500 underline">
@@ -50,7 +47,7 @@ export default async function ListingPage({
               <br />
             </>
           )}
-          {user && applied && <p className="text-green-500">You've already applied for this!</p>}
+          {user && applied && <p className="text-green-500">You&apos;ve already applied for this!</p>}
           {user && in_org && (
             <Link href={`/listing/${id}/manage`} className="text-blue-500 underline">
               Manage listing
