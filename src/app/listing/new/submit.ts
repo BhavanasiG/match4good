@@ -17,14 +17,14 @@ export interface CreateListingData {
 /**
  * This method returns an array containing the organizations a user is linked
  * with or null
- * @returns {Promise<Organization[] | null>} Array of organizations linked with user or null if no user logged in
+ * @returns Array of organizations linked with user or null if no user logged in
  */
 async function getUserOrganizations(): Promise<Organization[] | null> {
   const user = await getUser(true);
   if (!user) {
     return null;
   }
-
+  // We use a set for de-duplication as it naturally has unique elements
   const user_orgs = [...new Set([...user.owner_of, ...user.member_of])];
 
   return user_orgs;
@@ -38,9 +38,7 @@ async function getUserOrganizations(): Promise<Organization[] | null> {
  * - Ensures the name field is not empty.
  * - Checks that both start and end dates and times are provided.
  * - Validates that the end date and time is the same as or
- * after the start date and time.
  * - Displays an appropriate error message if validation fails.
- * and passes to the server to create new record in database
  * - Listing is linked to one of the user's organisation
  * @param {CreateListingData} form_data Form data inputted/submitted by user.
  * @returns {redirect} redirection to new created listing (if valid data inputted),
@@ -68,7 +66,6 @@ export async function createListing(form_data: CreateListingData) {
 
   const hours =
     (end_datetime.getTime() - start_datetime.getTime()) / (1000 * 60 * 60);
-
   const user_orgs = await getUserOrganizations();
   if (!user_orgs || user_orgs.length === 0) {
     return "No organizations associated with account";
