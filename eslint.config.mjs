@@ -77,6 +77,21 @@ export default defineConfig([
     },
     plugins: { "react-hooks": reactHooks },
   },
+  {
+    files: ["**/*.page.ts", "**/*.page.tsx"],
+    rules: {
+      "jsdoc/require-jsdoc": "off",
+      "jsdoc/require-description": "off",
+      "jsdoc/require-param": "off",
+      "jsdoc/require-returns": "off",
+      "jsdoc/require-example": "off",
+      "jsdoc/check-param-names": "off",
+      "jsdoc/check-tag-names": "off",
+      "jsdoc/check-types": "off",
+      "jsdoc/require-returns-check": "off",
+      "jsdoc/require-description-complete-sentence": "off",
+    },
+  },
 
   ...compat.extends(
     "next/core-web-vitals",
