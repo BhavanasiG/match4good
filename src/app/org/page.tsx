@@ -24,8 +24,8 @@ export default function OrganizationsPage() {
         }
         const data: Charity[] = await res.json();
         setCharities(data);
-      } catch (error) {
-        setError(error instanceof Error ? error.message : "Unknown error");
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Unknown error");
       } finally {
         setLoading(false);
       }
@@ -43,14 +43,14 @@ export default function OrganizationsPage() {
       {!loading && !error && charities.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {charities.map((charity) => (
-            <Link key={charity.id} href={`/org/${charity.id}`}>
+            <Link key={charity.id} href={`/org/${charity.id}`} passHref>
               <div className="border p-6 rounded-lg shadow-md bg-white hover:bg-gray-100 cursor-pointer">
                 <h2 className="text-2xl font-semibold mb-2">{charity.charity_name}</h2>
                 <p className="text-gray-700">
-                  <strong>Date of Registration:</strong> {charity.date_of_registration}
+                  <strong>Date of Registration:</strong> {charity.date_of_registration || "N/A"}
                 </p>
                 <p className="text-gray-700">
-                  <strong>Removal Reason:</strong> {charity.removal_reason}
+                  <strong>Removal Reason:</strong> {charity.removal_reason || "N/A"}
                 </p>
               </div>
             </Link>

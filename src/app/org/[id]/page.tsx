@@ -11,7 +11,7 @@ interface Charity {
 }
 
 export default function CharityDetailPage() {
-  const { id } = useParams();
+  const { id } = useParams() as { id: string };
   const [charity, setCharity] = useState<Charity | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -25,15 +25,15 @@ export default function CharityDetailPage() {
         }
         const data: Charity[] = await res.json();
 
-        const charityData = data.find((charity) => charity.id === Number(id));
+        const charityData = data.find((c) => c.id === Number(id));
 
         if (!charityData) {
           throw new Error("Charity not found");
         }
 
         setCharity(charityData);
-      } catch (error) {
-        setError(error instanceof Error ? error.message : "Unknown error");
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Unknown error");
       } finally {
         setLoading(false);
       }
@@ -53,10 +53,10 @@ export default function CharityDetailPage() {
         <div className="border p-6 rounded-lg shadow-md bg-white">
           <h2 className="text-2xl font-semibold mb-2">{charity.charity_name}</h2>
           <p className="text-gray-700">
-            <strong>Date of Registration:</strong> {charity.date_of_registration}
+            <strong>Date of Registration:</strong> {charity.date_of_registration || "N/A"}
           </p>
           <p className="text-gray-700">
-            <strong>Removal Reason:</strong> {charity.removal_reason}
+            <strong>Removal Reason:</strong> {charity.removal_reason || "N/A"}
           </p>
         </div>
       )}

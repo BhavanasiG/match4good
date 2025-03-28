@@ -47,10 +47,10 @@ export async function GET() {
 
     console.log("Fetched Charities:", charityData);
     return NextResponse.json(charityData);
-  } catch (error) {
-    console.error("Error in API route:", error);
+  } catch (err) {
+    console.error("Error in API route:", err);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Unknown error" },
+      { error: err instanceof Error ? err.message : "Unknown error" },
       { status: 500 }
     );
   }
