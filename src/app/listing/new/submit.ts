@@ -17,22 +17,18 @@ export interface CreateListingData {
 /**
  * This method returns an array containing the organizations a user is linked
  * with or null
-<<<<<<< HEAD:src/app/listing/new/submit.ts
- * @returns Array of organizations linked with user or null if no user logged in
-=======
+ *
  * @returns {Promise<Organization[] | null>} Array of organizations linked with user or null if no user logged in
->>>>>>> 9facdfb (Removes merge artefacts):src/app/listing/new/actions.ts
  */
 async function getUserOrganizations(): Promise<Organization[] | null> {
+  // Makes sense to do appropriate checks before checking for organizaions
+  // linked with user
+  //
   const user = await getUser(true);
   if (!user) {
     return null;
   }
-<<<<<<< HEAD:src/app/listing/new/submit.ts
   // We use a set for de-duplication as it naturally has unique elements
-=======
-
->>>>>>> 9facdfb (Removes merge artefacts):src/app/listing/new/actions.ts
   const user_orgs = [...new Set([...user.owner_of, ...user.member_of])];
 
   return user_orgs;
@@ -74,6 +70,7 @@ export async function createListing(form_data: CreateListingData) {
 
   const hours =
     (end_datetime.getTime() - start_datetime.getTime()) / (1000 * 60 * 60);
+
   const user_orgs = await getUserOrganizations();
   if (!user_orgs || user_orgs.length === 0) {
     return "No organizations associated with account";
