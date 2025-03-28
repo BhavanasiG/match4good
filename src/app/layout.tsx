@@ -29,7 +29,7 @@ export default function rootLayout({
         className={`${inter.className} antialiased flex flex-col min-h-screen`}
       >
         <Header />
-        <main className="grow">{children}</main>
+        <main className="grow flex flex-col min-h-screen">{children}</main>
         <Toaster position="top-center" richColors closeButton />
         <Footer />
       </body>
