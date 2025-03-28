@@ -1,7 +1,16 @@
 "use client";
 
-import { ApplicationStatus, Prisma } from "@/../generated/prisma_client";
-import { setApplicationStatus } from "./actions";
+import {
+  ApplicationStatus,
+  Listing,
+  ListingStatus,
+  Prisma,
+} from "@/../generated/prisma_client";
+import {
+  distributePointsFor,
+  setApplicationStatus,
+  setListingStatus,
+} from "./actions";
 
 export type ListingWithApplications = Prisma.ListingGetPayload<{
   include: { applications: { include: { user: true } } };
@@ -35,14 +44,14 @@ export function PresentApplication({
           <>
             <button
               onClick={() =>
-                setApplicationStatus(application, ApplicationStatus.ACCEPTED)
+                setApplicationStatus(application.id, ApplicationStatus.ACCEPTED)
               }
             >
               Accept
             </button>
             <button
               onClick={() =>
-                setApplicationStatus(application, ApplicationStatus.REJECTED)
+                setApplicationStatus(application.id, ApplicationStatus.REJECTED)
               }
             >
               Reject
@@ -51,7 +60,7 @@ export function PresentApplication({
         ) : (
           <button
             onClick={() =>
-              setApplicationStatus(application, ApplicationStatus.PENDING)
+              setApplicationStatus(application.id, ApplicationStatus.PENDING)
             }
           >
             Undo
@@ -59,5 +68,18 @@ export function PresentApplication({
         )}
       </div>
     </div>
+  );
+}
+
+export function CloseApplications({ listing }: { listing: Listing }) {
+  return (
+    <button
+      onClick={async () => {
+        await setListingStatus(listing.id, ListingStatus.ApplicationsClosed);
+        await distributePointsFor(listing.id);
+      }}
+    >
+      Close Applications
+    </button>
   );
 }

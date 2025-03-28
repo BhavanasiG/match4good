@@ -1,7 +1,12 @@
 import prisma, { getUser } from "@/lib/prisma";
 import { forbidden, notFound } from "next/navigation";
-import { ListingWithApplications, PresentApplication } from "./client";
+import {
+  CloseApplications,
+  ListingWithApplications,
+  PresentApplication,
+} from "./client";
 import ListingInfo from "@/components/listingInfo";
+import { ListingStatus } from "../../../../../generated/prisma_client";
 
 function Applicants({ listing }: { listing: ListingWithApplications }) {
   return (
@@ -14,6 +19,10 @@ function Applicants({ listing }: { listing: ListingWithApplications }) {
           </li>
         ))}
       </ul>
+
+      {listing.status === ListingStatus.AcceptingApplications && (
+        <CloseApplications listing={listing} />
+      )}
     </div>
   );
 }
