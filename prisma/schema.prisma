@@ -18,6 +18,7 @@ model User {
   id       Int    @id @default(autoincrement())
   user_id  String @unique
   username String @unique
+  email    String? @unique
 
   owner_of  Organization[] @relation("ownership")
   member_of Organization[] @relation("membership")
