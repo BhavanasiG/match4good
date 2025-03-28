@@ -1,5 +1,12 @@
 import { NextResponse } from "next/server";
 
+interface CharityData {
+  id: number;
+  charity_name: string;
+  date_of_registration: string;
+  removal_reason: string;
+}
+
 export async function GET() {
   try {
     console.log("Fetching charity data...");
@@ -9,12 +16,10 @@ export async function GET() {
       throw new Error("API Key is missing. Check .env.local");
     }
 
-    // Example charity numbers (Replace with real ones)
     const registeredNumbers = ["1000000", "1000001", "1000002", "1000003", "1000004"];
+    const charityData: CharityData[] = [];
 
-    const charityData = [];
-
-    for (const registeredNumber of registeredNumbers) {
+    for (const [index, registeredNumber] of registeredNumbers.entries()) {
       const suffix = "0";
       const url = `https://api.charitycommission.gov.uk/register/api/allcharitydetailsV2/${registeredNumber}/${suffix}`;
 
@@ -28,26 +33,22 @@ export async function GET() {
 
       if (!res.ok) {
         console.error(`Failed to fetch charity ${registeredNumber}, Status:`, res.status);
-        continue; // Skip this charity and continue with others
+        continue;
       }
 
       const data = await res.json();
-      charityData.push(data); // Store the charity data
+      charityData.push({
+        id: index + 1,
+        charity_name: data.charity_name || "Unknown",
+        date_of_registration: data.date_of_registration || "N/A",
+        removal_reason: data.removal_reason || "N/A",
+      });
     }
 
     console.log("Fetched Charities:", charityData);
-
-    // Ensure only relevant details are returned
-    const processedData = charityData.slice(0, 5).map((charity) => ({
-      charity_name: charity.charity_name || "Unknown",
-      date_of_registration: charity.date_of_registration || "N/A",
-      removal_reason: charity.removal_reason || "N/A",
-    }));
-
-    return NextResponse.json(processedData);
+    return NextResponse.json(charityData);
   } catch (error) {
     console.error("Error in API route:", error);
-
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Unknown error" },
       { status: 500 }
