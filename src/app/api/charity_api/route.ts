@@ -7,46 +7,47 @@ interface CharityData {
   removal_reason: string;
 }
 
-export async function GET() {
+export async function getCharities() {
   try {
     console.log("Fetching charity data...");
 
-    const apiKey = process.env.CHARITY_API_KEY;
-    if (!apiKey) {
+    const api_key = process.env.CHARITY_API_KEY;
+    if (!api_key) {
       throw new Error("API Key is missing. Check .env.local");
     }
 
-    const registeredNumbers = ["1000000", "1000001", "1000002", "1000003", "1000004"];
-    const charityData: CharityData[] = [];
+    const registered_numbers = ["1000000", "1000001", "1000002", "1000003", "1000004"];
+    const charity_data: CharityData[] = [];
 
-    for (const [index, registeredNumber] of registeredNumbers.entries()) {
+    for (const [index, registered_number] of registered_numbers.entries()) {
       const suffix = "0";
-      const url = `https://api.charitycommission.gov.uk/register/api/allcharitydetailsV2/${registeredNumber}/${suffix}`;
+      const url = `https://api.charitycommission.gov.uk/register/api/allcharitydetailsV2/${registered_number}/${suffix}`;
 
       console.log("Fetching charity:", url);
 
       const res = await fetch(url, {
         headers: {
-          "Ocp-Apim-Subscription-Key": apiKey,
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          "Ocp-Apim-Subscription-Key": api_key,
         },
       });
 
       if (!res.ok) {
-        console.error(`Failed to fetch charity ${registeredNumber}, Status:`, res.status);
+        console.error(`Failed to fetch charity ${registered_number}, Status:`, res.status);
         continue;
       }
 
-      const data = await res.json();
-      charityData.push({
+      const data: Partial<CharityData> = (await res.json()) as Partial<CharityData>;
+      charity_data.push({
         id: index + 1,
-        charity_name: data.charity_name || "Unknown",
-        date_of_registration: data.date_of_registration || "N/A",
-        removal_reason: data.removal_reason || "N/A",
+        charity_name: data.charity_name ?? "Unknown",
+        date_of_registration: data.date_of_registration ?? "N/A",
+        removal_reason: data.removal_reason ?? "N/A",
       });
     }
 
-    console.log("Fetched Charities:", charityData);
-    return NextResponse.json(charityData);
+    console.log("Fetched Charities:", charity_data);
+    return NextResponse.json(charity_data);
   } catch (err) {
     console.error("Error in API route:", err);
     return NextResponse.json(
@@ -54,4 +55,9 @@ export async function GET() {
       { status: 500 }
     );
   }
+}
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export async function GET() {
+  return getCharities();
 }
