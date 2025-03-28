@@ -6,8 +6,8 @@ interface CharityData {
   date_of_registration: string;
   removal_reason: string;
 }
-
-export async function getCharities() {
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export async function GET() {
   try {
     console.log("Fetching charity data...");
 
@@ -36,7 +36,6 @@ export async function getCharities() {
         console.error(`Failed to fetch charity ${registered_number}, Status:`, res.status);
         continue;
       }
-
       const data: Partial<CharityData> = (await res.json()) as Partial<CharityData>;
       charity_data.push({
         id: index + 1,
@@ -55,9 +54,4 @@ export async function getCharities() {
       { status: 500 }
     );
   }
-}
-
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export async function GET() {
-  return getCharities();
 }
