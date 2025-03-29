@@ -2,14 +2,8 @@ import DynamicLoginLogoutButton from "@/components/login";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu } from "lucide-react";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTriggerIconless,
-} from "./ui/navigation-menu";
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTriggerIconless } from "./ui/navigation-menu";
+import { ModeToggle } from "./toggle";
 
 /**
  * Creates the common header component for the site
@@ -52,6 +46,7 @@ export default function Header() {
       </div>
       <div className="flex space-x-4 justify-end items-center">
         <DynamicLoginLogoutButton />
+        <ModeToggle />
       </div>
     </header>
   );
