@@ -9,9 +9,13 @@ datasource db {
 }
 
 model User {
-  id          Int            @id @default(autoincrement())
-  user_id     String         @unique
-  username    String         @unique
+  id       Int    @id @default(autoincrement())
+  user_id  String @unique
+  username String @unique
+
+  owner_of  Organization[] @relation("ownership")
+  member_of Organization[] @relation("membership")
+
   application Application[]
   owner_of    Organization[] @relation("ownership")
   member_of   Organization[] @relation("membership")

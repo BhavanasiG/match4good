@@ -29,6 +29,7 @@ install:
     paths:
       - node_modules
       - generated
+    expire_in: 1 hour
 
 lint:
   stage: lint
@@ -65,3 +66,4 @@ deploy_static:
   artifacts:
     paths:
       - public
+

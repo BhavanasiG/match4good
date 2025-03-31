@@ -1,8 +1,8 @@
 import { createServer } from "http";
 import next from "next";
 import { Server } from "socket.io";
-import onConnection from "./src/app/ws/onConnection.js";
-import onServerStart from "./src/app/ws/onServerStart.js";
+import onConnection from "./src/lib/ws/onConnection.js";
+import onServerStart from "./src/lib/ws/onServerStart.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -28,5 +28,5 @@ app.prepare().then(
       console.log(`> Ready on http://localhost:${port}`);
     });
   },
-  () => {}
+  () => {},
 );
