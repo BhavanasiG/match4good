@@ -17,8 +17,6 @@ model User {
   member_of Organization[] @relation("membership")
 
   application Application[]
-  owner_of    Organization[] @relation("ownership")
-  member_of   Organization[] @relation("membership")
 }
 
 model Organization {
