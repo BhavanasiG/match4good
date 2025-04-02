@@ -72,7 +72,7 @@ export async function createListing(form_data: CreateListingData) {
       name: form_data.name,
       description: form_data.description,
       start_datetime: start_datetime,
-      end_datetime: end_datetime, // Fix: Use correct end_datetime
+      end_datetime: end_datetime,
       organization_id: form_data.organization_id,
     },
   });
