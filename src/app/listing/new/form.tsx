@@ -9,7 +9,7 @@ export interface CreateListingFormProps {
 }
 
 /**
- * Creates form and handles form submission for creating volunteer oppportunity
+ * Creates form and handles form submission for creating a volunteer opportunity
  * by validating the input fields
  *
  * Completes/Ensures these **client-side** actions:
@@ -19,12 +19,12 @@ export interface CreateListingFormProps {
  * after the start date and time.
  * - Displays an appropriate error message if validation fails.
  * - Logs the form data to the console if all validations pass
- * and passes to the server to create new record in database
- * - Listing is linked to one of the user's organisation
- * @param param0 The user (object) for which a new listing form will be
- * generated
- * @returns HTML form that allows user to create a new listing
+ * and passes to the server to create a new record in the database.
+ * - Listing is linked to one of the user's organizations.
+ * @param param0 The user (object) for which a new listing form will be generated.
+ * @returns HTML form that allows the user to create a new listing.
  */
+
 export default function CreateListingForm({ user }: CreateListingFormProps) {
   const user_orgs = [...new Set([...user.owner_of, ...user.member_of])];
 
@@ -36,16 +36,14 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
     description: "",
     start_datetime: new Date().toISOString(),
     end_datetime: new Date().toISOString(),
-    organization_id: user_orgs.length == 0 ? 0 : user_orgs[0].id,
+    organization_id: user_orgs.length === 0 ? 0 : user_orgs[0].id,
   });
 
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    console.log(name, value);
     setFormData((prev_data) => ({
       ...prev_data,
-      // Ensure organizationId is a number
-      [name]: name === "organizationId" ? Number(value) : value,
+      [name]: name === "organization_id" ? Number(value) : value,
     }));
   };
 
@@ -58,12 +56,10 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
     const end_datetime = new Date(form_data.end_datetime);
     const now = new Date();
 
-    // We need to validate the user's inputs
     if (!form_data.name.trim()) {
       setError("Name is required");
       return;
     }
-
     if (!form_data.start_datetime || !form_data.end_datetime) {
       setError("Both start and end dates are required");
       return;
@@ -72,12 +68,10 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
       setError("Start date cannot be in the past");
       return;
     }
-
     if (start_datetime > end_datetime) {
-      setError("End date must be same as or after the start date");
+      setError("End date must be the same as or after the start date");
       return;
     }
-
     if (!user_orgs.some((org) => org.id === form_data.organization_id)) {
       setError("Invalid organization selected.");
       return;
@@ -88,97 +82,95 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
   };
 
   return (
-    <div className="create-listing-form">
-      <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="name">Opportunity name:</label>
-          <br />
-          <input
-            type="text"
-            name="name"
-            id="name"
-            onChange={onChange}
-            value={form_data.name}
-            required
-          />
-          <br />
-        </div>
+    <form onSubmit={onSubmit} className="space-y-4 max-w-lg mx-auto">
+      <div>
+        <label htmlFor="name" className="block font-medium">
+          Opportunity Name
+        </label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          value={form_data.name}
+          onChange={onChange}
+          required
+          className="border p-2 w-full rounded"
+        />
+      </div>
 
-        <div>
-          <label htmlFor="description">
-            About this opportunity (not required):
-          </label>
-          <br />
-          <input
-            type="text"
-            name="description"
-            id="description"
-            onChange={onChange}
-            value={form_data.description}
-          />
-          <br />
-        </div>
+      <div>
+        <label htmlFor="description" className="block font-medium">
+          Description (Optional)
+        </label>
+        <input
+          type="text"
+          name="description"
+          id="description"
+          value={form_data.description}
+          onChange={onChange}
+          className="border p-2 w-full rounded"
+        />
+      </div>
 
-        <div>
-          <label htmlFor="start_datetime">
-            Opprtunity start date and time (24hr):
-          </label>
-          <br />
-          <input
-            type="datetime-local"
-            name="start_datetime"
-            id="start_datetime"
-            onChange={onChange}
-            value={form_data.start_datetime}
-            required
-          />
-          <br />
-        </div>
+      <div>
+        <label htmlFor="start_datetime" className="block font-medium">
+          Start Date & Time
+        </label>
+        <input
+          type="datetime-local"
+          name="start_datetime"
+          id="start_datetime"
+          value={form_data.start_datetime}
+          onChange={onChange}
+          required
+          className="border p-2 w-full rounded"
+        />
+      </div>
 
-        <div>
-          <label htmlFor="end_datetime">
-            Opportunity end date and time (24hr):
-          </label>
-          <br />
-          <input
-            type="datetime-local"
-            name="end_datetime"
-            id="end_datetime"
-            onChange={onChange}
-            value={form_data.end_datetime}
-            required
-          />
-        </div>
+      <div>
+        <label htmlFor="end_datetime" className="block font-medium">
+          End Date & Time
+        </label>
+        <input
+          type="datetime-local"
+          name="end_datetime"
+          id="end_datetime"
+          value={form_data.end_datetime}
+          onChange={onChange}
+          required
+          className="border p-2 w-full rounded"
+        />
+      </div>
 
-        <div>
-          <label htmlFor="organisation_id">
-            Select Organisation opportunity should be listed for:
-          </label>
-          <br />
-          <select
-            name="organisation_id"
-            id="organisation_id"
-            onChange={onChange}
-            value={form_data.organization_id}
-            required
-          >
-            <option value="" disabled>
-              --Select an organization--
+      <div>
+        <label htmlFor="organization_id" className="block font-medium">
+          Select Organization
+        </label>
+        <select
+          name="organization_id"
+          id="organization_id"
+          value={form_data.organization_id}
+          onChange={onChange}
+          required
+          className="border p-2 w-full rounded"
+        >
+          <option value="" disabled>
+            -- Select an organization --
+          </option>
+          {user_orgs.map((org) => (
+            <option key={org.id} value={org.id}>
+              {org.name}
             </option>
-            {user_orgs.map((org) => (
-              <option key={org.id} value={org.id}>
-                {org.name}
-              </option>
-            ))}
-          </select>
-        </div>
+          ))}
+        </select>
+      </div>
 
-        {error && <p className={"text-red-600"}>{error}</p>}
-        {success && <p className={"text-red-600"}>{success}</p>}
+      {error && <p className="text-red-600">{error}</p>}
+      {success && <p className="text-green-600">{success}</p>}
 
-        <br />
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+      <button type="submit" className="bg-blue-500 text-white p-2 w-full rounded">
+        Submit
+      </button>
+    </form>
   );
 }

@@ -7,6 +7,8 @@ export default function CreateOrgForm() {
   const [form_data, setFormData] = useState<CreateOrgFormData>({
     name: "",
     description: undefined,
+    address: "",
+    postcode: "",
   });
   const [error, setError] = useState<string | undefined>(undefined);
 
@@ -26,13 +28,21 @@ export default function CreateOrgForm() {
       setError("Name cannot be empty");
       return;
     }
+    if (form_data.address.trim() === "") {
+      setError("Address cannot be empty");
+      return;
+    }
+    if (form_data.postcode.trim() === "") {
+      setError("Postcode cannot be empty");
+      return;
+    }
 
     const error = await createOrg(form_data);
     setError(error);
   };
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} className="space-y-4">
       <div>
         <label htmlFor="name">Name</label>
         <input
@@ -42,6 +52,7 @@ export default function CreateOrgForm() {
           required
           value={form_data.name}
           onChange={onChange}
+          className="border p-2 w-full"
         />
       </div>
 
@@ -50,15 +61,44 @@ export default function CreateOrgForm() {
         <input
           id="description"
           name="description"
-          type="textarea"
+          type="text"
           value={form_data.description}
           onChange={onChange}
+          className="border p-2 w-full"
         />
       </div>
 
-      {error && <p className={"text-red-600"}>{error}</p>}
+      <div>
+        <label htmlFor="address">Address</label>
+        <input
+          id="address"
+          name="address"
+          type="text"
+          required
+          value={form_data.address}
+          onChange={onChange}
+          className="border p-2 w-full"
+        />
+      </div>
 
-      <button type="submit">Submit</button>
+      <div>
+        <label htmlFor="postcode">Postcode</label>
+        <input
+          id="postcode"
+          name="postcode"
+          type="text"
+          required
+          value={form_data.postcode}
+          onChange={onChange}
+          className="border p-2 w-full"
+        />
+      </div>
+
+      {error && <p className="text-red-600">{error}</p>}
+
+      <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+        Submit
+      </button>
     </form>
   );
 }
