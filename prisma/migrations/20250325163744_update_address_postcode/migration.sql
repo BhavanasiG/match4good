@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Organization" ALTER COLUMN "address" DROP NOT NULL,
+ALTER COLUMN "address" DROP DEFAULT,
+ALTER COLUMN "postcode" DROP NOT NULL,
+ALTER COLUMN "postcode" DROP DEFAULT;
