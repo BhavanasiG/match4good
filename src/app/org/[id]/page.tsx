@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+/* eslint-disable @typescript-eslint/naming-convention */
+
 function getTimeString(start_date : Date, end_date : Date) {
   const difference : Date = new Date(end_date.getTime() - start_date.getTime());
   const hours : number = Math.floor(difference.getTime() / (1000 * 60 * 60));
@@ -40,8 +42,10 @@ function getTimeString(start_date : Date, end_date : Date) {
   }
 }
 
-export default async function App({ params } : { params: { id: string } }) {
-  const org_id : number = Number(params.id);
+type t_params = Promise<{ id: string }>;
+
+export default async function App(props: {params: t_params}) {
+  const org_id: number = Number((await props.params).id);
 
   const org = await prisma.organization.findUnique({
     where: {
