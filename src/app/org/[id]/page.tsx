@@ -7,8 +7,45 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export default async function App() {
-  const org_id : number = 1;
+/* eslint-disable @typescript-eslint/naming-convention */
+
+function getTimeString(start_date : Date, end_date : Date) {
+  const difference : Date = new Date(end_date.getTime() - start_date.getTime());
+  const hours : number = Math.floor(difference.getTime() / (1000 * 60 * 60));
+
+  if (start_date.getDate() === end_date.getDate()) {
+    return (
+      <>
+        <p>
+          {start_date.toLocaleDateString(undefined, {dateStyle: "full"})}
+        </p>
+        <p>
+          {start_date.toLocaleTimeString(undefined, {timeStyle: "short"})} -&nbsp; 
+          {end_date.toLocaleTimeString(undefined, {timeStyle: "short"})}
+        </p>
+      </>
+    )
+  } else if (hours < 168) {
+    return (
+      <p>
+        {start_date.toLocaleDateString(undefined, {dateStyle: "full"})} -&nbsp;
+        {end_date.toLocaleDateString(undefined, {dateStyle: "full"})}
+      </p>
+    )
+  } else {
+    return (
+      <p>
+        {start_date.toLocaleDateString(undefined, {dateStyle: "long"})} -&nbsp;
+        {end_date.toLocaleDateString(undefined, {dateStyle: "long"})}
+      </p>
+    )
+  }
+}
+
+type t_params = Promise<{ id: string }>;
+
+export default async function App(props: {params: t_params}) {
+  const org_id: number = Number((await props.params).id);
 
   const org = await prisma.organization.findUnique({
     where: {
