@@ -1,7 +1,6 @@
 import { User } from "@/lib/prisma";
 
 export type Props = { user: User };
-
 /**
  * Displays organizations the user owns and is a part of
  * @param {User} user accepts a prisma user object to display

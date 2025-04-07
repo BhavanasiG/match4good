@@ -19,7 +19,7 @@ export type User = Prisma.UserGetPayload<{
  * @returns {User} User if logged in, otherwise null
  */
 export async function getUser(
-  organizations: boolean = false,
+  organizations: boolean = false
 ): Promise<User | null> {
   const session = await auth0.getSession();
   if (!session) {

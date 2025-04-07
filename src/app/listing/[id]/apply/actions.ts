@@ -12,7 +12,7 @@ import { forbidden, notFound, redirect } from "next/navigation";
  */
 export default async function createApplication(
   listing_id: number,
-  description: string | null,
+  description: string | null
 ) {
   const user = await getUser();
 

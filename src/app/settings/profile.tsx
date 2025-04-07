@@ -48,7 +48,6 @@ const form_schema = z.object({
 
 export type Props = { user: User };
 
-
 /**
  *
  * @param {User} param0 - user: The user object to display

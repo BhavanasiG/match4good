@@ -9,6 +9,11 @@ import prisma, { getUser } from "@/lib/prisma";
 
 export type Props = { username: string };
 
+/**
+ *
+ * @param {string} param0 - Accepts an object with a username string
+ * @returns {Promise<void>} - Returns a promise that resolves when the user is updated
+ */
 export async function UpdateUser({ username }: Props) {
   const user = await getUser();
 
