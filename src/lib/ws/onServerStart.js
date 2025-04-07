@@ -2,7 +2,7 @@
 /* eslint @typescript-eslint/no-unsafe-member-access: 0 */
 
 /**
- * 
+ *
  * @param {*} server Server
  */
 export default function onServerStart(server) {
