@@ -46,7 +46,6 @@ export default function Header() {
       </div>
       <div className="col-span-3 flex space-x-4 justify-end items-center">
         <DynamicLoginLogoutButton />
-        <ModeToggle />
       </div>
     </header>
   );
