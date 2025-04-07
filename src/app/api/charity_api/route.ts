@@ -12,7 +12,8 @@ interface CharityData {
  * and returns it as a JSON response.
  * @returns {Promise<NextResponse>} - JSON response containing charity data
  */
-export async function Get() {
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export async function GET() {
   try {
     console.log("Fetching charity data...");
 
