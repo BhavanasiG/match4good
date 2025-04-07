@@ -49,7 +49,6 @@ model Listing {
   organization_id Int
   end_datetime    DateTime
   start_datetime  DateTime
-  active         Boolean  @default(true)
   applications    Application[]
   organization    Organization  @relation(fields: [organization_id], references: [id])
 }
@@ -59,4 +58,3 @@ enum ApplicationStatus {
   ACCEPTED
   REJECTED
 }
-
