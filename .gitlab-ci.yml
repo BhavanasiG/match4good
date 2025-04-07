@@ -75,4 +75,3 @@ deploy_static:
   artifacts:
     paths:
       - public
-
