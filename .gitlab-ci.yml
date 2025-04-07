@@ -41,6 +41,14 @@ lint:
   script:
     - npm run lint
 
+test:
+  stage: test
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  needs: ["install"]
+  script:
+    - npm run test
+
 prettier:
   stage: prettier
   rules:
