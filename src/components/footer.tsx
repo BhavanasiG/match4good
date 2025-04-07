@@ -4,7 +4,7 @@ import { Separator } from "./ui/separator";
 
 /**
  * The function creates the footer to be used on the website
- * @returns Common footer for webpages
+ * @returns {Element} Common footer for webpages
  */
 export default function Footer() {
   return (

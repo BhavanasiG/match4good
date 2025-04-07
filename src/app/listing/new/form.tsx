@@ -21,9 +21,9 @@ export interface CreateListingFormProps {
  * - Logs the form data to the console if all validations pass
  * and passes to the server to create new record in database
  * - Listing is linked to one of the user's organisation
- * @param param0 The user (object) for which a new listing form will be
+ * @param {CreateListingFormProps} param0 The user (object) for which a new listing form will be
  * generated
- * @returns HTML form that allows user to create a new listing
+ * @returns {Element} - A form for creating a new listing
  */
 export default function CreateListingForm({ user }: CreateListingFormProps) {
   const user_orgs = [...new Set([...user.owner_of, ...user.member_of])];

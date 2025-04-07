@@ -15,6 +15,11 @@ export const metadata: Metadata = {
   description: "Find volunteering opportunities near you!",
 };
 
+/**
+ * @param {*} root0 - The root layout for the app
+ * @param {*} root0.children - The children of the root layout
+ * @returns {Element} - The root layout for the app
+ */
 export default function rootLayout({
   children,
 }: Readonly<{

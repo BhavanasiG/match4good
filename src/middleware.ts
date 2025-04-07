@@ -2,6 +2,12 @@ import type { NextRequest } from "next/server";
 
 import { auth0 } from "./lib/auth0";
 
+/**
+ *
+ * @param {NextRequest} request - The incoming request object
+ * @returns {Promise<Response>} - The response object
+ * This middleware function handles authentication for the application.
+ */
 export async function middleware(request: NextRequest) {
   return await auth0.middleware(request);
 }

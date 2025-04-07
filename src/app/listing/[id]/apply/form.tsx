@@ -3,6 +3,11 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import createApplication from "./actions";
 
+/**
+ * Creates form and handles form submission for creating an application
+ * @param {number} param0 - listing_id: The id of the listing to which the application is being made
+ * @returns {Element} - A form for creating an application for a listing
+ */
 export default function ApplicationForm({
   listing_id,
 }: {

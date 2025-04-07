@@ -13,7 +13,8 @@ import Link from "next/link";
 
 /**
  * This component has a link to the sign-up page and the log in page
- * @returns
+ * Returns A link to the sign-up page and the log in page
+ * @returns {Element} A link to the sign-up page and the log in page
  */
 export function LoginButton() {
   return (
@@ -32,7 +33,8 @@ export function LoginButton() {
 
 /**
  * This component is a link to the log out endpoint
- * @returns
+ * Returns A link to the log out endpoint
+ * @returns {Element} A link to the log out endpoint
  */
 export function LogoutButton() {
   return (
@@ -67,7 +69,8 @@ export function LogoutButton() {
 
 /**
  * This component is a `LogoutButton` if logged in, otherwise it's a `LoginButton`
- * @returns
+ * Returns A `LoginButton` or a `LogoutButton`
+ * @returns {Element} A `LoginButton` or a `LogoutButton`
  */
 export default async function DynamicLoginLogoutButton() {
   const session = await auth0.getSession();

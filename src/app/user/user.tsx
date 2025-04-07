@@ -5,8 +5,8 @@ export type Props = { user: User };
 /**
  * Displays basic user information such as username, owned organizations,
  * and orgs the user is a member of.
- * @param Props accepts a prisma user object to display
- * @returns
+ * @param {Props} user accepts a prisma user object to display
+ * @returns {Element} - Returns a component that displays the user information
  */
 export function UserInfo({ user }: Props) {
   return (
