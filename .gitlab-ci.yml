@@ -57,13 +57,6 @@ prettier:
   script:
     - npm run format:check
 
-prettier:
-  stage: prettier
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-  needs: ["install"]
-  script:
-    - npm run format:check
 
 test:
   stage: test
