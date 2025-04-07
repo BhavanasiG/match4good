@@ -48,6 +48,11 @@ const form_schema = z.object({
 
 export type Props = { user: User };
 
+/**
+ *
+ * @param {User} param0 - user: The user object to display
+ * @returns {Element} - Returns a form for updating the user's profile
+ */
 export default function ProfileForm({ user }: Props) {
   /**
    * Make sure to include defaultValues for each form or
@@ -65,6 +70,11 @@ export default function ProfileForm({ user }: Props) {
     },
   });
 
+  /**
+   *
+   * @param {z.infer<typeof form_schema>} values Form values
+   * Handles form submission and updates the user profile
+   */
   function OnSubmit(values: z.infer<typeof form_schema>) {
     let error = false;
 

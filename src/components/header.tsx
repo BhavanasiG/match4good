@@ -13,7 +13,7 @@ import {
 
 /**
  * Creates the common header component for the site
- * @returns Header component for the site
+ * @returns {Element} Header component
  */
 export default function Header() {
   return (

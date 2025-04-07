@@ -3,6 +3,10 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { createOrg, CreateOrgFormData } from "./actions";
 
+/**
+ * @returns {Element} - A form for creating a new organization
+ * This component is a form that allows the user to create a new organization
+ */
 export default function CreateOrgForm() {
   const [form_data, setFormData] = useState<CreateOrgFormData>({
     name: "",

@@ -4,6 +4,12 @@ export type ListingWithOrganization = Prisma.ListingGetPayload<{
   include: { organization: true };
 }>;
 
+/**
+ *
+ * @param {ListingWithOrganization} param0 - Accepts an object with a listing object
+ * @returns {Element} - Returns HTML component that displays the listing information
+ * This component is used to display the listing information on the listing page
+ */
 export default function ListingInfo({
   listing,
 }: {

@@ -15,12 +15,11 @@ export type User = Prisma.UserGetPayload<{
 /**
  * Helper function to get the currently logged in user from the auth0 session infomation.
  * If the user didn't exist in the database before, a new record is created.
- *
- * @param organizations Include related organizations
- * @returns User if logged in, otherwise null
+ * @param {boolean} organizations Include related organizations
+ * @returns {User} User if logged in, otherwise null
  */
 export async function getUser(
-  organizations: boolean = false,
+  organizations: boolean = false
 ): Promise<User | null> {
   const session = await auth0.getSession();
   if (!session) {
