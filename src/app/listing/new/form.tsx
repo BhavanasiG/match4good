@@ -24,7 +24,6 @@ export interface CreateListingFormProps {
  * @param param0 The user (object) for which a new listing form will be generated.
  * @returns HTML form that allows the user to create a new listing.
  */
-
 export default function CreateListingForm({ user }: CreateListingFormProps) {
   const user_orgs = [...new Set([...user.owner_of, ...user.member_of])];
 
@@ -168,7 +167,10 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
       {error && <p className="text-red-600">{error}</p>}
       {success && <p className="text-green-600">{success}</p>}
 
-      <button type="submit" className="bg-blue-500 text-white p-2 w-full rounded">
+      <button
+        type="submit"
+        className="bg-blue-500 text-white p-2 w-full rounded"
+      >
         Submit
       </button>
     </form>
