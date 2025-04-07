@@ -19,10 +19,18 @@ export interface CreateListingFormProps {
  * after the start date and time.
  * - Displays an appropriate error message if validation fails.
  * - Logs the form data to the console if all validations pass
+<<<<<<< HEAD
  * and passes to the server to create a new record in the database.
  * - Listing is linked to one of the user's organizations.
  * @param param0 The user (object) for which a new listing form will be generated.
  * @returns HTML form that allows the user to create a new listing.
+=======
+ * and passes to the server to create new record in database
+ * - Listing is linked to one of the user's organisation
+ * @param {CreateListingFormProps} param0 The user (object) for which a new listing form will be
+ * generated
+ * @returns {Element} - A form for creating a new listing
+>>>>>>> 8d560df8127ce8f6424e0dac1cfda4e1cbdae810
  */
 
 export default function CreateListingForm({ user }: CreateListingFormProps) {
