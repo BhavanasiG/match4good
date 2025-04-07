@@ -168,7 +168,10 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
       {error && <p className="text-red-600">{error}</p>}
       {success && <p className="text-green-600">{success}</p>}
 
-      <button type="submit" className="bg-blue-500 text-white p-2 w-full rounded">
+      <button
+        type="submit"
+        className="bg-blue-500 text-white p-2 w-full rounded"
+      >
         Submit
       </button>
     </form>

@@ -41,15 +41,25 @@ export default async function ListingPage({ params }: PageProps) {
           <ListingInfo listing={listing} />
           {user && !applied && (
             <>
-              <Link href={`/listing/${id}/apply`} className="text-blue-500 underline">
+              <Link
+                href={`/listing/${id}/apply`}
+                className="text-blue-500 underline"
+              >
                 Apply now!
               </Link>
               <br />
             </>
           )}
-          {user && applied && <p className="text-green-500">You&apos;ve already applied for this!</p>}
+          {user && applied && (
+            <p className="text-green-500">
+              You&apos;ve already applied for this!
+            </p>
+          )}
           {user && in_org && (
-            <Link href={`/listing/${id}/manage`} className="text-blue-500 underline">
+            <Link
+              href={`/listing/${id}/manage`}
+              className="text-blue-500 underline"
+            >
               Manage listing
             </Link>
           )}
