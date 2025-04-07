@@ -48,7 +48,6 @@ prettier:
   script:
     - npm run format:check
 
-
 test:
   stage: test
   rules:
