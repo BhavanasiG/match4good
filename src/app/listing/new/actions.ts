@@ -13,18 +13,9 @@ export interface CreateListingData {
 }
 
 /**
-<<<<<<< HEAD
  * This method returns an array containing the organizations a user is linked
  * with or null
-<<<<<<< HEAD
  * @returns {Promise<Organization[] | null>} Array of organizations linked with user or null if no user logged in
-=======
- * @returns Array of organizations linked with user or null if no user logged in
->>>>>>> fe27b7e (Applies prettier fixes)
-=======
- * Retrieves an array of organizations the user is associated with.
- * @returns Array of organizations or null if no user is logged in.
->>>>>>> f535b8d20cd5354395ab4796ae61dc71ea882a31
  */
 async function getUserOrganizations(): Promise<Organization[] | null> {
   const user = await getUser(true);
@@ -38,15 +29,6 @@ async function getUserOrganizations(): Promise<Organization[] | null> {
 }
 
 /**
-<<<<<<< HEAD
- * Handles form submission for creating a volunteer opportunity.
- * - Validates required fields.
- * - Ensures the selected organization is valid.
- * - Saves the listing to the database if all conditions are met.
- * 
- * @param form_data Data inputted by the user.
- * @returns Redirection to the new listing or an error message.
-=======
  * Creates form and handles form submission for creating volunteer oppportunity
  * by validating the input fields
  *
@@ -61,7 +43,6 @@ async function getUserOrganizations(): Promise<Organization[] | null> {
  * @param {CreateListingData} form_data Form data inputted/submitted by user.
  * @returns {redirect} redirection to new created listing (if valid data inputted),
  * else returns an error message.
->>>>>>> 1cc43b131e718f28058a31372db46e398f442cd1
  */
 export async function createListing(form_data: CreateListingData) {
   if (!form_data.name.trim()) {
