@@ -20,10 +20,6 @@ export default function Footer() {
               height={0}
             />
           </Link>
-          <p className="flex pt-2 mx-auto">
-            <span className="hidden sm:block">Copyright&nbsp;</span>©
-            Match4Good 2025
-          </p>
         </div>
         <div className="flex justify-center items-center">
           <div className="flex flex-col space-y-2">
