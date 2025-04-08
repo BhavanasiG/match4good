@@ -1,6 +1,8 @@
 ﻿"use client";
 
+/* eslint-disable @typescript-eslint/naming-convention */
 import { useEffect, useState } from "react";
+import Image from "next/image"; 
 
 type Article = {
   title: string;
@@ -43,8 +45,8 @@ export default function NewsPage() {
 
         const url = `https://gnews.io/api/v4/top-headlines?token=${apiKey}&lang=en&country=${region}&topic=${category}`;
         const res = await fetch(url);
-        const data = await res.json();
-
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const data: { articles: Article[] } = await res.json();
         setArticles(data.articles || []);
       } catch (err) {
         console.error("Failed to fetch news:", err);
@@ -53,14 +55,14 @@ export default function NewsPage() {
       }
     };
 
-    fetchNews();
+    void fetchNews();
   }, [category, region]);
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">📰 Latest News</h1>
 
-      <div className="mb-6 flex gap-4">
+      <div className="mb-6 flex gap-4 flex-wrap">
         <select
           value={region}
           onChange={(e) => setRegion(e.target.value)}
@@ -89,28 +91,32 @@ export default function NewsPage() {
       {loading ? (
         <p>Loading news...</p>
       ) : (
-        <div className="grid gap-4">
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {articles.map((article, idx) => (
             <a
               key={idx}
               href={article.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="border p-4 rounded hover:bg-gray-50 transition-shadow shadow-sm"
+              className="border rounded overflow-hidden shadow hover:shadow-md transition-shadow bg-white flex flex-col"
             >
-              <h2 className="text-xl font-semibold">{article.title}</h2>
-              <p className="text-sm text-gray-600">
-                {new Date(article.publishedAt).toLocaleString()} –{" "}
-                {article.source.name}
-              </p>
-              <p className="mt-2 text-gray-700">{article.description}</p>
               {article.image && (
-                <img
+                <Image
                   src={article.image}
                   alt="Article"
-                  className="mt-3 w-full max-h-60 object-cover rounded"
+                  width={400}
+                  height={200}
+                  unoptimized 
+                  className="w-full h-48 object-cover"
                 />
               )}
+              <div className="p-4 flex flex-col flex-grow">
+                <h2 className="text-lg font-semibold">{article.title}</h2>
+                <p className="text-sm text-gray-600 mt-1">
+                  {new Date(article.publishedAt).toLocaleString()} – {article.source.name}
+                </p>
+                <p className="text-gray-700 mt-2 line-clamp-3">{article.description}</p>
+              </div>
             </a>
           ))}
         </div>
