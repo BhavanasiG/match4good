@@ -22,12 +22,12 @@ export default function rootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body className={`${inter.className} antialiased flex flex-col min-h-screen`}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="light">
           <Header />
           <main className="grow flex flex-col min-h-screen">{children}</main>
           <Toaster position="top-center" richColors closeButton />
