@@ -64,25 +64,25 @@ export default async function App(props: {params: t_params}) {
   }
 
   return (
-    <div className="p-20 px-80 space-y-10">
+    <div className="p-5 sm:p-10 md:p-20 lg:px-40 xl:px-80 space-y-10">
       <Card className="p-0 overflow-hidden">
-        <Card className="relative h-54 bg-primary border-none rounded-none">
-          <Avatar className="size-44 absolute top-30 left-20 border-4 border-secondary">
+        <Card className="relative h-32 md:h-54 bg-primary border-none rounded-none">
+          <Avatar className="size-22 md:size-44 absolute top-20 left-10 md:top-30 md:left-20 border-4 border-secondary">
             <AvatarImage src="https://avatars.githubusercontent.com/u/83641209?v=4" alt="profile image"/>
             <AvatarFallback>DM</AvatarFallback>
           </Avatar>
         </Card>
-        <CardHeader className="p-10 pt-20">
+        <CardHeader className="p-5 md:p-10 md:pt-20">
           <CardTitle className="mb-5">
-            <p className="text-3xl font-semibold">{org?.name}</p>
-            <p className="text-lg text-muted-foreground">Category ⋅ Location</p>
+            <p className="text-2xl md:text-3xl font-semibold">{org?.name}</p>
+            <p className="text-md md:text-lg text-muted-foreground">Category ⋅ {org?.address}</p>
           </CardTitle>
           <CardDescription>
-            <p className="text-lg font-medium line-clamp-3"> {org?.description} </p>
+            <p className="text-md md:text-lg font-medium line-clamp-3"> {org?.description} </p>
           </CardDescription>
         </CardHeader>
       </Card>
-      <Separator className="my-20" />
+      <Separator className="my-10 md:my-20" />
       <h2 className="text-3xl font-semibold">Listings</h2>
       <Tabs defaultValue="active" className="w-full">
         <TabsList className="grid grid-cols-2 mb-5 size-fit w-full">
@@ -158,7 +158,6 @@ export default async function App(props: {params: t_params}) {
             }})}
         </TabsContent>
       </Tabs>
-      <Separator className="my-10" />
     </div>
   )
 }
