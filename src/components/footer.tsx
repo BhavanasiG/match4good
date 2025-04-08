@@ -12,7 +12,13 @@ export default function Footer() {
       <div className="grid grid-cols-1 sm:grid-cols-3 items-center text-center space-y-8 sm:space-y-0">
         <div className="flex justify-center items-center">
           <Link href={"/"}>
-            <Image alt="Match4Good Logo" src={"/logo_extended.svg"} className="my-auto w-full h-8 md:h-11" width={0} height={0} />
+            <Image
+              alt="Match4Good Logo"
+              src={"/logo_extended.svg"}
+              className="my-auto w-full h-8 md:h-11"
+              width={0}
+              height={0}
+            />
           </Link>
           <p className="flex pt-2 mx-auto">
             <span className="hidden sm:block">Copyright&nbsp;</span>©
@@ -22,15 +28,23 @@ export default function Footer() {
         <div className="flex justify-center items-center">
           <div className="flex flex-col space-y-2">
             <h2 className="font-semibold text-2xl">Company</h2>
-            <Link href={"/org"} className="hover:text-white">Organizations</Link>
-            <Link href={""} className="hover:text-white">Jobs</Link>  
+            <Link href={"/org"} className="hover:text-white">
+              Organizations
+            </Link>
+            <Link href={""} className="hover:text-white">
+              Jobs
+            </Link>
           </div>
         </div>
         <div className="flex justify-center items-center">
           <div className="flex flex-col space-y-2">
             <h2 className="font-semibold text-2xl t">Resources</h2>
-            <Link href={"/about-us"} className="hover:text-white">About Us</Link>
-            <Link href={"/contact-us"} className="hover:text-white">Contact Us</Link>  
+            <Link href={"/about-us"} className="hover:text-white">
+              About Us
+            </Link>
+            <Link href={"/contact-us"} className="hover:text-white">
+              Contact Us
+            </Link>
           </div>
         </div>
       </div>
