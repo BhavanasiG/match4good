@@ -11,11 +11,10 @@ export interface CreateOrgFormData {
 }
 
 /**
- * Create a new organization for the logged-in user with the given information.
- * If any parameters are invalid, it returns an error string.
- *
- * @param form_data Data to create the org with
- * @returns Returns an error string, or redirects the page
+ * Create a new organization for the logged in user with the given information.
+ * If any parameters are invalid it returns an error string.
+ * @param {CreateOrgFormData} form_data Data to create the org with
+ * @returns {Promise<string | redirect>} Returns an error string, or redirects the page
  */
 export async function createOrg(form_data: CreateOrgFormData) {
   const user = await getUser();

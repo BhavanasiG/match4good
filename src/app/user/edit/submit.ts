@@ -7,6 +7,11 @@ type Data = {
   username: string;
 };
 
+/**
+ *
+ * @param {string} param0 - Accepts an object with a username string
+ * @returns {Promise<void>} - Returns a promise that resolves when the user is updated
+ */
 export default async function updateUser({ username }: Data) {
   const user = await getUser();
 

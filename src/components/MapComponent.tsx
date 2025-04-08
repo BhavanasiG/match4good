@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import * as L from "leaflet"; 
+import * as L from "leaflet";
 
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
@@ -35,7 +35,7 @@ const MapComponent: React.FC<MapProps> = ({ address, postcode }) => {
     const fetchCoordinates = async (): Promise<void> => {
       try {
         const response = await fetch(
-          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(postcode)}`
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(postcode)}`,
         );
 
         if (!response.ok) {
@@ -54,7 +54,7 @@ const MapComponent: React.FC<MapProps> = ({ address, postcode }) => {
       }
     };
 
-    void fetchCoordinates(); 
+    void fetchCoordinates();
   }, [postcode]);
 
   if (!coordinates) {
@@ -62,7 +62,11 @@ const MapComponent: React.FC<MapProps> = ({ address, postcode }) => {
   }
 
   return (
-    <MapContainer center={coordinates} zoom={13} style={{ height: "400px", width: "100%" }}>
+    <MapContainer
+      center={coordinates}
+      zoom={13}
+      style={{ height: "400px", width: "100%" }}
+    >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

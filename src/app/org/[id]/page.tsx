@@ -24,11 +24,13 @@ export default function CharityDetailPage() {
       try {
         const res = await fetch("/api/charity_api");
         if (!res.ok) {
-          throw new Error(`Failed to fetch charities, Status Code: ${res.status}`);
+          throw new Error(
+            `Failed to fetch charities, Status Code: ${res.status}`,
+          );
         }
-        
+
         const data: Charity[] = (await res.json()) as Charity[]; // **Explicitly type the response**
-        
+
         const charity_data = data.find((c) => c.id === Number(id));
 
         if (!charity_data) {
@@ -53,9 +55,12 @@ export default function CharityDetailPage() {
 
       {!loading && !error && charity && (
         <div className="border p-6 rounded-lg shadow-md bg-white">
-          <h2 className="text-2xl font-semibold mb-2">{charity.charity_name}</h2>
+          <h2 className="text-2xl font-semibold mb-2">
+            {charity.charity_name}
+          </h2>
           <p className="text-gray-700">
-            <strong>Date of Registration:</strong> {charity.date_of_registration ?? "N/A"}
+            <strong>Date of Registration:</strong>{" "}
+            {charity.date_of_registration ?? "N/A"}
           </p>
           <p className="text-gray-700">
             <strong>Removal Reason:</strong> {charity.removal_reason ?? "N/A"}

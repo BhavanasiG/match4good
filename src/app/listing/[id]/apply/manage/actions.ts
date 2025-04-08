@@ -5,14 +5,13 @@ import { Application, ApplicationStatus } from "@/../generated/prisma_client";
 
 /**
  * Tries to set the application status, checking permissions
- *
- * @param application The application to set status
- * @param status The status to set
- * @returns `true` if the status was successfully set, otherwise false
+ * @param {Application} application The application to set status
+ * @param {ApplicationStatus} status The status to set
+ * @returns {Promise<boolean>} `true` if the status was successfully set, otherwise false
  */
 export async function setApplicationStatus(
   application: Application,
-  status: ApplicationStatus
+  status: ApplicationStatus,
 ): Promise<boolean> {
   const user = await getUser(true);
 

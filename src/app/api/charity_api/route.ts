@@ -6,6 +6,12 @@ interface CharityData {
   date_of_registration: string;
   removal_reason: string;
 }
+
+/**
+ * This API route fetches charity data from the Charity Commission API
+ * and returns it as a JSON response.
+ * @returns {Promise<NextResponse>} - JSON response containing charity data
+ */
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export async function GET() {
   try {
@@ -16,7 +22,13 @@ export async function GET() {
       throw new Error("API Key is missing. Check .env.local");
     }
 
-    const registered_numbers = ["1000000", "1000001", "1000002", "1000003", "1000004"];
+    const registered_numbers = [
+      "1000000",
+      "1000001",
+      "1000002",
+      "1000003",
+      "1000004",
+    ];
     const charity_data: CharityData[] = [];
 
     for (const [index, registered_number] of registered_numbers.entries()) {
@@ -33,10 +45,14 @@ export async function GET() {
       });
 
       if (!res.ok) {
-        console.error(`Failed to fetch charity ${registered_number}, Status:`, res.status);
+        console.error(
+          `Failed to fetch charity ${registered_number}, Status:`,
+          res.status,
+        );
         continue;
       }
-      const data: Partial<CharityData> = (await res.json()) as Partial<CharityData>;
+      const data: Partial<CharityData> =
+        (await res.json()) as Partial<CharityData>;
       charity_data.push({
         id: index + 1,
         charity_name: data.charity_name ?? "Unknown",
@@ -51,7 +67,7 @@ export async function GET() {
     console.error("Error in API route:", err);
     return NextResponse.json(
       { error: err instanceof Error ? err.message : "Unknown error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

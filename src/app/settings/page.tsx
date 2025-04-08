@@ -1,10 +1,15 @@
-
 /**
  * The layout for each dedicated settings page
  * and provides links to subsequent pages
  */
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getUser } from "@/lib/prisma";
 import { notFound } from "next/navigation";
@@ -25,16 +30,23 @@ export default async function Settings() {
         <div className="flex pt-6">
           <Tabs defaultValue="profile" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="profile" className="cursor-pointer">Profile</TabsTrigger>
-              <TabsTrigger value="organizations" className="cursor-pointer">Organizations</TabsTrigger>
-              <TabsTrigger value="security" className="cursor-pointer">Security</TabsTrigger>
+              <TabsTrigger value="profile" className="cursor-pointer">
+                Profile
+              </TabsTrigger>
+              <TabsTrigger value="organizations" className="cursor-pointer">
+                Organizations
+              </TabsTrigger>
+              <TabsTrigger value="security" className="cursor-pointer">
+                Security
+              </TabsTrigger>
             </TabsList>
             <TabsContent value="profile">
               <Card>
                 <CardHeader>
                   <CardTitle>Profile</CardTitle>
                   <CardDescription>
-                    Update your personal information and how others see you on the platform.
+                    Update your personal information and how others see you on
+                    the platform.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -46,9 +58,7 @@ export default async function Settings() {
               <Card>
                 <CardHeader>
                   <CardTitle>Organizations</CardTitle>
-                  <CardDescription>
-                    Manage your organizations.
-                  </CardDescription>
+                  <CardDescription>Manage your organizations.</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <OrganizationsForm user={user} />
@@ -63,14 +73,12 @@ export default async function Settings() {
                     Manage your security preferences.
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  {/** Add securityform */}
-                </CardContent>
+                <CardContent>{/** Add securityform */}</CardContent>
               </Card>
             </TabsContent>
           </Tabs>
         </div>
       </div>
     </div>
-  )
+  );
 }

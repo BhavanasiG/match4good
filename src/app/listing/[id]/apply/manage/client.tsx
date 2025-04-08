@@ -11,6 +11,12 @@ export type ApplicationWithUsers = Prisma.ApplicationGetPayload<{
   include: { user: true };
 }>;
 
+/**
+ *
+ * @param {ApplicationWithUsers} param0 - Accepts an object with a listing object
+ * @returns {Element} - Returns HTML component that displays the listing information
+ * This component is used to display the listing information on the listing page
+ */
 export function PresentApplication({
   application,
 }: {

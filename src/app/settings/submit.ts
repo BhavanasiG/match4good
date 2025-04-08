@@ -3,13 +3,18 @@
  * @param username Accepts a username string
  */
 
-"use server"
+"use server";
 
 import prisma, { getUser } from "@/lib/prisma";
 
-export type Props = { username : string };
+export type Props = { username: string };
 
-export async function UpdateUser({ username } : Props) {
+/**
+ *
+ * @param {string} param0 - Accepts an object with a username string
+ * @returns {Promise<void>} - Returns a promise that resolves when the user is updated
+ */
+export async function UpdateUser({ username }: Props) {
   const user = await getUser();
 
   if (!user) {
@@ -22,6 +27,6 @@ export async function UpdateUser({ username } : Props) {
     },
     data: {
       username: username,
-    }
+    },
   });
 }
