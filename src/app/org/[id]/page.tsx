@@ -89,47 +89,73 @@ export default async function App(props: {params: t_params}) {
           <TabsTrigger value="active" className="cursor-pointer text-md">Active</TabsTrigger>
           <TabsTrigger value="inactive" className="cursor-pointer text-md">Inactive</TabsTrigger>
         </TabsList>
-        <TabsContent value="active" className="grid grid-cols-3 gap-5 w-full">
-          {listings.map((listing) => (
-            <Card key={listing.id} className="basis-1/3">
-              <CardHeader>
-                <CardTitle>
-                  <p>{listing.name}</p>
-                  <p className="text-sm text-muted-foreground mt-1">Location</p>
-                </CardTitle>
-                <CardDescription className="line-clamp-3">
-                  {listing.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="text-base">
-                {(listing.start_datetime.getDate() === listing.end_datetime.getDate()) ? (
-                  <>
-                    <p>
-                      {listing.start_datetime.toLocaleDateString(undefined, {dateStyle: "full"})}
-                    </p>
-                    <p>
-                      {listing.start_datetime.toLocaleTimeString(undefined, {timeStyle: "short"})} -&nbsp; 
-                      {listing.end_datetime.toLocaleTimeString(undefined, {timeStyle: "short"})}
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <p>
-                      {listing.start_datetime.toLocaleDateString(undefined, {dateStyle: "full"})} -&nbsp;
-                      {listing.end_datetime.toLocaleDateString(undefined, {dateStyle: "full"})}
-                    </p>
-                  </>
-                )}
-              </CardContent>
-              <CardFooter>
-                <Link href={`/listing/${listing.id}`}>
-                  <Button className="cursor-pointer">
-                    View Listing
-                  </Button>
-                </Link>
-              </CardFooter>
-            </Card>
-          ))}
+        <TabsContent value="active" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full">
+          {listings.length === 0 ? (
+              <div className="w-full justify-center items-center flex">
+                <p className="text-lg font-medium">No active listings</p>
+              </div>
+            ) : listings.map((listing) => {
+              if (listing.active) {
+                return (
+                  <div key={listing.id}>
+                    <Card className="basis-1/3 hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out">
+                      <CardHeader>
+                        <CardTitle>
+                          <p>{listing.name}</p>
+                          <p className="text-sm text-muted-foreground mt-1">Location</p>
+                        </CardTitle>
+                        <CardDescription className="line-clamp-3">
+                          {listing.description}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="text-base">
+                        {getTimeString(listing.start_datetime, listing.end_datetime)}
+                      </CardContent>
+                      <CardFooter>
+                        <Link href={`/listing/${listing.id}`}>
+                          <Button className="cursor-pointer">
+                            View Listing
+                          </Button>
+                        </Link>
+                      </CardFooter>
+                    </Card>
+                  </div>
+                );
+            }})}
+        </TabsContent>
+        <TabsContent value="inactive" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full">
+          {listings.length === 0 ? (
+              <div className="w-full justify-center items-center flex">
+                <p className="text-lg font-medium">No inactive listings</p>
+              </div>
+            ) : listings.map((listing) => {
+              if (!listing.active) {
+                return (
+                  <div key={listing.id}>
+                    <Card className="basis-1/3 hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out">
+                      <CardHeader>
+                        <CardTitle>
+                          <p>{listing.name}</p>
+                          <p className="text-sm text-muted-foreground mt-1">Location</p>
+                        </CardTitle>
+                        <CardDescription className="line-clamp-3">
+                          {listing.description}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="text-base">
+                        {getTimeString(listing.start_datetime, listing.end_datetime)}
+                      </CardContent>
+                      <CardFooter>
+                        <Link href={`/listing/${listing.id}`}>
+                          <Button className="cursor-pointer">
+                            View Listing
+                          </Button>
+                        </Link>
+                      </CardFooter>
+                    </Card>
+                  </div>
+                );
+            }})}
         </TabsContent>
       </Tabs>
       <Separator className="my-10" />
