@@ -9,9 +9,9 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  user_id  String @unique
-  username String @unique
+  id       Int     @id @default(autoincrement())
+  user_id  String  @unique
+  username String  @unique
   email    String? @unique
 
   owner_of  Organization[] @relation("ownership")
@@ -25,8 +25,8 @@ model Organization {
   name        String    @unique
   description String?
   owner_id    Int
-  address     String?     
-  postcode    String?   
+  address     String?
+  postcode    String?
   listings    Listing[]
   owner       User      @relation("ownership", fields: [owner_id], references: [id])
   members     User[]    @relation("membership")
@@ -58,4 +58,19 @@ enum ApplicationStatus {
   PENDING
   ACCEPTED
   REJECTED
+}
+
+model Category {
+  id            Int           @id @default(autoincrement())
+  name          String        @unique
+  description   String?
+  subcategories Subcategory[]
+}
+
+model Subcategory {
+  id                  Int      @id @default(autoincrement())
+  name                String   @unique
+  description         String?
+  primary_category_id Int
+  primary_category    Category @relation(fields: [primary_category_id], references: [id])
 }
