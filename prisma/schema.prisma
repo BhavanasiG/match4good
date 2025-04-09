@@ -95,3 +95,17 @@ enum ListingStatus {
   completed
   cancelled
 }
+model Category {
+  id            Int           @id @default(autoincrement())
+  name          String        @unique
+  description   String?
+  subcategories Subcategory[]
+}
+
+model Subcategory {
+  id                  Int      @id @default(autoincrement())
+  name                String   @unique
+  description         String?
+  primary_category_id Int
+  primary_category    Category @relation(fields: [primary_category_id], references: [id])
+}
