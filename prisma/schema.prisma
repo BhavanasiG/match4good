@@ -92,7 +92,6 @@ enum ListingStatus {
   completed
   cancelled
 }
-
 model Category {
   id            Int           @id @default(autoincrement())
   name          String        @unique
