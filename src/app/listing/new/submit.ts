@@ -17,26 +17,14 @@ export interface CreateListingData {
 /**
  * This method returns an array containing the organizations a user is linked
  * with or null
-<<<<<<< HEAD
  * @returns {Promise<Organization[] | null>} Array of organizations linked with user or null if no user logged in
  */
 async function getUserOrganizations(): Promise<Organization[] | null> {
-=======
- * @returns Array of organizations linked with user or null if no user logged in
- */
-async function getUserOrganizations(): Promise<Organization[] | null> {
-  // Makes sense to do appropriate checks before checking for organizaions
-  // linked with user
->>>>>>> 781ba90 (Implements basic points system)
   const user = await getUser(true);
   if (!user) {
     return null;
   }
 
-<<<<<<< HEAD
-=======
-  // We use a set for de-duplication as it naturally has unique elements
->>>>>>> 781ba90 (Implements basic points system)
   const user_orgs = [...new Set([...user.owner_of, ...user.member_of])];
 
   return user_orgs;
@@ -52,19 +40,10 @@ async function getUserOrganizations(): Promise<Organization[] | null> {
  * - Validates that the end date and time is the same as or
  * after the start date and time.
  * - Displays an appropriate error message if validation fails.
-<<<<<<< HEAD
  * and passes to the server to create new record in database
  * - Listing is linked to one of the user's organisation
  * @param {CreateListingData} form_data Form data inputted/submitted by user.
  * @returns {redirect} redirection to new created listing (if valid data inputted),
-=======
- * - Logs the form data to the console if all validations pass
- * and passes to the server to create new record in database
- * - Listing is linked to one of the user's organisation
- * @param form_data Form data inputted/submitted by user.
- * @returns redirection to new created listing (if valid data inputted),
->>>>>>> 781ba90 (Implements basic points system)
- * else returns an error message.
  */
 export async function createListing(form_data: CreateListingData) {
   if (!form_data.name.trim()) {
