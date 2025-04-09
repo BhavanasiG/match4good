@@ -1,7 +1,7 @@
 import prisma from "../src/lib/prisma.ts";
 
 async function main() {
-  const comm_outreach = await prisma.category.create({
+  const comm_outreach = await prisma.category.upsert({
     where: { name: "Community Outreach & Support" },
     update: {},
     create: {
@@ -33,7 +33,7 @@ async function main() {
       },
     },
   });
-  const education_development = await prisma.category.create({
+  const education_development = await prisma.category.upsert({
     where: { name: "Education & Development" },
     update: {},
     create: {
@@ -65,7 +65,7 @@ async function main() {
       },
     },
   });
-  const environmental_conservation = await prisma.category.create({
+  const environmental_conservation = await prisma.category.upsert({
     where: { name: "Environmental Conservation" },
     update: {},
     create: {
@@ -83,7 +83,7 @@ async function main() {
           },
           {
             name: "Sustainability initiatives",
-            descripton: "Initiatives for sustainability",
+            description: "Initiatives for sustainability",
           },
           {
             name: "Clean-up campaigns",
@@ -97,7 +97,7 @@ async function main() {
       },
     },
   });
-  const health_wellbeing = await prisma.category.create({
+  const health_wellbeing = await prisma.category.upsert({
     where: { name: "Health & Wellbeing" },
     update: {},
     create: {
@@ -129,7 +129,7 @@ async function main() {
       },
     },
   });
-  const arts_culture_heritage = await prisma.category.create({
+  const arts_culture_heritage = await prisma.category.upsert({
     where: { name: "Arts, Culture & Heritage" },
     update: {},
     create: {
@@ -161,7 +161,7 @@ async function main() {
       },
     },
   });
-  const animal_welfare = await prisma.category.create({
+  const animal_welfare = await prisma.category.upsert({
     where: { name: "Animal Welfare" },
     update: {},
     create: {
@@ -193,7 +193,7 @@ async function main() {
       },
     },
   });
-  const administrative_organizational = await prisma.category.create({
+  const administrative_organizational = await prisma.category.upsert({
     where: { name: "Administrative & Organizational" },
     update: {},
     create: {
@@ -225,7 +225,7 @@ async function main() {
       },
     },
   });
-  const advocay_awareness = await prisma.category.create({
+  const advocay_awareness = await prisma.category.upsert({
     where: { name: "Advocacy & Awareness" },
     update: {},
     create: {
