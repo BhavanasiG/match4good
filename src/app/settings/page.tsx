@@ -15,6 +15,7 @@ import { getUser } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import ProfileForm from "./profile";
 import OrganizationsForm from "./organizations";
+import SecurityForm from "./security";
 
 export default async function Settings() {
   const user = await getUser(true);
@@ -73,7 +74,9 @@ export default async function Settings() {
                     Manage your security preferences.
                   </CardDescription>
                 </CardHeader>
-                <CardContent>{/** Add securityform */}</CardContent>
+                <CardContent>
+                  <SecurityForm user={user} />
+                </CardContent>
               </Card>
             </TabsContent>
           </Tabs>
