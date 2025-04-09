@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ListingStatus } from "../../../../generated/prisma_client";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -119,7 +120,7 @@ export default async function App(props: { params: t_params }) {
             </div>
           ) : (
             listings.map((listing) => {
-              if (listing.active) {
+              if (listing.status == ListingStatus.AcceptingApplications) {
                 return (
                   <div key={listing.id}>
                     <Card className="basis-1/3 hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out h-full flex flex-col justify-between">
@@ -164,7 +165,7 @@ export default async function App(props: { params: t_params }) {
             </div>
           ) : (
             listings.map((listing) => {
-              if (!listing.active) {
+              if (listing.status != ListingStatus.AcceptingApplications) {
                 return (
                   <div key={listing.id}>
                     <Card className="basis-1/3 hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out">

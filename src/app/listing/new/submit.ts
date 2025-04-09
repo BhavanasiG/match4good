@@ -66,7 +66,8 @@ export async function createListing(form_data: CreateListingData) {
     return "End date must be same as or after the start date";
   }
 
-  const hours = (end_datetime - start_datetime) / (1000 * 60 * 60);
+  const hours =
+    (end_datetime.getTime() - start_datetime.getTime()) / (1000 * 60 * 60);
 
   const user_orgs = await getUserOrganizations();
   if (!user_orgs || user_orgs.length === 0) {
