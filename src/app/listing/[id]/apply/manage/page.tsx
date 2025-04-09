@@ -6,7 +6,7 @@ import {
   PresentApplication,
 } from "./client";
 import ListingInfo from "@/components/listingInfo";
-import { ListingStatus } from "../../../../../generated/prisma_client";
+import { ListingStatus } from "../../../../../../generated/prisma_client";
 
 function Applicants({ listing }: { listing: ListingWithApplications }) {
   return (
