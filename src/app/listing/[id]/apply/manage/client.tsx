@@ -21,10 +21,9 @@ export type ApplicationWithUsers = Prisma.ApplicationGetPayload<{
 }>;
 
 /**
- *
+ * This component is used to display the listing information on the listing page
  * @param {ApplicationWithUsers} param0 - Accepts an object with a listing object
  * @returns {Element} - Returns HTML component that displays the listing information
- * This component is used to display the listing information on the listing page
  */
 export function PresentApplication({
   application,
@@ -71,6 +70,11 @@ export function PresentApplication({
   );
 }
 
+/**
+ * Creates an element that allows applications to be closed for a listing
+ * @param {{listing: Listing}} params Parameters for the element
+ * @returns {Element} Element which allows for closing of applications
+ */
 export function CloseApplications({ listing }: { listing: Listing }) {
   return (
     <button
