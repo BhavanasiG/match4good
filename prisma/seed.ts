@@ -225,7 +225,7 @@ async function main() {
       },
     },
   });
-  const advocay_awareness = await prisma.category.upsert({
+  const advocacy_awareness = await prisma.category.upsert({
     where: { name: "Advocacy & Awareness" },
     update: {},
     create: {
@@ -265,7 +265,7 @@ async function main() {
     arts_culture_heritage,
     animal_welfare,
     administrative_organizational,
-    advocay_awareness,
+    advocacy_awareness,
   });
 }
 
