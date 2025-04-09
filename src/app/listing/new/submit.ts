@@ -21,14 +21,11 @@ export interface CreateListingData {
  * @returns {Promise<Organization[] | null>} Array of organizations linked with user or null if no user logged in
  */
 async function getUserOrganizations(): Promise<Organization[] | null> {
-  // Makes sense to do appropriate checks before checking for organizaions
-  // linked with user
-  //
   const user = await getUser(true);
   if (!user) {
     return null;
   }
-  // We use a set for de-duplication as it naturally has unique elements
+
   const user_orgs = [...new Set([...user.owner_of, ...user.member_of])];
 
   return user_orgs;
