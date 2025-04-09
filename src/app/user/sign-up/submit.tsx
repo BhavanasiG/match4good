@@ -1,6 +1,6 @@
 "use server";
 
-import prisma, { getUser } from "@/lib/prisma";
+import prisma, { GetUser } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { Category } from "@/../generated/prisma_client";
 
@@ -43,7 +43,7 @@ export async function getCategories(): Promise<Category[]> {
  * @returns {redirect} - Redirects to the home page if successful, otherwise returns an error message.
  */
 export async function createInterests(form_data: CreateInterestsData) {
-  const user = await getUser(true);
+  const user = await GetUser(true);
   if (!user) {
     return "User not logged in";
   }
