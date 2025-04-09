@@ -52,10 +52,9 @@ export async function setApplicationStatus(
 
 /**
  * Tries to set the listing status, checking permissions
- *
- * @param listing_id The listing to set status
- * @param status The status to set
- * @returns `true` if the status was successfully set, otherwise false
+ * @param {number} listing_id The listing to set status
+ * @param {ListingStatus} status The status to set
+ * @returns {boolean} `true` if the status was successfully set, otherwise false
  */
 export async function setListingStatus(
   listing_id: number,
@@ -92,9 +91,8 @@ export async function setListingStatus(
 
 /**
  * Tries to distribute points for a listing
- *
- * @param listing_id The listing update points for
- = * @returns `true` if the points were correctly applied
+ * @param {number} listing_id The listing update points for
+ * @returns {boolean} `true` if the points were correctly applied
  */
 export async function distributePointsFor(
   listing_id: number,
