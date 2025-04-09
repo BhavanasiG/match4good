@@ -14,7 +14,7 @@ type Article = {
 };
 
 const CATEGORIES = [
-  "General",
+  "general",
   "world",
   "nation",
   "business",
