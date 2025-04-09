@@ -3,6 +3,7 @@ import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
 import reactHooks from "eslint-plugin-react-hooks";
 import tseslint from "typescript-eslint";
+import jsdoc from "eslint-plugin-jsdoc";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -12,7 +13,7 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-export default defineConfig ([
+export default defineConfig([
   ...tseslint.configs.recommendedTypeChecked,
   {
     languageOptions: {
@@ -49,15 +50,61 @@ export default defineConfig ([
       ],
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
+
+      "jsdoc/require-jsdoc": [
+        "error",
+        {
+          require: {
+            ArrowFunctionExpression: false,
+            ClassDeclaration: true,
+            FunctionDeclaration: true,
+            FunctionExpression: false,
+            MethodDefinition: true,
+          },
+        },
+      ],
+      "jsdoc/require-description": "error",
+      "jsdoc/require-param": "error",
+      "jsdoc/require-returns": "error",
+      "jsdoc/require-example": "warn",
+      "jsdoc/check-param-names": "error",
+      "jsdoc/check-tag-names": "warn",
+      "jsdoc/check-types": "warn",
+      "jsdoc/require-returns-check": "error",
+      "jsdoc/require-description-complete-sentence": "warn",
+      "jsdoc/no-empty-description": "off",
+      "jsdoc/newline-after-description": "off",
     },
     plugins: { "react-hooks": reactHooks },
+  },
+  {
+    files: ["**/*.page.ts", "**/*.page.tsx"],
+    rules: {
+      "jsdoc/require-jsdoc": "off",
+      "jsdoc/require-description": "off",
+      "jsdoc/require-param": "off",
+      "jsdoc/require-returns": "off",
+      "jsdoc/require-example": "off",
+      "jsdoc/check-param-names": "off",
+      "jsdoc/check-tag-names": "off",
+      "jsdoc/check-types": "off",
+      "jsdoc/require-returns-check": "off",
+      "jsdoc/require-description-complete-sentence": "off",
+    },
   },
 
   ...compat.extends(
     "next/core-web-vitals",
     "next/typescript",
-    "plugin:react-hooks/recommended"
+    "prettier",
+    "plugin:react-hooks/recommended",
+    "plugin:jsdoc/recommended",
   ),
 
-  globalIgnores(["src/hooks/", "src/components/ui/"])
+  globalIgnores([
+    "src/hooks/",
+    "src/components/ui/",
+    "**/page.tsx",
+    "**/page.ts",
+  ]),
 ]);

@@ -19,12 +19,12 @@ export interface CreateListingFormProps {
  * after the start date and time.
  * - Displays an appropriate error message if validation fails.
  * - Logs the form data to the console if all validations pass
- * and passes to the server to create a new record in the database.
- * - Listing is linked to one of the user's organizations.
- * @param param0 The user (object) for which a new listing form will be generated.
- * @returns HTML form that allows the user to create a new listing.
+ * and passes to the server to create new record in database
+ * - Listing is linked to one of the user's organisation
+ * @param {User} param0 The user (object) for which a new listing form will be
+ * generated
+ * @returns {Element} - A form for creating a new listing
  */
-
 export default function CreateListingForm({ user }: CreateListingFormProps) {
   const user_orgs = [...new Set([...user.owner_of, ...user.member_of])];
 
@@ -168,7 +168,10 @@ export default function CreateListingForm({ user }: CreateListingFormProps) {
       {error && <p className="text-red-600">{error}</p>}
       {success && <p className="text-green-600">{success}</p>}
 
-      <button type="submit" className="bg-blue-500 text-white p-2 w-full rounded">
+      <button
+        type="submit"
+        className="bg-blue-500 text-white p-2 w-full rounded"
+      >
         Submit
       </button>
     </form>

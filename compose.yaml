@@ -1,4 +1,4 @@
-services:  
+services:
   postgres_db:
     image: postgres:alpine
     restart: always
@@ -13,7 +13,7 @@ services:
       interval: 5s
       timeout: 2s
       retries: 20
-    
+
   migrate:
     build:
       dockerfile: MigrationDockerfile
@@ -30,7 +30,6 @@ services:
         condition: service_completed_successfully
       postgres_db:
         condition: service_healthy
-
 
 volumes:
   postgres-data:
