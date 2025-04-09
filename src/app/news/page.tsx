@@ -2,7 +2,7 @@
 
 /* eslint-disable @typescript-eslint/naming-convention */
 import { useEffect, useState } from "react";
-import Image from "next/image"; 
+import Image from "next/image";
 
 type Article = {
   title: string;
@@ -106,16 +106,19 @@ export default function NewsPage() {
                   alt="Article"
                   width={400}
                   height={200}
-                  unoptimized 
+                  unoptimized
                   className="w-full h-48 object-cover"
                 />
               )}
               <div className="p-4 flex flex-col flex-grow">
                 <h2 className="text-lg font-semibold">{article.title}</h2>
                 <p className="text-sm text-gray-600 mt-1">
-                  {new Date(article.publishedAt).toLocaleString()} – {article.source.name}
+                  {new Date(article.publishedAt).toLocaleString()} –{" "}
+                  {article.source.name}
                 </p>
-                <p className="text-gray-700 mt-2 line-clamp-3">{article.description}</p>
+                <p className="text-gray-700 mt-2 line-clamp-3">
+                  {article.description}
+                </p>
               </div>
             </a>
           ))}
