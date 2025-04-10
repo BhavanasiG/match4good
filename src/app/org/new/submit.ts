@@ -13,24 +13,14 @@
 import prisma, { getUser } from "@/lib/prisma";
 import { forbidden, redirect } from "next/navigation";
 
-export type Props = {
-  name: string;
-  description: string;
-  address: string;
-  postcode: string;
-};
+export type Props = { name: string, description: string, address: string, postcode: string };
 
 /**
  *
  * @param {string} param0 - Accepts an object with a username string
  * @returns {Promise<void>} - Returns a promise that resolves when the user is updated
  */
-export async function CreateOrganization({
-  name,
-  description,
-  address,
-  postcode,
-}: Props) {
+export async function CreateOrganization({ name, description, address, postcode }: Props) {
   const user = await getUser();
 
   if (!user) {
