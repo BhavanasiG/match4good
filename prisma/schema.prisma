@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma_client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  user_id  String @unique
+  username String @unique
+  email    String? @unique
+
+  owner_of  Organization[] @relation("ownership")
+  member_of Organization[] @relation("membership")
+
+  application Application[]
+}
+
+model Organization {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  description String?
+  owner_id    Int
+  address     String?     
+  postcode    String?   
+  listings    Listing[]
+  owner       User      @relation("ownership", fields: [owner_id], references: [id])
+  members     User[]    @relation("membership")
+}
+
+model Application {
+  id          Int               @id @default(autoincrement())
+  listing_id  Int               @map("listingId")
+  user_id     Int               @map("userId")
+  description String?
+  status      ApplicationStatus @default(PENDING)
+  listing     Listing           @relation(fields: [listing_id], references: [id])
+  user        User              @relation(fields: [user_id], references: [id])
+}
+
+model Listing {
+  id              Int           @id @default(autoincrement())
+  name            String
+  description     String?
+  organization_id Int
+  end_datetime    DateTime
+  start_datetime  DateTime
+  active          Boolean       @default(true)
+  applications    Application[]
+  organization    Organization  @relation(fields: [organization_id], references: [id])
+}
+
+enum ApplicationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}

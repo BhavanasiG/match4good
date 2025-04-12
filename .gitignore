@@ -1,0 +1,10 @@
+node_modules/
+.next/
+generated/
+.vscode
+.swc
+.husky/
+.vs/
+.eslintcache
+.env
+.env.local

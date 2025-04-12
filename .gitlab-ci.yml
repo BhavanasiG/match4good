@@ -1,0 +1,78 @@
+image: node:latest
+
+stages:
+  - check
+  - docker
+  - install
+  - lint
+  - prettier
+  - test
+  - build
+  - deploy
+
+check:
+  stage: check
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  script:
+    - '[[ "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" =~ ^release$ ]] && [[ ! "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME" =~ ^trunk$ ]] && echo "Only trunk can be merged to release" && exit 1'
+    - echo "Merge check passed."
+
+install:
+  stage: install
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  needs: ["check"]
+  script:
+    - npm ci
+    - npx prisma generate
+  artifacts:
+    paths:
+      - node_modules
+      - generated
+    expire_in: 1 hour
+
+lint:
+  stage: lint
+  rules:
+    # - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  needs: ["install"]
+  script:
+    - npm run lint
+
+test:
+  stage: test
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  needs: ["install"]
+  script:
+    - npm run test
+
+prettier:
+  stage: prettier
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  needs: ["install"]
+  script:
+    - npm run format:check
+
+build:
+  stage: build
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  needs: ["install", "prettier", "lint", "test"]
+  script:
+    - npm run build
+
+deploy_static:
+  stage: deploy
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_REF_NAME == "release"'
+  needs: ["check"]
+  script:
+    - apk add python3 py3-yaml py3-mako
+    - python3 /shared/com2027_site.py
+  artifacts:
+    paths:
+      - public
