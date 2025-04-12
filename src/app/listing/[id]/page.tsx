@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+﻿import { notFound } from "next/navigation";
 import prisma, { getUser } from "@/lib/prisma";
 import ListingInfo from "@/components/listingInfo";
 import MapComponent from "@/components/MapComponent"; // Import the map component
