@@ -54,7 +54,10 @@ export default function CookieBanner(): React.ReactElement | null {
     >
       <p style={{ marginBottom: "0.5rem" }}>
         We use cookies to improve your experience. Read our{" "}
-        <Link href="/privacy-policy" style={{ textDecoration: "underline", color: "#90cdf4" }}>
+        <Link
+          href="/privacy-policy"
+          style={{ textDecoration: "underline", color: "#90cdf4" }}
+        >
           privacy policy
         </Link>
         .
