@@ -29,7 +29,7 @@ async function getUserOrganizations(): Promise<Organization[] | null> {
 }
 
 /**
- * Creates form and handles form submission for creating volunteer oppportunity
+ * Handles form submission for creating volunteer oppportunity
  * by validating the input fields
  *
  * Completes/Ensures these **server-side** actions:

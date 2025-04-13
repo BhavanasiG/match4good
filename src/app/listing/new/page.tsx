@@ -11,8 +11,6 @@ import { forbidden } from "next/navigation";
  * CreateListingForm page
  */
 export default async function CreateOpportunityForm() {
-
-
   const user = await getUser(true);
 
   if (!user) {
