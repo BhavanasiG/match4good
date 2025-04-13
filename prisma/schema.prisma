@@ -23,6 +23,8 @@ model User {
   regionId    Int?
 
   follows     Follow[]
+
+  interests Subcategory[]
 }
 
 model Organization {
@@ -108,4 +110,5 @@ model Subcategory {
   description         String?
   primary_category_id Int
   primary_category    Category @relation(fields: [primary_category_id], references: [id])
+  users               User[]
 }
