@@ -11,8 +11,7 @@ import { forbidden } from "next/navigation";
  * CreateListingForm page
  */
 export default async function CreateOpportunityForm() {
-  // We need to use React useState and useEffect as we need call and obtain data
-  //  whilst allowing the page to load
+
 
   const user = await getUser(true);
 

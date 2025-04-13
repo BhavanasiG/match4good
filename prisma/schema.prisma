@@ -18,6 +18,8 @@ model User {
   member_of Organization[] @relation("membership")
 
   application Application[]
+
+  interests Subcategory[]
 }
 
 model Organization {
@@ -73,4 +75,5 @@ model Subcategory {
   description         String?
   primary_category_id Int
   primary_category    Category @relation(fields: [primary_category_id], references: [id])
+  users               User[]
 }
