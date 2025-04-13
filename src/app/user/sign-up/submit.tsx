@@ -2,13 +2,19 @@
 
 import prisma, { getUser } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { Category } from "@/../generated/prisma_client";
 
 export interface CreateInterestsData {
   user_id: number;
   interests: number[]; // Array of interest IDs
 }
 
-async function getCategories() {
+/**
+ * This function fetches all categories and their subcategories from the database
+ * and returns them in a structured format.
+ * @returns {Promise<Category[]>} An array of categories with their subcategories.
+ */
+export async function getCategories(): Promise<Category[]> {
   const categories = await prisma.category.findMany({
     include: {
       subcategories: true,
@@ -30,6 +36,12 @@ async function getCategories() {
   return category_list;
 }
 
+/**
+ * In-progress function to handles form submission for creating interests
+ * by validating the input fields
+ * @param {CreateInterestsData} form_data Form data inputted/submitted by user.
+ * @returns {redirect} - Redirects to the home page if successful, otherwise returns an error message.
+ */
 export async function createInterests(form_data: CreateInterestsData) {
   const user = await getUser(true);
   if (!user) {
@@ -55,7 +67,7 @@ export async function createInterests(form_data: CreateInterestsData) {
   const existing_interests = user_obj.interests.map((interest) => interest.id);
 
   const new_interests = interests.filter(
-    (interest) => !existing_interests.includes(interest)
+    (interest) => !existing_interests.includes(interest),
   );
 
   await prisma.user.update({
