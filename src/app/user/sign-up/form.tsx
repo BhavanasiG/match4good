@@ -1,8 +1,9 @@
 "use client";
 
 import { User } from "@/lib/prisma";
-import { ChangeEvent, FormEvent, useState } from "react";
-import { createInterests, CreateInterestsData } from "./submit";
+// TODO
+//import { ChangeEvent, FormEvent, useState } from "react";
+//import { createInterests, CreateInterestsData } from "./submit";
 
 export interface SignUpFormProps {
   user: User;
