@@ -41,7 +41,7 @@
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.55.0",
     "react-leaflet": "^5.0.0",
-    "sharp": "^0.34.1",
+    "set-interval-async": "^3.0.3",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
     "sonner": "^2.0.1",
