@@ -87,7 +87,7 @@ export async function createListing(form_data: CreateListingData) {
       name: form_data.name,
       description: form_data.description,
       start_datetime: start_datetime,
-      end_datetime: start_datetime,
+      end_datetime: end_datetime,
       organization_id: form_data.organization_id,
       // todo, have a config somewhere to not hard-code it here
       point_value: hours * 1000,
