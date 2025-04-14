@@ -83,7 +83,7 @@ export default function ProfileForm({ user }: Props) {
         console.error("Failed to update: ", e);
         toast.error("Failed to update: " + e.message);
         error = true;
-      }
+      },
     );
 
     if (!error) {
