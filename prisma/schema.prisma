@@ -12,7 +12,7 @@ model User {
   id       Int     @id @default(autoincrement())
   user_id  String  @unique
   username String  @unique
-  email    String  @unique
+  email    String? @unique
   bio      String?
 
   owner_of  Organization[] @relation("ownership")
