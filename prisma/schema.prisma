@@ -9,10 +9,11 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  user_id  String @unique
-  username String @unique
-  email    String? @unique
+  id       Int     @id @default(autoincrement())
+  user_id  String  @unique
+  username String  @unique
+  email    String  @unique
+  bio      String?
 
   owner_of  Organization[] @relation("ownership")
   member_of Organization[] @relation("membership")
@@ -25,8 +26,8 @@ model Organization {
   name        String    @unique
   description String?
   owner_id    Int
-  address     String?     
-  postcode    String?   
+  address     String?
+  postcode    String?
   listings    Listing[]
   owner       User      @relation("ownership", fields: [owner_id], references: [id])
   members     User[]    @relation("membership")

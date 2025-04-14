@@ -65,8 +65,8 @@ export default function ProfileForm({ user }: Props) {
     resolver: zodResolver(form_schema),
     defaultValues: {
       username: user.username,
-      email: "",
-      bio: "",
+      email: user.email,
+      bio: user.bio || "",
     },
   });
 
@@ -78,11 +78,13 @@ export default function ProfileForm({ user }: Props) {
   function OnSubmit(values: z.infer<typeof form_schema>) {
     let error = false;
 
-    UpdateUser({ username: values.username }).catch((e: Error) => {
-      console.error("Failed to update: ", e);
-      toast.error("Failed to update: " + e.message);
-      error = true;
-    });
+    UpdateUser({ username: values.username, bio: values.bio || null }).catch(
+      (e: Error) => {
+        console.error("Failed to update: ", e);
+        toast.error("Failed to update: " + e.message);
+        error = true;
+      }
+    );
 
     if (!error) {
       toast.success("Changes saved");
@@ -115,7 +117,7 @@ export default function ProfileForm({ user }: Props) {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder={"example@mail.com"} {...field} />
+                <Input placeholder={user.email} {...field} />
               </FormControl>
               <FormDescription>
                 The email address associated with this account.
