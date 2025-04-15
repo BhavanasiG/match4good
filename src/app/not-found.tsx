@@ -9,22 +9,16 @@ export default function notFound() {
         <div className="flex items-center justify-center space-x-5">
           <h1 className="text-8xl font-black text-muted-foreground">404</h1>
         </div>
-        <h1 className="text-6xl font-bold">Page Not Found</h1>
+        <h1 className="text-6xl font-bold">Page Not Found</h1>  
       </div>
       <div className="flex flex-col space-y-4">
-        <p className="text-lg">
-          We couldn&apos;t find the page you were looking for.
-        </p>
+        <p className="text-lg">We couldn't find the page you were looking for.</p>
         <Link href="/" className="flex justify-center">
-          <Button
-            size="lg"
-            variant={"secondary"}
-            className="hover:cursor-pointer"
-          >
+          <Button size="lg" variant={"secondary"} className="hover:cursor-pointer">
             <IconArrowLeft />
             Back to Home
           </Button>
-        </Link>
+        </Link>  
       </div>
     </div>
   );
