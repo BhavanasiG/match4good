@@ -7,7 +7,9 @@ export default async function FollowingPage() {
   if (!user) {
     return (
       <div className="p-6">
-        <h1 className="text-2xl font-semibold mb-4">Organizations You Follow</h1>
+        <h1 className="text-2xl font-semibold mb-4">
+          Organizations You Follow
+        </h1>
         <p>You must be logged in to view this page.</p>
       </div>
     );
@@ -42,4 +44,3 @@ export default async function FollowingPage() {
     </div>
   );
 }
-
