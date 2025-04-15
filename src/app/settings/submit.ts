@@ -7,14 +7,14 @@
 
 import prisma, { getUser } from "@/lib/prisma";
 
-export type Props = { username: string };
+export type Props = { username: string; bio: string | null };
 
 /**
  *
  * @param {string} param0 - Accepts an object with a username string
  * @returns {Promise<void>} - Returns a promise that resolves when the user is updated
  */
-export async function UpdateUser({ username }: Props) {
+export async function UpdateUser({ username, bio }: Props) {
   const user = await getUser();
 
   if (!user) {
@@ -27,6 +27,7 @@ export async function UpdateUser({ username }: Props) {
     },
     data: {
       username: username,
+      bio: bio,
     },
   });
 }
