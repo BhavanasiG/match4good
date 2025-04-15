@@ -7,8 +7,10 @@ import { Organization } from "@/../generated/prisma_client";
 export interface CreateListingData {
   name: string;
   description: string;
-  start_datetime: string;
-  end_datetime: string;
+  date_range: {
+    start_datetime: string;
+    end_datetime: string;
+  };
   organization_id: number;
 }
 
@@ -49,11 +51,11 @@ export async function createListing(form_data: CreateListingData) {
     return "Name is required";
   }
 
-  const start_datetime = new Date(form_data.start_datetime);
-  const end_datetime = new Date(form_data.end_datetime);
+  const start_datetime = new Date(form_data.date_range.start_datetime);
+  const end_datetime = new Date(form_data.date_range.end_datetime);
   const now = new Date();
 
-  if (!form_data.start_datetime || !form_data.end_datetime) {
+  if (!start_datetime || !end_datetime) {
     return "Both start and end dates are required";
   }
 
