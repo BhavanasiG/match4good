@@ -5,7 +5,6 @@ import { useState } from "react";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
-
 /**
  * A button component that allows the user to follow or unfollow an organization.
  * @param {object} props - The component props.
