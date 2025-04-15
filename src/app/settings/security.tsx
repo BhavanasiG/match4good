@@ -19,35 +19,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { User } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
+import { DeleteUser } from "./submit";
 
-export type Props = { user: User };
-
-export default function SecurityForm({ user }: Props) {
+export default function SecurityForm() {
   const handleAccountDeletion = async () => {
-    let to_redirect = false;
-
-    try {
-      const response = await fetch(`/api/users/${user.user_id}`, {
-        method: "DELETE",
-      });
-
-      console.log("response:\n", response.text());
-      if (!response.ok) {
-        const error = await response.text();
-        throw new Error(error || "Failed to delete account (BACKEND)");
-      }
-
-      to_redirect = true;
-    } catch (error) {
+    const deleted = await DeleteUser().catch((error) => {
       console.error(error);
-    }
+      toast.error("Failed to delete account: " + error);
+    });
 
-    console.log(to_redirect, "TOREDIRECT");
-
-    if (to_redirect) {
+    if (deleted) {
       toast.success("Account deleted successfully");
       redirect(`/auth/logout/`);
     }

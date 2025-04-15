@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getUser } from "@/lib/prisma";
-import { notFound } from "next/navigation";
+import { forbidden } from "next/navigation";
 import ProfileForm from "./profile";
 import OrganizationsForm from "./organizations";
 import SecurityForm from "./security";
@@ -21,7 +21,7 @@ export default async function Settings() {
   const user = await getUser(true);
 
   if (!user) {
-    return notFound();
+    return forbidden();
   }
 
   return (
@@ -75,7 +75,7 @@ export default async function Settings() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <SecurityForm user={user} />
+                  <SecurityForm />
                 </CardContent>
               </Card>
             </TabsContent>
