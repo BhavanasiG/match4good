@@ -1,7 +1,12 @@
 import { auth0 } from "@/lib/auth0";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 /**
@@ -13,9 +18,7 @@ export function LoginButton() {
   return (
     <div className="flex space-x-2 md:space-x-4">
       <Link href="/auth/login">
-        <Button className="hover:cursor-pointer">
-          Log In
-        </Button>
+        <Button className="hover:cursor-pointer">Log In</Button>
       </Link>
       <Link href="/auth/login?screen_hint=signup" className="hidden sm:block">
         <Button variant="secondary" className="hover:cursor-pointer">
@@ -45,10 +48,12 @@ export function LogoutButton() {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem>
-          <Link href="/settings">Settings</Link>  
+          <Link href="/settings">Settings</Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <Link href="/auth/logout" className="text-destructive">Log Out</Link>  
+          <Link href="/auth/logout" className="text-destructive">
+            Log Out
+          </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

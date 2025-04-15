@@ -1,15 +1,13 @@
-"use client"
+"use client";
 
-import { useTheme } from "next-themes"
-import { Button } from "@/components/ui/button"
+import { useTheme } from "next-themes";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { IconSun, IconMoon } from "@tabler/icons-react"
-
+} from "@/components/ui/dropdown-menu";
 
 export default function AppearanceForm() {
   const { setTheme } = useTheme();
@@ -18,9 +16,7 @@ export default function AppearanceForm() {
     <div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant={"outline"}>
-            Select Theme
-          </Button>
+          <Button variant={"outline"}>Select Theme</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem onClick={() => setTheme("light")}>
@@ -35,5 +31,5 @@ export default function AppearanceForm() {
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
-  )
+  );
 }
