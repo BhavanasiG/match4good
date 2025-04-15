@@ -5,12 +5,13 @@ import prisma from "@/lib/prisma";
 export default async function App({
   params,
 }: {
-  params: Promise<{ id: number }>;
+  params: Promise<{ id: string }>;
 }) {
-  const id = (await params).id;
+  // const id = (await params).id;
+  const { id } = await params;
   const user = await prisma.user.findUnique({
     where: {
-      id,
+      id: parseInt(id),
     },
     include: { member_of: true, owner_of: true },
   });
