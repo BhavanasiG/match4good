@@ -2,6 +2,11 @@ import Link from "next/link";
 import { IconArrowLeft } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 
+/**
+ * Forbidden component displays a 403 error page with a message indicating that the user is not authorized to access the page.
+ * @returns {JSX.Element} Returns a component with a 403 error message and a button to the home page
+ */
+
 export default function Forbidden() {
   return (
     <div className="flex flex-col items-center justify-center h-screen text-center space-y-10">
@@ -9,16 +14,20 @@ export default function Forbidden() {
         <div className="flex items-center justify-center space-x-5">
           <h1 className="text-8xl font-black text-muted-foreground">403</h1>
         </div>
-        <h1 className="text-6xl font-bold">Forbidden</h1>  
+        <h1 className="text-6xl font-bold">Forbidden</h1>
       </div>
       <div className="flex flex-col space-y-4">
         <p className="text-lg">You are not authorized to access this page.</p>
         <Link href="/" className="flex justify-center">
-          <Button size="lg" variant={"secondary"} className="flex hover:cursor-pointer">
+          <Button
+            size="lg"
+            variant={"secondary"}
+            className="flex hover:cursor-pointer"
+          >
             <IconArrowLeft />
             Back to Home
           </Button>
-        </Link>  
+        </Link>
       </div>
     </div>
   );

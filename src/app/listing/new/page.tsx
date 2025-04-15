@@ -13,5 +13,5 @@ export default async function App() {
     <div className="self-center flex justify-center p-12 md:p-24 w-screen max-w-4xl">
       <CreateListingForm user={user} />
     </div>
-  )
+  );
 }
