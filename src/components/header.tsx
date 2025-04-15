@@ -1,7 +1,12 @@
 import DynamicLoginLogoutButton from "@/components/login";
 import Link from "next/link";
 import Image from "next/image";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 import { IconMenu2 } from "@tabler/icons-react";
 
 /**
@@ -19,14 +24,20 @@ export default function Header() {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>
-              <Link href="/" className="hover:text-muted-foreground">Jobs</Link>
+              <Link href="/" className="hover:text-muted-foreground">
+                Jobs
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href="/" className="hover:text-muted-foreground">Organizations</Link>
+              <Link href="/" className="hover:text-muted-foreground">
+                Organizations
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href="/about-us" className="hover:text-muted-foreground">About</Link>
-            </DropdownMenuItem>  
+              <Link href="/about-us" className="hover:text-muted-foreground">
+                About
+              </Link>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -42,9 +53,15 @@ export default function Header() {
         </Link>
       </div>
       <div className="hidden col-span-4 sm:flex justify-center items-center space-x-2 md:space-x-4">
-        <Link href="/" className="hover:text-muted-foreground">Jobs</Link>
-        <Link href="/" className="hover:text-muted-foreground">Organizations</Link>
-        <Link href="/about-us" className="hover:text-muted-foreground">About</Link>
+        <Link href="/" className="hover:text-muted-foreground">
+          Jobs
+        </Link>
+        <Link href="/" className="hover:text-muted-foreground">
+          Organizations
+        </Link>
+        <Link href="/about-us" className="hover:text-muted-foreground">
+          About
+        </Link>
       </div>
       <div className="col-span-3 flex space-x-4 justify-end items-center">
         <DynamicLoginLogoutButton />

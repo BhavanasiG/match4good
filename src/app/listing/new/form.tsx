@@ -1,3 +1,9 @@
+/**
+ * Form component for creating new volunteering opportunities.
+ * @param {Object} props - Component props
+ * @param {User} props.user - The current user object containing organization memberships
+ * @returns {JSX.Element} A form with fields for creating a new volunteering listing
+ */
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -5,41 +11,64 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { createListing } from "./submit";
 import { User } from "@/lib/prisma";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { IconCalendarWeek, IconClock } from "@tabler/icons-react";
-import { useState } from "react";
 
 /* zod uses ISO 8601 format for date and time, but server only returns YYYY-MM-DDTHH:MM instead of YYYY-MM-DDTHH:MM:SS, so z.string().datetime() is ignored */
 const form_schema = z.object({
-  name: z.string().min(4, {
-    message: "Name must be at least 4 characters.",
-  }).max(32, {
-    message: "Name cannot be longer than 32 characters.",}),
-  date_range: z.object({
-    start_datetime: z.string().refine((data) => new Date(data) > new Date(), {
-      message: "Start date and time cannot be in the past.",
+  name: z
+    .string()
+    .min(4, {
+      message: "Name must be at least 4 characters.",
+    })
+    .max(32, {
+      message: "Name cannot be longer than 32 characters.",
     }),
-    end_datetime: z.string().refine((data) => new Date(data) > new Date(), {
-      message: "End date and time cannot be in the past.",
+  date_range: z
+    .object({
+      start_datetime: z.string().refine((data) => new Date(data) > new Date(), {
+        message: "Start date and time cannot be in the past.",
+      }),
+      end_datetime: z.string().refine((data) => new Date(data) > new Date(), {
+        message: "End date and time cannot be in the past.",
+      }),
+    })
+    .refine((data) => data.start_datetime < data.end_datetime, {
+      message: "End date and time cannot be before start date and time",
+      path: ["end_datetime"],
     }),
-  }).refine((data) => data.start_datetime < data.end_datetime, {
-    message: "End date and time cannot be before start date and time",
-    path: ["end_datetime"],
-  }),
   description: z.string().max(400).optional(),
   organization: z.number(),
-})
+});
 
 export type Props = { user: User };
 
-export default function CreateListingForm({ user } : Props) {
+/* eslint-disable @typescript-eslint/naming-convention */
+export default function CreateListingForm({ user }: Props) {
   const user_orgs = [...new Set([...user.owner_of, ...user.member_of])];
 
   const form = useForm<z.infer<typeof form_schema>>({
@@ -50,12 +79,20 @@ export default function CreateListingForm({ user } : Props) {
       date_range: {
         start_datetime: "",
         end_datetime: "",
-      }
+      },
     },
   });
 
-  function OnSubmit(values: z.infer<typeof form_schema>) {    
-    createListing({ name: values.name, description: values.description || "", date_range: {start_datetime: values.date_range.start_datetime, end_datetime: values.date_range.end_datetime}, organization_id: values.organization }).catch((e: Error) => {
+  function OnSubmit(values: z.infer<typeof form_schema>) {
+    createListing({
+      name: values.name,
+      description: values.description || "",
+      date_range: {
+        start_datetime: values.date_range.start_datetime,
+        end_datetime: values.date_range.end_datetime,
+      },
+      organization_id: values.organization,
+    }).catch((e: Error) => {
       console.error(e);
     });
 
@@ -106,46 +143,58 @@ export default function CreateListingForm({ user } : Props) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Start date & time</FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
+                    <Popover>
+                      <PopoverTrigger asChild>
                         <FormControl>
-                          <Button variant={"outline"} className={cn("w-[240px] font-normal justify-start", field.value && "text-muted-foreground")}>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "w-[240px] font-normal justify-start",
+                              field.value && "text-muted-foreground",
+                            )}
+                          >
                             <IconCalendarWeek className="h-4 w-4 opacity-50" />
                             <p className="w-full flex justify-between">
                               {field.value ? (
                                 <span>
-                                  {new Date(field.value).toLocaleDateString("en-GB", { year: "numeric", month: "2-digit", day: "2-digit" })}
+                                  {new Date(field.value).toLocaleDateString(
+                                    "en-GB",
+                                    {
+                                      year: "numeric",
+                                      month: "2-digit",
+                                      day: "2-digit",
+                                    },
+                                  )}
                                 </span>
                               ) : (
-                                <span>
-                                  Select date
-                                </span>
+                                <span>Select date</span>
                               )}
                             </p>
                             <IconClock className="h-4 w-4 opacity-50" />
                             <p>
                               {field.value ? (
                                 <span>
-                                  {new Date(field.value).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}
-                                </span> 
-                              ) : (
-                                <span>
-                                  Select time
+                                  {new Date(field.value).toLocaleTimeString(
+                                    "en-GB",
+                                    { hour: "2-digit", minute: "2-digit" },
+                                  )}
                                 </span>
+                              ) : (
+                                <span>Select time</span>
                               )}
                             </p>
                           </Button>
                         </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="size-fit p-0" align="start">
-                          <input 
-                            type="datetime-local" 
-                            onChange={field.onChange} 
-                            value={field.value} 
-                            min={new Date().toISOString().slice(0, 16)}
-                          />
-                        </PopoverContent>
-                      </Popover>
+                      </PopoverTrigger>
+                      <PopoverContent className="size-fit p-0" align="start">
+                        <input
+                          type="datetime-local"
+                          onChange={field.onChange}
+                          value={field.value}
+                          min={new Date().toISOString().slice(0, 16)}
+                        />
+                      </PopoverContent>
+                    </Popover>
                     <FormDescription>
                       The start date and time of the volunteering opportunity.
                     </FormDescription>
@@ -153,7 +202,7 @@ export default function CreateListingForm({ user } : Props) {
                   </FormItem>
                 )}
               />
-              <FormField  
+              <FormField
                 control={form.control}
                 name="date_range.end_datetime"
                 render={({ field }) => (
@@ -162,39 +211,51 @@ export default function CreateListingForm({ user } : Props) {
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
-                          <Button variant={"outline"} className={cn("w-[240px] font-normal justify-start", field.value && "text-muted-foreground")}>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "w-[240px] font-normal justify-start",
+                              field.value && "text-muted-foreground",
+                            )}
+                          >
                             <IconCalendarWeek className="h-4 w-4 opacity-50" />
                             <p className="w-full flex justify-between">
                               {field.value ? (
                                 <span>
-                                  {new Date(field.value).toLocaleDateString("en-GB", { year: "numeric", month: "2-digit", day: "2-digit" })}
+                                  {new Date(field.value).toLocaleDateString(
+                                    "en-GB",
+                                    {
+                                      year: "numeric",
+                                      month: "2-digit",
+                                      day: "2-digit",
+                                    },
+                                  )}
                                 </span>
                               ) : (
-                                <span>
-                                  Select date
-                                </span>
+                                <span>Select date</span>
                               )}
                             </p>
                             <IconClock className="h-4 w-4 opacity-50" />
                             <p>
                               {field.value ? (
                                 <span>
-                                  {new Date(field.value).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}
-                                </span> 
-                              ) : (
-                                <span>
-                                  Select time
+                                  {new Date(field.value).toLocaleTimeString(
+                                    "en-GB",
+                                    { hour: "2-digit", minute: "2-digit" },
+                                  )}
                                 </span>
+                              ) : (
+                                <span>Select time</span>
                               )}
                             </p>
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0" align="start">
-                        <input 
-                          type="datetime-local" 
-                          onChange={field.onChange} 
-                          value={field.value} 
+                        <input
+                          type="datetime-local"
+                          onChange={field.onChange}
+                          value={field.value}
                           min={form.getValues("date_range.start_datetime")}
                         />
                       </PopoverContent>
@@ -214,13 +275,23 @@ export default function CreateListingForm({ user } : Props) {
                     <FormLabel>Organization</FormLabel>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant={"outline"} className={cn("w-[240px] font-normal justify-start", field.value && "text-muted-foreground")}>
-                          {user_orgs.find((org) => org.id === field.value)?.name || "Select an organization"}
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-[240px] font-normal justify-start",
+                            field.value && "text-muted-foreground",
+                          )}
+                        >
+                          {user_orgs.find((org) => org.id === field.value)
+                            ?.name || "Select an organization"}
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
                         {user_orgs.map((org) => (
-                          <DropdownMenuItem key={org.id} onClick={() => field.onChange(org.id)}>
+                          <DropdownMenuItem
+                            key={org.id}
+                            onClick={() => field.onChange(org.id)}
+                          >
                             {org.name}
                           </DropdownMenuItem>
                         ))}
@@ -229,11 +300,13 @@ export default function CreateListingForm({ user } : Props) {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="hover:cursor-pointer" >Create</Button>
+              <Button type="submit" className="hover:cursor-pointer">
+                Create
+              </Button>
             </form>
           </Form>
         </CardContent>
-      </Card>  
-    </div>  
-  )
+      </Card>
+    </div>
+  );
 }

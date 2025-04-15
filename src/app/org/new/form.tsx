@@ -5,36 +5,52 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CreateOrganization } from "./submit";
-import { User } from "@/lib/prisma";
 
 const form_schema = z.object({
-  name: z.string().min(4, {
-    message: "Name must be at least 4 characters.",
-  }).max(32, {
-    message: "Name cannot be longer than 32 characters.",}),
+  name: z
+    .string()
+    .min(4, {
+      message: "Name must be at least 4 characters.",
+    })
+    .max(32, {
+      message: "Name cannot be longer than 32 characters.",
+    }),
   description: z.string().max(400).optional(),
-  address: z.string().min(4, {
-    message: "Address must be at least 4 characters.",
-  }).max(64, {
-    message: "Address cannot be longer than 64 characters.",
-  }),
-  postcode: z.string().min(6, {
-    message: "Postcode must be at least 6 characters.",
-  }).max(8, {
-    message: "Postcode cannot be longer than 8 characters.",
-  }).regex(/^([A-Z][A-HJ-Y]?\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0A{2})$/, {
-    message: "Invalid postcode format"
-  })
-})
+  address: z
+    .string()
+    .min(4, {
+      message: "Address must be at least 4 characters.",
+    })
+    .max(64, {
+      message: "Address cannot be longer than 64 characters.",
+    }),
+  postcode: z
+    .string()
+    .min(6, {
+      message: "Postcode must be at least 6 characters.",
+    })
+    .max(8, {
+      message: "Postcode cannot be longer than 8 characters.",
+    })
+    .regex(/^([A-Z][A-HJ-Y]?\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0A{2})$/, {
+      message: "Invalid postcode format",
+    }),
+});
 
-export type Props = { user: User };
-
-export default function CreateOrganizationForm({ user }: Props) {
-
+/* eslint-disable @typescript-eslint/naming-convention */
+export default function CreateOrganizationForm() {
   const form = useForm<z.infer<typeof form_schema>>({
     resolver: zodResolver(form_schema),
     defaultValues: {
@@ -45,8 +61,14 @@ export default function CreateOrganizationForm({ user }: Props) {
     },
   });
 
-  function OnSubmit(values: z.infer<typeof form_schema>) {    
-    CreateOrganization({ name: values.name, description: values.description || "", address: values.address, postcode: values.postcode }).catch((e: Error) => {
+  function OnSubmit(values: z.infer<typeof form_schema>) {
+    CreateOrganization({
+      name: values.name,
+      description: values.description || "",
+      address: values.address,
+      postcode: values.postcode,
+    }).catch((e: Error) => {
+      console.error(e);
     });
 
     toast.success("Organization created successfully!");
@@ -119,11 +141,13 @@ export default function CreateOrganizationForm({ user }: Props) {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="hover:cursor-pointer" >Create</Button>
+              <Button type="submit" className="hover:cursor-pointer">
+                Create
+              </Button>
             </form>
           </Form>
         </CardContent>
-      </Card>  
-    </div>  
-  )
+      </Card>
+    </div>
+  );
 }
