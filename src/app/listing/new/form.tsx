@@ -66,7 +66,7 @@ const form_schema = z.object({
  * @param {User} user - The current user object containing organization memberships
  * @returns {Element} A form with fields for creating a new volunteering listing
  */
-export default function CreateListingForm(user: User) {
+export default function CreateListingForm({ user } : { user: User }) {
   const user_orgs = [...new Set([...user.owner_of, ...user.member_of])];
 
   const form = useForm<z.infer<typeof form_schema>>({
