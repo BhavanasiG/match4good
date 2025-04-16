@@ -10,6 +10,13 @@ import { forbidden } from "next/navigation";
  */
 
 /* eslint-disable @typescript-eslint/naming-convention */
+
+/**
+ * Updates the user's username and bio
+ * @param {string} username - The new username
+ * @param {string | null} bio - The new bio
+ * @returns {Promise<void>} - Returns a promise that resolves when the user is updated
+ */
 export async function UpdateUser(username: string, bio: string | null) {
   const user = await getUser();
 
@@ -82,7 +89,7 @@ export async function DeleteUser() {
     },
   );
 
-  const data = await response.json();
+  const data = (await response.json()) as { access_token: string };
 
   if (!data.access_token) {
     console.error("Error getting access token:", data);
@@ -101,8 +108,8 @@ export async function DeleteUser() {
   );
 
   if (!delete_response.ok) {
-    const error: Error = await delete_response.json();
-    throw new Error("Error deleting user (AUTH0):", error);
+    const error = (await delete_response.json()) as string;
+    throw new Error("Error deleting user (AUTH0):" + error);
   }
 
   await prisma.user.delete({
