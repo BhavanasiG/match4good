@@ -2,15 +2,20 @@ import { notFound } from "next/navigation";
 import { UserInfo } from "../user";
 import prisma from "@/lib/prisma";
 
-export default async function App({
-  params,
-}: {
-  params: Promise<{ id: number }>;
-}) {
-  const id = (await params).id;
+interface PageProps {
+  params: Promise<{ id: string }>; // Update params type to Promise
+}
+
+export default async function App({ params }: PageProps) {
+  const { id } = await params;
+
+  if (isNaN(parseInt(id))) {
+    return notFound();
+  }
+
   const user = await prisma.user.findUnique({
     where: {
-      id,
+      id: parseInt(id),
     },
     include: { member_of: true, owner_of: true },
   });
