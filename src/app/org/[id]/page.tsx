@@ -54,7 +54,11 @@ function getTimeString(start_date: Date, end_date: Date) {
 type t_params = Promise<{ id: string }>;
 
 export default async function App(props: { params: t_params }) {
-  const org_id: number = Number((await props.params).id);
+  const org_id = parseInt((await props.params).id);
+
+  if (isNaN(org_id)) {
+    return notFound();
+  }
 
   const org = await prisma.organization.findUnique({
     where: {

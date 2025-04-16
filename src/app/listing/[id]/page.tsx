@@ -13,6 +13,10 @@ export default async function ListingPage({ params }: PageProps) {
 
   const user = await getUser(true);
 
+  if (isNaN(parseInt(id))) {
+    return notFound();
+  }
+
   const listing = await prisma.listing.findUnique({
     where: { id: parseInt(id) },
     include: { organization: true },
