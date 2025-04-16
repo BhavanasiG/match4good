@@ -50,6 +50,11 @@ const form_schema = z.object({
 });
 
 /* eslint-disable @typescript-eslint/naming-convention */
+
+/**
+ * Form component for creating new organizations.
+ * @returns {Element} A form with fields for creating a new organization
+ */
 export default function CreateOrganizationForm() {
   const form = useForm<z.infer<typeof form_schema>>({
     resolver: zodResolver(form_schema),
@@ -61,6 +66,10 @@ export default function CreateOrganizationForm() {
     },
   });
 
+  /**
+   * Handles the submission of the form.
+   * @param {z.infer<typeof form_schema>} values - The values of the form
+   */
   function OnSubmit(values: z.infer<typeof form_schema>) {
     CreateOrganization({
       name: values.name,

@@ -2,6 +2,10 @@ import Link from "next/link";
 import { IconArrowLeft } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 
+/**
+ * NotFound component displays a 404 error page with a message indicating that the page was not found.
+ * @returns {Element} Returns a component with a 404 error message and a button to the home page
+ */
 export default function notFound() {
   return (
     <div className="flex flex-col items-center justify-center h-screen text-center space-y-10">

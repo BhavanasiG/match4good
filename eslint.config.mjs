@@ -101,5 +101,5 @@ export default defineConfig([
     "plugin:jsdoc/recommended",
   ),
 
-  globalIgnores(["src/hooks/", "src/components/ui/", "**/*.tsx"]),
+  globalIgnores(["src/hooks/", "src/components/ui/", "**/page.tsx"]),
 ]);

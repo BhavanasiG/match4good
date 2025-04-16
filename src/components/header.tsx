@@ -10,10 +10,9 @@ import {
 import { IconMenu2 } from "@tabler/icons-react";
 
 /**
- * Creates the common header component for the site
+ * Header component for the site
  * @returns {Element} Header component
  */
-
 export default function Header() {
   return (
     <header className="sticky top-0 z-50 grid grid-cols-10 p-3 px-6 md:px-12 lg:px-24 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">

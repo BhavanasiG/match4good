@@ -1,9 +1,3 @@
-/**
- * Form component for creating new volunteering opportunities.
- * @param {Object} props - Component props
- * @param {User} props.user - The current user object containing organization memberships
- * @returns {JSX.Element} A form with fields for creating a new volunteering listing
- */
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -65,10 +59,14 @@ const form_schema = z.object({
   organization: z.number(),
 });
 
-export type Props = { user: User };
-
 /* eslint-disable @typescript-eslint/naming-convention */
-export default function CreateListingForm({ user }: Props) {
+
+/**
+ * Form component for creating new volunteering opportunities.
+ * @param {User} user - The current user object containing organization memberships
+ * @returns {Element} A form with fields for creating a new volunteering listing
+ */
+export default function CreateListingForm(user: User) {
   const user_orgs = [...new Set([...user.owner_of, ...user.member_of])];
 
   const form = useForm<z.infer<typeof form_schema>>({
@@ -83,6 +81,10 @@ export default function CreateListingForm({ user }: Props) {
     },
   });
 
+  /**
+   * Handles the submission of the form.
+   * @param {z.infer<typeof form_schema>} values - The values of the form
+   */
   function OnSubmit(values: z.infer<typeof form_schema>) {
     createListing({
       name: values.name,
