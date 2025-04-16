@@ -10,7 +10,7 @@ import { forbidden } from "next/navigation";
  */
 
 /* eslint-disable @typescript-eslint/naming-convention */
-export async function UpdateUser(username: string, bio: string) {
+export async function UpdateUser(username: string, bio: string | null) {
   const user = await getUser();
 
   if (!user) {
