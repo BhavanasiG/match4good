@@ -75,7 +75,7 @@ export default async function App(props: { params: t_params }) {
     <div className="p-5 sm:p-10 md:p-20 lg:px-40 xl:px-80 space-y-10">
       <Card className="p-0 overflow-hidden">
         <Card className="relative h-32 md:h-54 bg-primary border-none rounded-none">
-          <Avatar className="size-22 md:size-44 absolute top-20 left-10 md:top-30 md:left-20 border-4 border-secondary">
+          <Avatar className="size-22 md:size-44 absolute top-20 left-10 md:top-30 md:left-20 border-8 border-card">
             <AvatarImage
               src="https://avatars.githubusercontent.com/u/83641209?v=4"
               alt="profile image"
@@ -111,7 +111,7 @@ export default async function App(props: { params: t_params }) {
         </TabsList>
         <TabsContent
           value="active"
-          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full"
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full h-fit"
         >
           {listings.length === 0 ? (
             <div className="w-full justify-center items-center flex">
@@ -122,7 +122,7 @@ export default async function App(props: { params: t_params }) {
               if (listing.active) {
                 return (
                   <div key={listing.id}>
-                    <Card className="basis-1/3 hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out">
+                    <Card className="basis-1/3 hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out h-full flex flex-col justify-between">
                       <CardHeader>
                         <CardTitle>
                           <p>{listing.name}</p>
