@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 "use client";
-
 import React from "react"; // <-- This brings in JSX.Element
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Button } from "./ui/button";
+import { cn } from "@/lib/utils";
 
 /**
  * Displays cookie consent banner at bottom of page.
@@ -36,59 +37,20 @@ export default function CookieBanner(): React.ReactElement | null {
   if (!shouldRender) return null;
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        bottom: 0,
-        left: 0,
-        width: "100%",
-        backgroundColor: "#333",
-        color: "white",
-        padding: "1rem",
-        textAlign: "center",
-        zIndex: 1000,
-        transition: "opacity 0.8s ease, transform 0.8s ease",
-        opacity: showBanner ? 1 : 0,
-        transform: showBanner ? "translateY(0%)" : "translateY(100%)",
-      }}
-    >
-      <p style={{ marginBottom: "0.5rem" }}>
+    <div className={
+      cn("fixed bottom-0 left-0 w-full bg-accent/80 p-4 text-center z-10 transition duration-500 ease-out",
+        showBanner ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10",
+        "space-y-4"
+      )}>
+      <p>
         We use cookies to improve your experience. Read our{" "}
-        <Link
-          href="/privacy-policy"
-          style={{ textDecoration: "underline", color: "#90cdf4" }}
-        >
+        <Link href="/privacy-policy" className="underline text-primary hover:text-primary/70">
           privacy policy
         </Link>
-        .
       </p>
-      <div style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
-        <button
-          onClick={() => handleConsent(true)}
-          style={{
-            padding: "0.5rem 1rem",
-            backgroundColor: "#4CAF50",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
-        >
-          Accept
-        </button>
-        <button
-          onClick={() => handleConsent(false)}
-          style={{
-            padding: "0.5rem 1rem",
-            backgroundColor: "#f44336",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
-        >
-          Reject
-        </button>
+      <div className="flex justify-center gap-4">
+        <Button className="hover:cursor-pointer" onClick={() => handleConsent(true)}>Accept</Button>
+        <Button className="hover:cursor-pointer" variant="destructive" onClick={() => handleConsent(false)}>Reject</Button>
       </div>
     </div>
   );
