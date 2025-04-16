@@ -19,6 +19,9 @@ model User {
   member_of Organization[] @relation("membership")
 
   application Application[]
+
+  region    Region? @relation(fields: [region_id], references: [id])
+  region_id Int?
 }
 
 model Organization {
@@ -33,30 +36,50 @@ model Organization {
   members     User[]    @relation("membership")
 }
 
-model Application {
-  id          Int               @id @default(autoincrement())
-  listing_id  Int               @map("listingId")
-  user_id     Int               @map("userId")
-  description String?
-  status      ApplicationStatus @default(PENDING)
-  listing     Listing           @relation(fields: [listing_id], references: [id], onDelete: Cascade)
-  user        User              @relation(fields: [user_id], references: [id], onDelete: Cascade)
-}
-
-model Listing {
-  id              Int           @id @default(autoincrement())
-  name            String
-  description     String?
-  organization_id Int
-  end_datetime    DateTime
-  start_datetime  DateTime
-  active          Boolean       @default(true)
-  applications    Application[]
-  organization    Organization  @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-}
-
 enum ApplicationStatus {
   PENDING
   ACCEPTED
   REJECTED
+}
+
+model Application {
+  id          Int               @id @default(autoincrement())
+  description String?
+  status      ApplicationStatus @default(PENDING)
+
+  listing    Listing @relation(fields: [listing_id], references: [id])
+  user       User    @relation(fields: [user_id], references: [id])
+  listing_id Int     @map("listingId")
+  user_id    Int     @map("userId")
+}
+
+model Listing {
+  id             Int           @id @default(autoincrement())
+  name           String
+  description    String?
+  start_datetime DateTime
+  end_datetime   DateTime
+  status         ListingStatus @default(AcceptingApplications)
+  point_value    Int           @default(0)
+  scored         Boolean       @default(false)
+
+  organization    Organization @relation(fields: [organization_id], references: [id])
+  organization_id Int
+
+  applications Application[]
+}
+
+enum ListingStatus {
+  AcceptingApplications
+  ApplicationsClosed
+  Completed
+  Cancelled
+}
+
+model Region {
+  id     Int    @id @default(autoincrement())
+  name   String
+  points Int    @default(0)
+
+  users User[]
 }

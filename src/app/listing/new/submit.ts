@@ -38,13 +38,10 @@ async function getUserOrganizations(): Promise<Organization[] | null> {
  * - Ensures the name field is not empty.
  * - Checks that both start and end dates and times are provided.
  * - Validates that the end date and time is the same as or
- * after the start date and time.
  * - Displays an appropriate error message if validation fails.
- * and passes to the server to create new record in database
  * - Listing is linked to one of the user's organisation
  * @param {CreateListingData} form_data Form data inputted/submitted by user.
  * @returns {redirect} redirection to new created listing (if valid data inputted),
- * else returns an error message.
  */
 export async function createListing(form_data: CreateListingData) {
   if (!form_data.name.trim()) {
@@ -64,12 +61,15 @@ export async function createListing(form_data: CreateListingData) {
   }
 
   if (start_datetime > end_datetime) {
-    return "End date must be the same as or after the start date";
+    return "End date must be same as or after the start date";
   }
+
+  const hours =
+    (end_datetime.getTime() - start_datetime.getTime()) / (1000 * 60 * 60);
 
   const user_orgs = await getUserOrganizations();
   if (!user_orgs || user_orgs.length === 0) {
-    return "No organizations associated with the account";
+    return "No organizations associated with account";
   }
 
   if (!user_orgs.some((org) => org.id === form_data.organization_id)) {
@@ -77,6 +77,9 @@ export async function createListing(form_data: CreateListingData) {
   }
 
   // Save the listing
+  // We have to manually destructure data as we have converted the datetime
+  // from a string to a date object since Prisma expects Date objects
+
   const listing = await prisma.listing.create({
     data: {
       name: form_data.name,
@@ -84,6 +87,8 @@ export async function createListing(form_data: CreateListingData) {
       start_datetime: start_datetime,
       end_datetime: end_datetime,
       organization_id: form_data.organization_id,
+      // todo, have a config somewhere to not hard-code it here
+      point_value: hours * 1000,
     },
   });
 
