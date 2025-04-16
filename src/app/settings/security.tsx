@@ -23,6 +23,10 @@ import { redirect } from "next/navigation";
 import { toast } from "sonner";
 import { DeleteUser } from "./submit";
 
+/**
+ * SecurityForm component displays a dialog for deleting the user's account.
+ * @returns {Element} Returns a component with a dialog for deleting the user's account
+ */
 export default function SecurityForm() {
   const handleAccountDeletion = async () => {
     const deleted = await DeleteUser().catch((error) => {
