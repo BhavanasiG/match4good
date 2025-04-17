@@ -5,7 +5,7 @@
  *
  * @param {*} server Server
  */
-export default function OnServerStart(server) {
+export default function onServerStart(server) {
   let counter = 0;
   console.log('Got here');
   setInterval(() => {

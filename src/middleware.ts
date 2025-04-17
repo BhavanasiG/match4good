@@ -8,7 +8,7 @@ import { auth0 } from './lib/auth0';
  * @returns {Promise<Response>} - The response object
  * This middleware function handles authentication for the application.
  */
-export async function Middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   return await auth0.middleware(request);
 }
 
