@@ -1,7 +1,7 @@
-﻿"use client";
+﻿'use client';
 
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 type Article = {
   title: string;
@@ -13,19 +13,19 @@ type Article = {
 };
 
 const CATEGORIES = [
-  "general",
-  "world",
-  "nation",
-  "business",
-  "technology",
-  "entertainment",
-  "sports",
-  "science",
-  "health",
+  'general',
+  'world',
+  'nation',
+  'business',
+  'technology',
+  'entertainment',
+  'sports',
+  'science',
+  'health',
 ];
 
 export default function NewsPage() {
-  const [category, setCategory] = useState("general");
+  const [category, setCategory] = useState('general');
   const [localCity, setLocalCity] = useState<string | null>(null);
   const [localArticles, setLocalArticles] = useState<Article[]>([]);
   const [nationalArticles, setNationalArticles] = useState<Article[]>([]);
@@ -46,15 +46,14 @@ export default function NewsPage() {
             `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,
           );
           const data = await res.json();
-          const foundCity =
-            data.address.city || data.address.town || data.address.village;
+          const foundCity = data.address.city || data.address.town || data.address.village;
           setLocalCity(foundCity);
         } catch (err) {
-          console.error("Failed to get city from geolocation", err);
+          console.error('Failed to get city from geolocation', err);
         }
       },
       (err) => {
-        console.error("Geolocation error:", err);
+        console.error('Geolocation error:', err);
       },
     );
   }, []);
@@ -73,7 +72,7 @@ export default function NewsPage() {
         const data = await res.json();
         setLocalArticles(data.articles || []);
       } catch (err) {
-        console.error("Failed to fetch local news", err);
+        console.error('Failed to fetch local news', err);
       } finally {
         setLoadingLocal(false);
       }
@@ -94,7 +93,7 @@ export default function NewsPage() {
         const data = await res.json();
         setNationalArticles(data.articles || []);
       } catch (err) {
-        console.error("Failed to fetch national news", err);
+        console.error('Failed to fetch national news', err);
       } finally {
         setLoadingNational(false);
       }
@@ -126,12 +125,9 @@ export default function NewsPage() {
           <div className="p-4 flex flex-col flex-grow">
             <h2 className="text-lg font-semibold">{article.title}</h2>
             <p className="text-sm text-gray-600 mt-1">
-              {new Date(article.publishedAt).toLocaleString()} –{" "}
-              {article.source.name}
+              {new Date(article.publishedAt).toLocaleString()} – {article.source.name}
             </p>
-            <p className="text-gray-700 mt-2 line-clamp-3">
-              {article.description}
-            </p>
+            <p className="text-gray-700 mt-2 line-clamp-3">{article.description}</p>
           </div>
         </a>
       ))}

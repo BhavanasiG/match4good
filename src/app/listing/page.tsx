@@ -1,5 +1,5 @@
-import prisma from "@/lib/prisma";
-import Link from "next/link";
+import prisma from '@/lib/prisma';
+import Link from 'next/link';
 
 // Fetch listings directly from the database
 export default async function ListingsPage() {
@@ -19,16 +19,13 @@ export default async function ListingsPage() {
               <h2 className="text-xl font-semibold">{listing.name}</h2>
               <p>{listing.description}</p>
               <p className="text-gray-500">
-                {listing.start_datetime?.toLocaleDateString()} -{" "}
-                {listing.end_datetime?.toLocaleDateString()}
+                {listing.startDatetime?.toLocaleDateString()} -{' '}
+                {listing.endDatetime?.toLocaleDateString()}
               </p>
               <p className="text-gray-600">
-                Organization: {listing.organization?.name || "Unknown"}
+                Organization: {listing.organization?.name || 'Unknown'}
               </p>
-              <Link
-                href={`/listing/${listing.id}`}
-                className="text-blue-500 underline"
-              >
+              <Link href={`/listing/${listing.id}`} className="text-blue-500 underline">
                 View Details
               </Link>
             </li>

@@ -7,9 +7,9 @@
  */
 export default function onServerStart(server) {
   let counter = 0;
-  console.log("Got here");
+  console.log('Got here');
   setInterval(() => {
-    server.emit("counter", counter);
+    server.emit('counter', counter);
     counter += 1;
   }, 2000);
 }

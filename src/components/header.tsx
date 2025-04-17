@@ -1,13 +1,13 @@
-import DynamicLoginLogoutButton from "@/components/login";
-import Link from "next/link";
-import Image from "next/image";
+import DynamicLoginLogoutButton from '@/components/login';
+import Link from 'next/link';
+import Image from 'next/image';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { IconMenu2 } from "@tabler/icons-react";
+} from './ui/dropdown-menu';
+import { IconMenu2 } from '@tabler/icons-react';
 
 /**
  * Header component for the site
@@ -41,9 +41,9 @@ export default function Header() {
         </DropdownMenu>
       </div>
       <div className="col-span-4 sm:col-span-3 flex justify-center sm:justify-start items-center space-x-4">
-        <Link href={"/"}>
+        <Link href={'/'}>
           <Image
-            src={"/logo_extended.svg"}
+            src={'/logo_extended.svg'}
             alt="Match4Good Logo"
             width={0}
             height={0}

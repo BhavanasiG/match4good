@@ -1,7 +1,7 @@
-"use server";
+'use server';
 
-import prisma, { getUser } from "@/lib/prisma";
-import { redirect } from "next/navigation";
+import prisma, { GetUser } from '@/lib/prisma';
+import { redirect } from 'next/navigation';
 
 type Data = {
   username: string;
@@ -12,8 +12,8 @@ type Data = {
  * @param {string} param0 - Accepts an object with a username string
  * @returns {Promise<void>} - Returns a promise that resolves when the user is updated
  */
-export default async function updateUser({ username }: Data) {
-  const user = await getUser();
+export default async function UpdateUser({ username }: Data) {
+  const user = await GetUser();
 
   if (!user) {
     return;
@@ -21,12 +21,12 @@ export default async function updateUser({ username }: Data) {
 
   await prisma.user.update({
     where: {
-      user_id: user.user_id,
+      userId: user.userId,
     },
     data: {
       username: username,
     },
   });
 
-  return redirect("/user");
+  return redirect('/user');
 }

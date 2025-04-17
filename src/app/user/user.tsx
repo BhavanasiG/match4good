@@ -1,4 +1,4 @@
-import { User } from "@/lib/prisma";
+import { User } from '@/lib/prisma';
 
 export type Props = { user: User };
 
@@ -14,11 +14,11 @@ export function UserInfo({ user }: Props) {
       <h1>{user.username}</h1>
 
       <div>
-        {user.owner_of.length > 0 && (
+        {user.ownerOf.length > 0 && (
           <div>
             <h2>Owned Organizations: </h2>
             <ul>
-              {user.owner_of.map((o) => (
+              {user.ownerOf.map((o) => (
                 <li key={o.id}>
                   <h3>{o.name}</h3>
                   <p>{o.description}</p>
@@ -28,11 +28,11 @@ export function UserInfo({ user }: Props) {
           </div>
         )}
 
-        {user.member_of.length > 0 && (
+        {user.memberOf.length > 0 && (
           <div>
             <h2>Organizations: </h2>
             <ul>
-              {user.member_of.map((o) => (
+              {user.memberOf.map((o) => (
                 <li key={o.id}>
                   <h3>{o.name}</h3>
                   <p>{o.description}</p>

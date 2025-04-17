@@ -1,8 +1,8 @@
-﻿import { notFound } from "next/navigation";
-import prisma, { getUser } from "@/lib/prisma";
-import ListingInfo from "@/components/listingInfo";
-import MapComponent from "@/components/MapComponent"; // Import the map component
-import Link from "next/link";
+﻿import { notFound } from 'next/navigation';
+import prisma, { GetUser } from '@/lib/prisma';
+import ListingInfo from '@/components/listingInfo';
+import MapComponent from '@/components/MapComponent'; // Import the map component
+import Link from 'next/link';
 
 interface PageProps {
   params: Promise<{ id: string }>; // Update params type to Promise
@@ -11,7 +11,7 @@ interface PageProps {
 export default async function ListingPage({ params }: PageProps) {
   const { id } = await params; // Await the params because it's now a Promise
 
-  const user = await getUser(true);
+  const user = await GetUser(true);
 
   if (isNaN(parseInt(id))) {
     return notFound();
@@ -27,14 +27,14 @@ export default async function ListingPage({ params }: PageProps) {
   const applied =
     user != null
       ? (await prisma.application.count({
-          where: { listing_id: listing.id, user_id: user.id },
+          where: { listingId: listing.id, userId: user.id },
         })) > 0
       : false;
 
   const in_org =
     user != null
-      ? user.member_of.some((org) => org.id === listing.organization_id) ||
-        user.owner_of.some((org) => org.id === listing.organization_id)
+      ? user.memberOf.some((org) => org.id === listing.organizationId) ||
+        user.ownerOf.some((org) => org.id === listing.organizationId)
       : false;
 
   return (
@@ -45,25 +45,17 @@ export default async function ListingPage({ params }: PageProps) {
           <ListingInfo listing={listing} />
           {user && !applied && (
             <>
-              <Link
-                href={`/listing/${id}/apply`}
-                className="text-blue-500 underline"
-              >
+              <Link href={`/listing/${id}/apply`} className="text-blue-500 underline">
                 Apply now!
               </Link>
               <br />
             </>
           )}
           {user && applied && (
-            <p className="text-green-500">
-              You&apos;ve already applied for this!
-            </p>
+            <p className="text-green-500">You&apos;ve already applied for this!</p>
           )}
           {user && in_org && (
-            <Link
-              href={`/listing/${id}/manage`}
-              className="text-blue-500 underline"
-            >
+            <Link href={`/listing/${id}/manage`} className="text-blue-500 underline">
               Manage listing
             </Link>
           )}

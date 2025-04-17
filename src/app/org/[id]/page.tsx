@@ -5,15 +5,15 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import prisma from "@/lib/prisma";
-import { notFound } from "next/navigation";
-import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ListingStatus } from "../../../../generated/prisma_client";
+} from '@/components/ui/card';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import prisma from '@/lib/prisma';
+import { notFound } from 'next/navigation';
+import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ListingStatus } from '../../../../generated/prisma_client';
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -24,28 +24,25 @@ function getTimeString(start_date: Date, end_date: Date) {
   if (start_date.getDate() === end_date.getDate()) {
     return (
       <>
-        <p>{start_date.toLocaleDateString(undefined, { dateStyle: "full" })}</p>
+        <p>{start_date.toLocaleDateString(undefined, { dateStyle: 'full' })}</p>
         <p>
-          {start_date.toLocaleTimeString(undefined, { timeStyle: "short" })}{" "}
-          -&nbsp;
-          {end_date.toLocaleTimeString(undefined, { timeStyle: "short" })}
+          {start_date.toLocaleTimeString(undefined, { timeStyle: 'short' })} -&nbsp;
+          {end_date.toLocaleTimeString(undefined, { timeStyle: 'short' })}
         </p>
       </>
     );
   } else if (hours < 168) {
     return (
       <p>
-        {start_date.toLocaleDateString(undefined, { dateStyle: "full" })}{" "}
-        -&nbsp;
-        {end_date.toLocaleDateString(undefined, { dateStyle: "full" })}
+        {start_date.toLocaleDateString(undefined, { dateStyle: 'full' })} -&nbsp;
+        {end_date.toLocaleDateString(undefined, { dateStyle: 'full' })}
       </p>
     );
   } else {
     return (
       <p>
-        {start_date.toLocaleDateString(undefined, { dateStyle: "long" })}{" "}
-        -&nbsp;
-        {end_date.toLocaleDateString(undefined, { dateStyle: "long" })}
+        {start_date.toLocaleDateString(undefined, { dateStyle: 'long' })} -&nbsp;
+        {end_date.toLocaleDateString(undefined, { dateStyle: 'long' })}
       </p>
     );
   }
@@ -68,7 +65,7 @@ export default async function App(props: { params: t_params }) {
 
   const listings = await prisma.listing.findMany({
     where: {
-      organization_id: org_id,
+      organizationId: org_id,
     },
   });
 
@@ -91,15 +88,10 @@ export default async function App(props: { params: t_params }) {
         <CardHeader className="p-5 md:p-10 md:pt-20">
           <CardTitle className="mb-5">
             <p className="text-2xl md:text-3xl font-semibold">{org?.name}</p>
-            <p className="text-md md:text-lg text-muted-foreground">
-              Category ⋅ {org?.address}
-            </p>
+            <p className="text-md md:text-lg text-muted-foreground">Category ⋅ {org?.address}</p>
           </CardTitle>
           <CardDescription>
-            <p className="text-md md:text-lg font-medium line-clamp-3">
-              {" "}
-              {org?.description}{" "}
-            </p>
+            <p className="text-md md:text-lg font-medium line-clamp-3"> {org?.description} </p>
           </CardDescription>
         </CardHeader>
       </Card>
@@ -124,32 +116,25 @@ export default async function App(props: { params: t_params }) {
             </div>
           ) : (
             listings.map((listing) => {
-              if (listing.status == ListingStatus.AcceptingApplications) {
+              if (listing.status == ListingStatus.acceptingApplications) {
                 return (
                   <div key={listing.id}>
                     <Card className="basis-1/3 hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out h-full flex flex-col justify-between">
                       <CardHeader>
                         <CardTitle>
                           <p>{listing.name}</p>
-                          <p className="text-sm text-muted-foreground mt-1">
-                            Location
-                          </p>
+                          <p className="text-sm text-muted-foreground mt-1">Location</p>
                         </CardTitle>
                         <CardDescription className="line-clamp-3">
                           {listing.description}
                         </CardDescription>
                       </CardHeader>
                       <CardContent className="text-base">
-                        {getTimeString(
-                          listing.start_datetime,
-                          listing.end_datetime,
-                        )}
+                        {getTimeString(listing.startDatetime, listing.endDatetime)}
                       </CardContent>
                       <CardFooter>
                         <Link href={`/listing/${listing.id}`}>
-                          <Button className="cursor-pointer">
-                            View Listing
-                          </Button>
+                          <Button className="cursor-pointer">View Listing</Button>
                         </Link>
                       </CardFooter>
                     </Card>
@@ -169,32 +154,25 @@ export default async function App(props: { params: t_params }) {
             </div>
           ) : (
             listings.map((listing) => {
-              if (listing.status != ListingStatus.AcceptingApplications) {
+              if (listing.status != ListingStatus.acceptingApplications) {
                 return (
                   <div key={listing.id}>
                     <Card className="basis-1/3 hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out">
                       <CardHeader>
                         <CardTitle>
                           <p>{listing.name}</p>
-                          <p className="text-sm text-muted-foreground mt-1">
-                            Location
-                          </p>
+                          <p className="text-sm text-muted-foreground mt-1">Location</p>
                         </CardTitle>
                         <CardDescription className="line-clamp-3">
                           {listing.description}
                         </CardDescription>
                       </CardHeader>
                       <CardContent className="text-base">
-                        {getTimeString(
-                          listing.start_datetime,
-                          listing.end_datetime,
-                        )}
+                        {getTimeString(listing.startDatetime, listing.endDatetime)}
                       </CardContent>
                       <CardFooter>
                         <Link href={`/listing/${listing.id}`}>
-                          <Button className="cursor-pointer">
-                            View Listing
-                          </Button>
+                          <Button className="cursor-pointer">View Listing</Button>
                         </Link>
                       </CardFooter>
                     </Card>

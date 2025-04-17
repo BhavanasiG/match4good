@@ -1,17 +1,17 @@
-"use server";
+'use server';
 
-import prisma, { getUser } from "@/lib/prisma";
-import { redirect } from "next/navigation";
-import { Organization } from "@/../generated/prisma_client";
+import prisma, { GetUser } from '@/lib/prisma';
+import { redirect } from 'next/navigation';
+import { Organization } from '@/../generated/prisma_client';
 
 export interface CreateListingData {
   name: string;
   description: string;
-  date_range: {
-    start_datetime: string;
-    end_datetime: string;
+  dateRange: {
+    startDatetime: string;
+    endDatetime: string;
   };
-  organization_id: number;
+  organizationId: number;
 }
 
 /**
@@ -20,14 +20,14 @@ export interface CreateListingData {
  * @returns {Promise<Organization[] | null>} Array of organizations linked with user or null if no user logged in
  */
 async function getUserOrganizations(): Promise<Organization[] | null> {
-  const user = await getUser(true);
+  const user = await GetUser(true);
   if (!user) {
     return null;
   }
 
-  const user_orgs = [...new Set([...user.owner_of, ...user.member_of])];
+  const userOrgs = [...new Set([...user.ownerOf, ...user.memberOf])];
 
-  return user_orgs;
+  return userOrgs;
 }
 
 /**
@@ -40,40 +40,39 @@ async function getUserOrganizations(): Promise<Organization[] | null> {
  * - Validates that the end date and time is the same as or
  * - Displays an appropriate error message if validation fails.
  * - Listing is linked to one of the user's organisation
- * @param {CreateListingData} form_data Form data inputted/submitted by user.
+ * @param {CreateListingData} formData Form data inputted/submitted by user.
  * @returns {redirect} redirection to new created listing (if valid data inputted),
  */
-export async function createListing(form_data: CreateListingData) {
-  if (!form_data.name.trim()) {
-    return "Name is required";
+export async function CreateListing(formData: CreateListingData) {
+  if (!formData.name.trim()) {
+    return 'Name is required';
   }
 
-  const start_datetime = new Date(form_data.date_range.start_datetime);
-  const end_datetime = new Date(form_data.date_range.end_datetime);
+  const startDatetime = new Date(formData.dateRange.startDatetime);
+  const endDatetime = new Date(formData.dateRange.endDatetime);
   const now = new Date();
 
-  if (!start_datetime || !end_datetime) {
-    return "Both start and end dates are required";
+  if (!startDatetime || !endDatetime) {
+    return 'Both start and end dates are required';
   }
 
-  if (start_datetime < now) {
-    return "Start date cannot be in the past";
+  if (startDatetime < now) {
+    return 'Start date cannot be in the past';
   }
 
-  if (start_datetime > end_datetime) {
-    return "End date must be same as or after the start date";
+  if (startDatetime > endDatetime) {
+    return 'End date must be same as or after the start date';
   }
 
-  const hours =
-    (end_datetime.getTime() - start_datetime.getTime()) / (1000 * 60 * 60);
+  const hours = (endDatetime.getTime() - startDatetime.getTime()) / (1000 * 60 * 60);
 
-  const user_orgs = await getUserOrganizations();
-  if (!user_orgs || user_orgs.length === 0) {
-    return "No organizations associated with account";
+  const userOrgs = await getUserOrganizations();
+  if (!userOrgs || userOrgs.length === 0) {
+    return 'No organizations associated with account';
   }
 
-  if (!user_orgs.some((org) => org.id === form_data.organization_id)) {
-    return "Invalid organization selected.";
+  if (!userOrgs.some((org) => org.id === formData.organizationId)) {
+    return 'Invalid organization selected.';
   }
 
   // Save the listing
@@ -82,13 +81,13 @@ export async function createListing(form_data: CreateListingData) {
 
   const listing = await prisma.listing.create({
     data: {
-      name: form_data.name,
-      description: form_data.description,
-      start_datetime: start_datetime,
-      end_datetime: end_datetime,
-      organization_id: form_data.organization_id,
+      name: formData.name,
+      description: formData.description,
+      startDatetime: startDatetime,
+      endDatetime: endDatetime,
+      organizationId: formData.organizationId,
       // todo, have a config somewhere to not hard-code it here
-      point_value: hours * 1000,
+      pointValue: hours * 1000,
     },
   });
 

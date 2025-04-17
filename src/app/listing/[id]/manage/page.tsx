@@ -1,12 +1,8 @@
-import prisma, { getUser } from "@/lib/prisma";
-import { forbidden, notFound } from "next/navigation";
-import {
-  CloseApplications,
-  ListingWithApplications,
-  PresentApplication,
-} from "./client";
-import ListingInfo from "@/components/listingInfo";
-import { ListingStatus } from "@/../generated/prisma_client";
+import prisma, { GetUser } from '@/lib/prisma';
+import { forbidden, notFound } from 'next/navigation';
+import { CloseApplications, ListingWithApplications, PresentApplication } from './client';
+import ListingInfo from '@/components/listingInfo';
+import { ListingStatus } from '@/../generated/prisma_client';
 
 function Applicants({ listing }: { listing: ListingWithApplications }) {
   return (
@@ -20,19 +16,15 @@ function Applicants({ listing }: { listing: ListingWithApplications }) {
         ))}
       </ul>
 
-      {listing.status === ListingStatus.AcceptingApplications && (
+      {listing.status === ListingStatus.acceptingApplications && (
         <CloseApplications listing={listing} />
       )}
     </div>
   );
 }
 
-export default async function App({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const user = await getUser(true);
+export default async function App({ params }: { params: Promise<{ id: string }> }) {
+  const user = await GetUser(true);
 
   if (!user) {
     return forbidden();
@@ -53,8 +45,8 @@ export default async function App({
   }
 
   if (
-    !user.member_of.some((org) => org.id === listing.organization_id) &&
-    !user.owner_of.some((org) => org.id === listing.organization_id)
+    !user.memberOf.some((org) => org.id === listing.organizationId) &&
+    !user.ownerOf.some((org) => org.id === listing.organizationId)
   ) {
     return forbidden();
   }
