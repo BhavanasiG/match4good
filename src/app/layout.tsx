@@ -1,20 +1,20 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
-import { Toaster } from "sonner";
-import { ThemeProvider } from "next-themes";
-import CookieBanner from "@/components/CookieBanner";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import Header from '@/components/header';
+import Footer from '@/components/footer';
+import { Toaster } from 'sonner';
+import { ThemeProvider } from 'next-themes';
+import CookieBanner from '@/components/CookieBanner';
 
 const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
+  subsets: ['latin'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: "Match4Good - Find volunteering opportunities near you!",
-  description: "Find volunteering opportunities near you!",
+  title: 'Match4Good - Find volunteering opportunities near you!',
+  description: 'Find volunteering opportunities near you!',
 };
 
 /**
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
  * @param {*} root0.children - The children of the root layout
  * @returns {Element} - The root layout for the app
  */
-export default function rootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -35,7 +35,7 @@ export default function rootLayout({
       <body
         className={`${inter.className} antialiased flex flex-col min-h-screen bg-linear-to-b from-secondary/10 to-30% to-background`}
       >
-        <ThemeProvider attribute={"class"}>
+        <ThemeProvider attribute={'class'}>
           <CookieBanner />
           <Header />
           <main className="grow flex flex-col min-h-screen">{children}</main>

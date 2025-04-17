@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'sonner';
 import {
   Form,
   FormControl,
@@ -13,39 +13,39 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { CreateOrganization } from "./submit";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { CreateOrganization } from './submit';
 
-const form_schema = z.object({
+const formSchema = z.object({
   name: z
     .string()
     .min(4, {
-      message: "Name must be at least 4 characters.",
+      message: 'Name must be at least 4 characters.',
     })
     .max(32, {
-      message: "Name cannot be longer than 32 characters.",
+      message: 'Name cannot be longer than 32 characters.',
     }),
   description: z.string().max(400).optional(),
   address: z
     .string()
     .min(4, {
-      message: "Address must be at least 4 characters.",
+      message: 'Address must be at least 4 characters.',
     })
     .max(64, {
-      message: "Address cannot be longer than 64 characters.",
+      message: 'Address cannot be longer than 64 characters.',
     }),
   postcode: z
     .string()
     .min(6, {
-      message: "Postcode must be at least 6 characters.",
+      message: 'Postcode must be at least 6 characters.',
     })
     .max(8, {
-      message: "Postcode cannot be longer than 8 characters.",
+      message: 'Postcode cannot be longer than 8 characters.',
     })
     .regex(/^([A-Z][A-HJ-Y]?\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0A{2})$/, {
-      message: "Invalid postcode format",
+      message: 'Invalid postcode format',
     }),
 });
 
@@ -56,31 +56,31 @@ const form_schema = z.object({
  * @returns {Element} A form with fields for creating a new organization
  */
 export default function CreateOrganizationForm() {
-  const form = useForm<z.infer<typeof form_schema>>({
-    resolver: zodResolver(form_schema),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      description: "",
-      address: "",
-      postcode: "",
+      name: '',
+      description: '',
+      address: '',
+      postcode: '',
     },
   });
 
   /**
    * Handles the submission of the form.
-   * @param {z.infer<typeof form_schema>} values - The values of the form
+   * @param {z.infer<typeof formSchema>} values - The values of the form
    */
-  function OnSubmit(values: z.infer<typeof form_schema>) {
+  function OnSubmit(values: z.infer<typeof formSchema>) {
     CreateOrganization({
       name: values.name,
-      description: values.description || "",
+      description: values.description || '',
       address: values.address,
       postcode: values.postcode,
     }).catch((e: Error) => {
       console.error(e);
     });
 
-    toast.success("Organization created successfully!");
+    toast.success('Organization created successfully!');
   }
 
   return (
@@ -114,9 +114,7 @@ export default function CreateOrganizationForm() {
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
-                    <FormDescription>
-                      Tell us a bit about your organization.
-                    </FormDescription>
+                    <FormDescription>Tell us a bit about your organization.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -130,9 +128,7 @@ export default function CreateOrganizationForm() {
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
-                    <FormDescription>
-                      Where your organization is situated.
-                    </FormDescription>
+                    <FormDescription>Where your organization is situated.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

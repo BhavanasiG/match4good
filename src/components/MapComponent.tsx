@@ -1,11 +1,11 @@
-"use client";
-import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import * as L from "leaflet";
+'use client';
+import { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import * as L from 'leaflet';
 
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
 /* eslint-disable @typescript-eslint/naming-convention */
 const customIcon: L.Icon<L.IconOptions> = new L.Icon<L.IconOptions>({
@@ -45,12 +45,12 @@ const MapComponent: React.FC<MapProps> = ({ address, postcode }) => {
         const data: GeocodeResult[] = await response.json();
 
         if (Array.isArray(data) && data.length > 0) {
-          const lat = parseFloat(data[0]?.lat ?? "0"); // Ensure valid number
-          const lon = parseFloat(data[0]?.lon ?? "0");
+          const lat = parseFloat(data[0]?.lat ?? '0'); // Ensure valid number
+          const lon = parseFloat(data[0]?.lon ?? '0');
           setCoordinates([lat, lon]);
         }
       } catch (error) {
-        console.error("Error fetching coordinates:", error);
+        console.error('Error fetching coordinates:', error);
       }
     };
 
@@ -62,11 +62,7 @@ const MapComponent: React.FC<MapProps> = ({ address, postcode }) => {
   }
 
   return (
-    <MapContainer
-      center={coordinates}
-      zoom={13}
-      style={{ height: "400px", width: "100%" }}
-    >
+    <MapContainer center={coordinates} zoom={13} style={{ height: '400px', width: '100%' }}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

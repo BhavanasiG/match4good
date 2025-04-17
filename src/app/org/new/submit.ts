@@ -8,10 +8,10 @@
  * @throws {Error} Throws a forbidden if the user is not authenticated
  */
 
-"use server";
+'use server';
 
-import prisma, { getUser } from "@/lib/prisma";
-import { forbidden, redirect } from "next/navigation";
+import prisma, { GetUser } from '@/lib/prisma';
+import { forbidden, redirect } from 'next/navigation';
 
 export type Props = {
   name: string;
@@ -25,13 +25,8 @@ export type Props = {
  * @param {string} param0 - Accepts an object with a username string
  * @returns {Promise<void>} - Returns a promise that resolves when the user is updated
  */
-export async function CreateOrganization({
-  name,
-  description,
-  address,
-  postcode,
-}: Props) {
-  const user = await getUser();
+export async function CreateOrganization({ name, description, address, postcode }: Props) {
+  const user = await GetUser();
 
   if (!user) {
     return forbidden();
@@ -43,7 +38,7 @@ export async function CreateOrganization({
       description: description,
       address: address,
       postcode: postcode,
-      owner_id: user.id,
+      ownerId: user.id,
     },
   });
 

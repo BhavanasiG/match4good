@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { User } from "@/../generated/prisma_client";
-import { useState } from "react";
-import updateUser from "./submit";
+import { User } from '@/../generated/prisma_client';
+import { useState } from 'react';
+import updateUser from './submit';
 
 export type Props = {
   user: User;

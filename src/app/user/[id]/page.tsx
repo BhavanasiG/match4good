@@ -1,6 +1,6 @@
-import { notFound } from "next/navigation";
-import { UserInfo } from "../user";
-import prisma from "@/lib/prisma";
+import { notFound } from 'next/navigation';
+import { UserInfo } from '../user';
+import prisma from '@/lib/prisma';
 
 interface PageProps {
   params: Promise<{ id: string }>; // Update params type to Promise
@@ -17,7 +17,7 @@ export default async function App({ params }: PageProps) {
     where: {
       id: parseInt(id),
     },
-    include: { member_of: true, owner_of: true },
+    include: { memberOf: true, ownerOf: true },
   });
 
   if (!user) {

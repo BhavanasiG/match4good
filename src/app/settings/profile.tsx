@@ -6,13 +6,13 @@
  * @returns ProfileForm component JSX
  */
 
-"use client";
+'use client';
 
-import { User } from "@/lib/prisma";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+import { User } from '@/lib/prisma';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import {
   Form,
   FormControl,
@@ -21,28 +21,28 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { UpdateUser } from "./submit";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { UpdateUser } from './submit';
 
 /** Profile form schema */
 
-const form_schema = z.object({
+const formSchema = z.object({
   username: z
     .string()
     .min(4, {
-      message: "Username must be at least 4 characters.",
+      message: 'Username must be at least 4 characters.',
     })
     .max(20, {
-      message: "Username cannot be longer than 20 characters.",
+      message: 'Username cannot be longer than 20 characters.',
     }),
   email: z
     .string()
     .min(1, {
-      message: "This field is required",
+      message: 'This field is required',
     })
-    .email("This is not a valid email address."),
+    .email('This is not a valid email address.'),
   bio: z.string().max(160).optional(),
 });
 
@@ -61,31 +61,31 @@ export default function ProfileForm({ user }: Props) {
 
   /* eslint-disable @typescript-eslint/naming-convention */
 
-  const form = useForm<z.infer<typeof form_schema>>({
-    resolver: zodResolver(form_schema),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       username: user.username,
-      email: user.email || "",
-      bio: user.bio || "",
+      email: user.email || '',
+      bio: user.bio || '',
     },
   });
 
   /**
    *
-   * @param {z.infer<typeof form_schema>} values Form values
+   * @param {z.infer<typeof formSchema>} values Form values
    * Handles form submission and updates the user profile
    */
-  function OnSubmit(values: z.infer<typeof form_schema>) {
+  function OnSubmit(values: z.infer<typeof formSchema>) {
     let error = false;
 
     UpdateUser(values.username, values.bio || null).catch((e: Error) => {
-      console.error("Failed to update: ", e);
-      toast.error("Failed to update: " + e.message);
+      console.error('Failed to update: ', e);
+      toast.error('Failed to update: ' + e.message);
       error = true;
     });
 
     if (!error) {
-      toast.success("Changes saved");
+      toast.success('Changes saved');
     }
   }
 
@@ -101,9 +101,7 @@ export default function ProfileForm({ user }: Props) {
               <FormControl>
                 <Input placeholder={user.username} {...field} />
               </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
+              <FormDescription>This is your public display name.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -115,14 +113,9 @@ export default function ProfileForm({ user }: Props) {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input
-                  placeholder={user.email || "example@mailservice.com"}
-                  {...field}
-                />
+                <Input placeholder={user.email || 'example@mailservice.com'} {...field} />
               </FormControl>
-              <FormDescription>
-                The email address associated with this account.
-              </FormDescription>
+              <FormDescription>The email address associated with this account.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -134,10 +127,7 @@ export default function ProfileForm({ user }: Props) {
             <FormItem>
               <FormLabel>Biography</FormLabel>
               <FormControl>
-                <Input
-                  placeholder={"Tell us a little bit more about yourself."}
-                  {...field}
-                />
+                <Input placeholder={'Tell us a little bit more about yourself.'} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

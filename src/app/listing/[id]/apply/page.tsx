@@ -1,14 +1,10 @@
-import prisma, { getUser } from "@/lib/prisma";
-import { forbidden, notFound } from "next/navigation";
-import ApplicationForm from "./form";
-import ListingInfo from "@/components/listingInfo";
+import prisma, { GetUser } from '@/lib/prisma';
+import { forbidden, notFound } from 'next/navigation';
+import ApplicationForm from './form';
+import ListingInfo from '@/components/listingInfo';
 
-export default async function App({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const user = await getUser();
+export default async function App({ params }: { params: Promise<{ id: string }> }) {
+  const user = await GetUser();
 
   if (!user) {
     return forbidden();
@@ -30,7 +26,7 @@ export default async function App({
         <ListingInfo listing={listing} />
       </div>
       <div className="w-max">
-        <ApplicationForm listing_id={listing.id} />
+        <ApplicationForm listingId={listing.id} />
       </div>
     </span>
   );

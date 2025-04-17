@@ -1,10 +1,10 @@
-import { getUser } from "@/lib/prisma";
-import { notFound } from "next/navigation";
-import Link from "next/link";
-import EditUserForm from "./form";
+import { GetUser } from '@/lib/prisma';
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import EditUserForm from './form';
 
 export default async function App() {
-  const user = await getUser();
+  const user = await GetUser();
 
   if (!user) {
     return notFound();

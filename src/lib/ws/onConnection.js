@@ -6,9 +6,9 @@
  * @param {*} ws WebSocket
  */
 export default function onConnection(ws) {
-  console.log("New client connected");
+  console.log('New client connected');
 
-  ws.on("disconnect", () => {
-    console.log("Client disconnected");
+  ws.on('disconnect', () => {
+    console.log('Client disconnected');
   });
 }
