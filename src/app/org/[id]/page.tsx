@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import FollowButton from "@/components/FollowButton";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -50,7 +51,9 @@ function getTimeString(start_date: Date, end_date: Date) {
 type t_params = Promise<{ id: string }>;
 
 export default async function App(props: { params: t_params }) {
-  const org_id = parseInt((await props.params).id);
+  const org_id: number = Number((await props.params).id);
+
+  const user = await getUser(); // 👈 current user
 
   const org = await prisma.organization.findUnique({
     where: { id: org_id },
@@ -73,7 +76,7 @@ export default async function App(props: { params: t_params }) {
     <div className="p-5 sm:p-10 md:p-20 lg:px-40 xl:px-80 space-y-10">
       <Card className="p-0 overflow-hidden">
         <Card className="relative h-32 md:h-54 bg-primary border-none rounded-none">
-          <Avatar className="size-22 md:size-44 absolute top-20 left-10 md:top-30 md:left-20 border-8 border-card">
+          <Avatar className="size-22 md:size-44 absolute top-20 left-10 md:top-30 md:left-20 border-4 border-secondary">
             <AvatarImage
               src="https://avatars.githubusercontent.com/u/83641209?v=4"
               alt="profile image"
@@ -123,18 +126,18 @@ export default async function App(props: { params: t_params }) {
         {/* Active Listings */}
         <TabsContent
           value="active"
-          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full h-fit"
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full"
         >
           {listings.length === 0 ? (
             <div className="w-full justify-center items-center flex">
               <p className="text-lg font-medium">No active listings</p>
             </div>
           ) : (
-            listings.map((listing) => {
-              if (listing.active) {
-                return (
+            listings.map(
+              (listing) =>
+                listing.active && (
                   <div key={listing.id}>
-                    <Card className="basis-1/3 hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out h-full flex flex-col justify-between">
+                    <Card className="basis-1/3 hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out">
                       <CardHeader>
                         <CardTitle>
                           <p>{listing.name}</p>
@@ -176,9 +179,9 @@ export default async function App(props: { params: t_params }) {
               <p className="text-lg font-medium">No inactive listings</p>
             </div>
           ) : (
-            listings.map((listing) => {
-              if (!listing.active) {
-                return (
+            listings.map(
+              (listing) =>
+                !listing.active && (
                   <div key={listing.id}>
                     <Card className="basis-1/3 hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out">
                       <CardHeader>
