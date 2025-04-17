@@ -1,7 +1,16 @@
 "use client";
 
-import { ApplicationStatus, Prisma } from "@/../generated/prisma_client";
-import { setApplicationStatus } from "./actions";
+import {
+  ApplicationStatus,
+  Listing,
+  ListingStatus,
+  Prisma,
+} from "@/../generated/prisma_client";
+import {
+  distributePointsFor,
+  setApplicationStatus,
+  setListingStatus,
+} from "./actions";
 
 export type ListingWithApplications = Prisma.ListingGetPayload<{
   include: { applications: { include: { user: true } } };
@@ -12,10 +21,9 @@ export type ApplicationWithUsers = Prisma.ApplicationGetPayload<{
 }>;
 
 /**
- *
+ * This component is used to display the listing information on the listing page
  * @param {ApplicationWithUsers} param0 - Accepts an object with a listing object
  * @returns {Element} - Returns HTML component that displays the listing information
- * This component is used to display the listing information on the listing page
  */
 export function PresentApplication({
   application,
@@ -35,14 +43,14 @@ export function PresentApplication({
           <>
             <button
               onClick={() =>
-                setApplicationStatus(application, ApplicationStatus.ACCEPTED)
+                setApplicationStatus(application.id, ApplicationStatus.ACCEPTED)
               }
             >
               Accept
             </button>
             <button
               onClick={() =>
-                setApplicationStatus(application, ApplicationStatus.REJECTED)
+                setApplicationStatus(application.id, ApplicationStatus.REJECTED)
               }
             >
               Reject
@@ -51,7 +59,7 @@ export function PresentApplication({
         ) : (
           <button
             onClick={() =>
-              setApplicationStatus(application, ApplicationStatus.PENDING)
+              setApplicationStatus(application.id, ApplicationStatus.PENDING)
             }
           >
             Undo
@@ -59,5 +67,23 @@ export function PresentApplication({
         )}
       </div>
     </div>
+  );
+}
+
+/**
+ * Creates an element that allows applications to be closed for a listing
+ * @param {{listing: Listing}} params Parameters for the element
+ * @returns {Element} Element which allows for closing of applications
+ */
+export function CloseApplications({ listing }: { listing: Listing }) {
+  return (
+    <button
+      onClick={async () => {
+        await setListingStatus(listing.id, ListingStatus.ApplicationsClosed);
+        await distributePointsFor(listing.id);
+      }}
+    >
+      Close Applications
+    </button>
   );
 }

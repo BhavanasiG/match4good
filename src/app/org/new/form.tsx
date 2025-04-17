@@ -1,108 +1,162 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useState } from "react";
-import { createOrg, CreateOrgFormData } from "./actions";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { CreateOrganization } from "./submit";
+
+const form_schema = z.object({
+  name: z
+    .string()
+    .min(4, {
+      message: "Name must be at least 4 characters.",
+    })
+    .max(32, {
+      message: "Name cannot be longer than 32 characters.",
+    }),
+  description: z.string().max(400).optional(),
+  address: z
+    .string()
+    .min(4, {
+      message: "Address must be at least 4 characters.",
+    })
+    .max(64, {
+      message: "Address cannot be longer than 64 characters.",
+    }),
+  postcode: z
+    .string()
+    .min(6, {
+      message: "Postcode must be at least 6 characters.",
+    })
+    .max(8, {
+      message: "Postcode cannot be longer than 8 characters.",
+    })
+    .regex(/^([A-Z][A-HJ-Y]?\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0A{2})$/, {
+      message: "Invalid postcode format",
+    }),
+});
+
+/* eslint-disable @typescript-eslint/naming-convention */
 
 /**
- * @returns {Element} - A form for creating a new organization
- * This component is a form that allows the user to create a new organization
+ * Form component for creating new organizations.
+ * @returns {Element} A form with fields for creating a new organization
  */
-export default function CreateOrgForm() {
-  const [form_data, setFormData] = useState<CreateOrgFormData>({
-    name: "",
-    description: undefined,
-    address: "",
-    postcode: "",
+export default function CreateOrganizationForm() {
+  const form = useForm<z.infer<typeof form_schema>>({
+    resolver: zodResolver(form_schema),
+    defaultValues: {
+      name: "",
+      description: "",
+      address: "",
+      postcode: "",
+    },
   });
-  const [error, setError] = useState<string | undefined>(undefined);
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev_data) => ({
-      ...prev_data,
-      [name]: value,
-    }));
-  };
+  /**
+   * Handles the submission of the form.
+   * @param {z.infer<typeof form_schema>} values - The values of the form
+   */
+  function OnSubmit(values: z.infer<typeof form_schema>) {
+    CreateOrganization({
+      name: values.name,
+      description: values.description || "",
+      address: values.address,
+      postcode: values.postcode,
+    }).catch((e: Error) => {
+      console.error(e);
+    });
 
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError("");
-
-    if (form_data.name.trim() === "") {
-      setError("Name cannot be empty");
-      return;
-    }
-    if (form_data.address.trim() === "") {
-      setError("Address cannot be empty");
-      return;
-    }
-    if (form_data.postcode.trim() === "") {
-      setError("Postcode cannot be empty");
-      return;
-    }
-
-    const error = await createOrg(form_data);
-    setError(error);
-  };
+    toast.success("Organization created successfully!");
+  }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
-      <div>
-        <label htmlFor="name">Name</label>
-        <input
-          id="name"
-          name="name"
-          type="text"
-          required
-          value={form_data.name}
-          onChange={onChange}
-          className="border p-2 w-full"
-        />
-      </div>
-
-      <div>
-        <label htmlFor="description">Description</label>
-        <input
-          id="description"
-          name="description"
-          type="text"
-          value={form_data.description}
-          onChange={onChange}
-          className="border p-2 w-full"
-        />
-      </div>
-
-      <div>
-        <label htmlFor="address">Address</label>
-        <input
-          id="address"
-          name="address"
-          type="text"
-          required
-          value={form_data.address}
-          onChange={onChange}
-          className="border p-2 w-full"
-        />
-      </div>
-
-      <div>
-        <label htmlFor="postcode">Postcode</label>
-        <input
-          id="postcode"
-          name="postcode"
-          type="text"
-          required
-          value={form_data.postcode}
-          onChange={onChange}
-          className="border p-2 w-full"
-        />
-      </div>
-
-      {error && <p className="text-red-600">{error}</p>}
-
-      <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-        Submit
-      </button>
-    </form>
+    <div className="self-center p-12 md:p-24 w-screen max-w-4xl">
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle>Create Organization</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Organization Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Tell us a bit about your organization.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Address</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Where your organization is situated.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="postcode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Postcode</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" className="hover:cursor-pointer">
+                Create
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

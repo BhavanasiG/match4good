@@ -78,13 +78,11 @@ export default function ProfileForm({ user }: Props) {
   function OnSubmit(values: z.infer<typeof form_schema>) {
     let error = false;
 
-    UpdateUser({ username: values.username, bio: values.bio || null }).catch(
-      (e: Error) => {
-        console.error("Failed to update: ", e);
-        toast.error("Failed to update: " + e.message);
-        error = true;
-      },
-    );
+    UpdateUser(values.username, values.bio || null).catch((e: Error) => {
+      console.error("Failed to update: ", e);
+      toast.error("Failed to update: " + e.message);
+      error = true;
+    });
 
     if (!error) {
       toast.success("Changes saved");

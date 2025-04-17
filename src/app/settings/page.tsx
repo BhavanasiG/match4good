@@ -12,24 +12,26 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getUser } from "@/lib/prisma";
-import { notFound } from "next/navigation";
+import { forbidden } from "next/navigation";
 import ProfileForm from "./profile";
 import OrganizationsForm from "./organizations";
+import AppearanceForm from "./appearance";
+import SecurityForm from "./security";
 
 export default async function Settings() {
   const user = await getUser(true);
 
   if (!user) {
-    return notFound();
+    return forbidden();
   }
 
   return (
-    <div className="flex justify-center w-full">
+    <div className="self-center flex justify-center p-12 md:p-24 w-screen max-w-8xl">
       <div className="flex flex-col p-12 md:p-24 w-screen max-w-4xl">
         <h1 className="font-semibold text-3xl">Your Settings</h1>
         <div className="flex pt-6">
           <Tabs defaultValue="profile" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="profile" className="cursor-pointer">
                 Profile
               </TabsTrigger>
@@ -38,6 +40,9 @@ export default async function Settings() {
               </TabsTrigger>
               <TabsTrigger value="security" className="cursor-pointer">
                 Security
+              </TabsTrigger>
+              <TabsTrigger value="appearance" className="cursor-pointer">
+                Appearance
               </TabsTrigger>
             </TabsList>
             <TabsContent value="profile">
@@ -73,7 +78,22 @@ export default async function Settings() {
                     Manage your security preferences.
                   </CardDescription>
                 </CardHeader>
-                <CardContent>{/** Add securityform */}</CardContent>
+                <CardContent>
+                  <SecurityForm />
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="appearance">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Appearance</CardTitle>
+                  <CardDescription>
+                    Manage your appearance preferences.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <AppearanceForm />
+                </CardContent>
               </Card>
             </TabsContent>
           </Tabs>
