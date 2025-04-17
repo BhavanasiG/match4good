@@ -13,7 +13,8 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import FollowButton from "@/components/FollowButton";
+import { ListingStatus } from "../../../../generated/prisma_client";
+import FollowButton from "@/components/FollowButton"; // <-- import FollowButton
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -26,7 +27,8 @@ function getTimeString(start_date: Date, end_date: Date) {
       <>
         <p>{start_date.toLocaleDateString(undefined, { dateStyle: "full" })}</p>
         <p>
-          {start_date.toLocaleTimeString(undefined, { timeStyle: "short" })} -{" "}
+          {start_date.toLocaleTimeString(undefined, { timeStyle: "short" })}{" "}
+          -&nbsp;
           {end_date.toLocaleTimeString(undefined, { timeStyle: "short" })}
         </p>
       </>
@@ -34,14 +36,16 @@ function getTimeString(start_date: Date, end_date: Date) {
   } else if (hours < 168) {
     return (
       <p>
-        {start_date.toLocaleDateString(undefined, { dateStyle: "full" })} -{" "}
+        {start_date.toLocaleDateString(undefined, { dateStyle: "full" })}{" "}
+        -&nbsp;
         {end_date.toLocaleDateString(undefined, { dateStyle: "full" })}
       </p>
     );
   } else {
     return (
       <p>
-        {start_date.toLocaleDateString(undefined, { dateStyle: "long" })} -{" "}
+        {start_date.toLocaleDateString(undefined, { dateStyle: "long" })}{" "}
+        -&nbsp;
         {end_date.toLocaleDateString(undefined, { dateStyle: "long" })}
       </p>
     );
@@ -51,14 +55,22 @@ function getTimeString(start_date: Date, end_date: Date) {
 type t_params = Promise<{ id: string }>;
 
 export default async function App(props: { params: t_params }) {
-  const org_id: number = Number((await props.params).id);
+  const org_id = parseInt((await props.params).id);
 
-  const user = await getUser(); // 👈 current user
+  if (isNaN(org_id)) {
+    return notFound();
+  }
 
+  // Get the current user
+  const user = await getUser();
+
+  // Include followers in the org query for the FollowButton logic
   const org = await prisma.organization.findUnique({
-    where: { id: org_id },
+    where: {
+      id: org_id,
+    },
     include: {
-      followers: true,
+      followers: true, // <-- include followers
     },
   });
 
@@ -68,7 +80,7 @@ export default async function App(props: { params: t_params }) {
     },
   });
 
-  if (!org) {
+  if (org === null) {
     notFound();
   }
 
@@ -76,7 +88,7 @@ export default async function App(props: { params: t_params }) {
     <div className="p-5 sm:p-10 md:p-20 lg:px-40 xl:px-80 space-y-10">
       <Card className="p-0 overflow-hidden">
         <Card className="relative h-32 md:h-54 bg-primary border-none rounded-none">
-          <Avatar className="size-22 md:size-44 absolute top-20 left-10 md:top-30 md:left-20 border-4 border-secondary">
+          <Avatar className="size-22 md:size-44 absolute top-20 left-10 md:top-30 md:left-20 border-8 border-card">
             <AvatarImage
               src="https://avatars.githubusercontent.com/u/83641209?v=4"
               alt="profile image"
@@ -86,14 +98,14 @@ export default async function App(props: { params: t_params }) {
         </Card>
         <CardHeader className="p-5 md:p-10 md:pt-20">
           <CardTitle className="mb-5">
-            <p className="text-2xl md:text-3xl font-semibold">{org.name}</p>
+            <p className="text-2xl md:text-3xl font-semibold">{org?.name}</p>
             <p className="text-md md:text-lg text-muted-foreground">
-              Category ⋅ {org.address}
+              Category ⋅ {org?.address}
             </p>
           </CardTitle>
 
           {/* ✅ Follow/Unfollow Button */}
-          {user && (
+          {user && org?.followers && (
             <div className="mt-2">
               <FollowButton
                 organizationId={org.id}
@@ -104,15 +116,14 @@ export default async function App(props: { params: t_params }) {
 
           <CardDescription>
             <p className="text-md md:text-lg font-medium line-clamp-3">
-              {org.description}
+              {" "}
+              {org?.description}{" "}
             </p>
           </CardDescription>
         </CardHeader>
       </Card>
-
       <Separator className="my-10 md:my-20" />
       <h2 className="text-3xl font-semibold">Listings</h2>
-
       <Tabs defaultValue="active" className="w-full">
         <TabsList className="grid grid-cols-2 mb-5 size-fit w-full">
           <TabsTrigger value="active" className="cursor-pointer text-md">
@@ -122,22 +133,20 @@ export default async function App(props: { params: t_params }) {
             Inactive
           </TabsTrigger>
         </TabsList>
-
-        {/* Active Listings */}
         <TabsContent
           value="active"
-          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full"
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full h-fit"
         >
           {listings.length === 0 ? (
             <div className="w-full justify-center items-center flex">
               <p className="text-lg font-medium">No active listings</p>
             </div>
           ) : (
-            listings.map(
-              (listing) =>
-                listing.active && (
+            listings.map((listing) => {
+              if (listing.status == ListingStatus.AcceptingApplications) {
+                return (
                   <div key={listing.id}>
-                    <Card className="basis-1/3 hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out">
+                    <Card className="basis-1/3 hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out h-full flex flex-col justify-between">
                       <CardHeader>
                         <CardTitle>
                           <p>{listing.name}</p>
@@ -164,12 +173,11 @@ export default async function App(props: { params: t_params }) {
                       </CardFooter>
                     </Card>
                   </div>
-                ),
-            )
+                );
+              }
+            })
           )}
         </TabsContent>
-
-        {/* Inactive Listings */}
         <TabsContent
           value="inactive"
           className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full"
@@ -179,9 +187,9 @@ export default async function App(props: { params: t_params }) {
               <p className="text-lg font-medium">No inactive listings</p>
             </div>
           ) : (
-            listings.map(
-              (listing) =>
-                !listing.active && (
+            listings.map((listing) => {
+              if (listing.status != ListingStatus.AcceptingApplications) {
+                return (
                   <div key={listing.id}>
                     <Card className="basis-1/3 hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out">
                       <CardHeader>
@@ -210,8 +218,9 @@ export default async function App(props: { params: t_params }) {
                       </CardFooter>
                     </Card>
                   </div>
-                ),
-            )
+                );
+              }
+            })
           )}
         </TabsContent>
       </Tabs>

@@ -9,16 +9,17 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  user_id  String  @unique
-  username String  @unique
-  email    String? @unique
-  bio      String?
-
-  owner_of  Organization[] @relation("ownership")
-  member_of Organization[] @relation("membership")
-
+  id          Int            @id @default(autoincrement())
+  user_id     String         @unique
+  username    String         @unique
+  email       String?        @unique
+  region_id   Int?
+  bio         String?
   application Application[]
+  Follow      Follow[]
+  owner_of    Organization[] @relation("ownership")
+  Region      Region?        @relation(fields: [region_id], references: [id])
+  member_of   Organization[] @relation("membership")
 }
 
 model Organization {
@@ -28,20 +29,51 @@ model Organization {
   owner_id    Int
   address     String?
   postcode    String?
+  followers   Follow[]
   listings    Listing[]
   owner       User      @relation("ownership", fields: [owner_id], references: [id])
   members     User[]    @relation("membership")
-  followers Follow[]      // Relation
 }
 
 model Follow {
-  id             Int           @id @default(autoincrement())
-  user           User          @relation(fields: [userId], references: [id])
+  id             Int          @id @default(autoincrement())
   userId         Int
-  organization   Organization  @relation(fields: [organizationId], references: [id])
   organizationId Int
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  user           User         @relation(fields: [userId], references: [id])
 
-  @@unique([userId, organizationId]) // Ensure unique follows
+  @@unique([userId, organizationId])
+}
+
+model Application {
+  id          Int               @id @default(autoincrement())
+  listing_id  Int               @map("listingId")
+  user_id     Int               @map("userId")
+  description String?
+  status      ApplicationStatus @default(PENDING)
+  listing     Listing           @relation(fields: [listing_id], references: [id])
+  user        User              @relation(fields: [user_id], references: [id])
+}
+
+model Listing {
+  id              Int           @id @default(autoincrement())
+  name            String
+  description     String?
+  organization_id Int
+  end_datetime    DateTime
+  start_datetime  DateTime
+  point_value     Int           @default(0)
+  scored          Boolean       @default(false)
+  status          ListingStatus @default(AcceptingApplications)
+  applications    Application[]
+  organization    Organization  @relation(fields: [organization_id], references: [id])
+}
+
+model Region {
+  id     Int    @id @default(autoincrement())
+  name   String
+  points Int    @default(0)
+  User   User[]
 }
 
 enum ApplicationStatus {
@@ -50,44 +82,9 @@ enum ApplicationStatus {
   REJECTED
 }
 
-model Application {
-  id          Int               @id @default(autoincrement())
-  description String?
-  status      ApplicationStatus @default(PENDING)
-
-  listing    Listing @relation(fields: [listing_id], references: [id])
-  user       User    @relation(fields: [user_id], references: [id])
-  listing_id Int     @map("listingId")
-  user_id    Int     @map("userId")
-}
-
-model Listing {
-  id             Int           @id @default(autoincrement())
-  name           String
-  description    String?
-  start_datetime DateTime
-  end_datetime   DateTime
-  status         ListingStatus @default(AcceptingApplications)
-  point_value    Int           @default(0)
-  scored         Boolean       @default(false)
-
-  organization    Organization @relation(fields: [organization_id], references: [id])
-  organization_id Int
-
-  applications Application[]
-}
-
 enum ListingStatus {
   AcceptingApplications
   ApplicationsClosed
   Completed
   Cancelled
-}
-
-model Region {
-  id     Int    @id @default(autoincrement())
-  name   String
-  points Int    @default(0)
-
-  users User[]
 }
