@@ -5,7 +5,7 @@ stages:
   - docker
   - install
   - lint
-  - prettier
+  - prettier_format_check
   - test
   - build
   - deploy
