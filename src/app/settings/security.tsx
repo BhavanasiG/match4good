@@ -6,9 +6,9 @@
  * @returns SecurityForm component JSX
  */
 
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -18,10 +18,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { redirect } from "next/navigation";
-import { toast } from "sonner";
-import { DeleteUser } from "./submit";
+} from '@/components/ui/dialog';
+import { redirect } from 'next/navigation';
+import { toast } from 'sonner';
+import { DeleteUser } from './submit';
 
 /**
  * SecurityForm component displays a dialog for deleting the user's account.
@@ -31,11 +31,11 @@ export default function SecurityForm() {
   const handleAccountDeletion = async () => {
     const deleted = await DeleteUser().catch((error) => {
       console.error(error);
-      toast.error("Failed to delete account: " + error);
+      toast.error('Failed to delete account: ' + error);
     });
 
     if (deleted) {
-      toast.success("Account deleted successfully");
+      toast.success('Account deleted successfully');
       redirect(`/auth/logout/`);
     }
   };
@@ -56,8 +56,8 @@ export default function SecurityForm() {
           <DialogHeader>
             <DialogTitle>Are you sure?</DialogTitle>
             <DialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and all of your data.
+              This action cannot be undone. This will permanently delete your account and all of
+              your data.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

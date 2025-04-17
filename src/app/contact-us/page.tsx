@@ -1,25 +1,23 @@
-"use client";
-import React, { useState } from "react";
+'use client';
+import React, { useState } from 'react';
 
 export default function ContactUsPage() {
   const [form_data, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...form_data, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", form_data);
+    console.log('Form submitted:', form_data);
     alert("Message sent! We'll get back to you soon.");
-    setFormData({ name: "", email: "", subject: "", message: "" });
+    setFormData({ name: '', email: '', subject: '', message: '' });
   };
 
   return (
@@ -61,10 +59,7 @@ export default function ContactUsPage() {
           className="p-2 border rounded h-24"
           required
         />
-        <button
-          type="submit"
-          className="bg-lime-500 text-white py-2 rounded hover:bg-lime-600"
-        >
+        <button type="submit" className="bg-lime-500 text-white py-2 rounded hover:bg-lime-600">
           Send Message
         </button>
       </form>

@@ -3,23 +3,17 @@
  * and provides links to subsequent pages
  */
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getUser } from "@/lib/prisma";
-import { forbidden } from "next/navigation";
-import ProfileForm from "./profile";
-import OrganizationsForm from "./organizations";
-import AppearanceForm from "./appearance";
-import SecurityForm from "./security";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { GetUser } from '@/lib/prisma';
+import { forbidden } from 'next/navigation';
+import ProfileForm from './profile';
+import OrganizationsForm from './organizations';
+import AppearanceForm from './appearance';
+import SecurityForm from './security';
 
 export default async function Settings() {
-  const user = await getUser(true);
+  const user = await GetUser(true);
 
   if (!user) {
     return forbidden();
@@ -50,8 +44,7 @@ export default async function Settings() {
                 <CardHeader>
                   <CardTitle>Profile</CardTitle>
                   <CardDescription>
-                    Update your personal information and how others see you on
-                    the platform.
+                    Update your personal information and how others see you on the platform.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -74,9 +67,7 @@ export default async function Settings() {
               <Card>
                 <CardHeader>
                   <CardTitle>Security</CardTitle>
-                  <CardDescription>
-                    Manage your security preferences.
-                  </CardDescription>
+                  <CardDescription>Manage your security preferences.</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <SecurityForm />
@@ -87,9 +78,7 @@ export default async function Settings() {
               <Card>
                 <CardHeader>
                   <CardTitle>Appearance</CardTitle>
-                  <CardDescription>
-                    Manage your appearance preferences.
-                  </CardDescription>
+                  <CardDescription>Manage your appearance preferences.</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <AppearanceForm />

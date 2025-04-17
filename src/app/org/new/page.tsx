@@ -1,9 +1,9 @@
-import { getUser } from "@/lib/prisma";
-import CreateOrganizationForm from "./form";
-import { forbidden } from "next/navigation";
+import { GetUser } from '@/lib/prisma';
+import CreateOrganizationForm from './form';
+import { forbidden } from 'next/navigation';
 
 export default async function App() {
-  const user = await getUser(true);
+  const user = await GetUser(true);
 
   if (!user) {
     return forbidden();

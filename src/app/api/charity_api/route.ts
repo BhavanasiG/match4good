@@ -1,10 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
 interface CharityData {
   id: number;
-  charity_name: string;
-  date_of_registration: string;
-  removal_reason: string;
+  charityName: string;
+  dateOfRegistration: string;
+  removalReason: string;
 }
 
 /**
@@ -13,60 +13,50 @@ interface CharityData {
  * @returns {Promise<NextResponse>} - JSON response containing charity data
  */
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export async function GET() {
+export async function GET(): Promise<NextResponse> {
   try {
-    console.log("Fetching charity data...");
+    console.log('Fetching charity data...');
 
-    const api_key = process.env.CHARITY_API_KEY;
-    if (!api_key) {
-      throw new Error("API Key is missing. Check .env.local");
+    const apiKey = process.env.CHARITY_API_KEY;
+    if (!apiKey) {
+      throw new Error('API Key is missing. Check .env.local');
     }
 
-    const registered_numbers = [
-      "1000000",
-      "1000001",
-      "1000002",
-      "1000003",
-      "1000004",
-    ];
-    const charity_data: CharityData[] = [];
+    const registeredNumbers = ['1000000', '1000001', '1000002', '1000003', '1000004'];
+    const charityData: CharityData[] = [];
 
-    for (const [index, registered_number] of registered_numbers.entries()) {
-      const suffix = "0";
-      const url = `https://api.charitycommission.gov.uk/register/api/allcharitydetailsV2/${registered_number}/${suffix}`;
+    for (const [index, registeredNumber] of registeredNumbers.entries()) {
+      const suffix = '0';
+      const url = `https://api.charitycommission.gov.uk/register/api/allcharitydetailsV2/${registeredNumber}/${suffix}`;
 
-      console.log("Fetching charity:", url);
+      console.log('Fetching charity:', url);
 
       const res = await fetch(url, {
         headers: {
           // eslint-disable-next-line @typescript-eslint/naming-convention
-          "Ocp-Apim-Subscription-Key": api_key,
+          'Ocp-Apim-Subscription-Key': apiKey,
         },
       });
 
       if (!res.ok) {
-        console.error(
-          `Failed to fetch charity ${registered_number}, Status:`,
-          res.status,
-        );
+        console.error(`Failed to fetch charity ${registeredNumber}, Status:`, res.status);
         continue;
       }
-      const data: Partial<CharityData> =
-        (await res.json()) as Partial<CharityData>;
-      charity_data.push({
+      const data: Partial<CharityData> = (await res.json()) as Partial<CharityData>;
+      charityData.push({
         id: index + 1,
-        charity_name: data.charity_name ?? "Unknown",
-        date_of_registration: data.date_of_registration ?? "N/A",
-        removal_reason: data.removal_reason ?? "N/A",
+        charityName: data.charityName ?? 'Unknown',
+        dateOfRegistration: data.dateOfRegistration ?? 'N/A',
+        removalReason: data.removalReason ?? 'N/A',
       });
     }
 
-    console.log("Fetched Charities:", charity_data);
-    return NextResponse.json(charity_data);
+    console.log('Fetched Charities:', charityData);
+    return NextResponse.json(charityData);
   } catch (err) {
-    console.error("Error in API route:", err);
+    console.error('Error in API route:', err);
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : "Unknown error" },
+      { error: err instanceof Error ? err.message : 'Unknown error' },
       { status: 500 },
     );
   }

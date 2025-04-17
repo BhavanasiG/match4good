@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { IconArrowLeft } from "@tabler/icons-react";
-import { Button } from "@/components/ui/button";
+import Link from 'next/link';
+import { IconArrowLeft } from '@tabler/icons-react';
+import { Button } from '@/components/ui/button';
 
 /**
  * Forbidden component displays a 403 error page with a message indicating that the user is not authorized to access the page.
@@ -18,11 +18,7 @@ export default function Forbidden() {
       <div className="flex flex-col space-y-4">
         <p className="text-lg">You are not authorized to access this page.</p>
         <Link href="/" className="flex justify-center">
-          <Button
-            size="lg"
-            variant={"secondary"}
-            className="flex hover:cursor-pointer"
-          >
+          <Button size="lg" variant={'secondary'} className="flex hover:cursor-pointer">
             <IconArrowLeft />
             Back to Home
           </Button>

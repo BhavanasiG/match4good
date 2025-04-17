@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from 'next/link';
 /**
  *
  * @returns {Link} Link to the page for creating a new organization

@@ -22,7 +22,7 @@ install:
   stage: install
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-  needs: ["check"]
+  needs: ['check']
   script:
     - npm ci
     - npx prisma generate
@@ -37,7 +37,7 @@ lint:
   rules:
     # - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-  needs: ["install"]
+  needs: ['install']
   script:
     - npm run lint
 
@@ -45,15 +45,15 @@ test:
   stage: test
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-  needs: ["install"]
+  needs: ['install']
   script:
     - npm run test
 
-prettier:
+prettier_format_check:
   stage: prettier
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-  needs: ["install"]
+  needs: ['install']
   script:
     - npm run format:check
 
@@ -61,7 +61,7 @@ build:
   stage: build
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-  needs: ["install", "prettier", "lint", "test"]
+  needs: ['install', 'prettier', 'lint', 'test']
   script:
     - npm run build
 
@@ -69,7 +69,7 @@ deploy_static:
   stage: deploy
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_REF_NAME == "release"'
-  needs: ["check"]
+  needs: ['check']
   script:
     - apk add python3 py3-yaml py3-mako
     - python3 /shared/com2027_site.py

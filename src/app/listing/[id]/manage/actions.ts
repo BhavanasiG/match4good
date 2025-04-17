@@ -1,26 +1,26 @@
-"use server";
+'use server';
 
-import prisma, { getUser } from "@/lib/prisma";
-import { ApplicationStatus, ListingStatus } from "@/../generated/prisma_client";
+import prisma, { GetUser } from '@/lib/prisma';
+import { ApplicationStatus, ListingStatus } from '@/../generated/prisma_client';
 
 /**
  * Tries to set the application status, checking permissions
- * @param {number} application_id The application to set status
+ * @param {number} applicationId The application to set status
  * @param {ApplicationStatus} status The status to set
  * @returns {Promise<boolean>} `true` if the status was successfully set, otherwise false
  */
-export async function setApplicationStatus(
-  application_id: number,
+export async function SetApplicationStatus(
+  applicationId: number,
   status: ApplicationStatus,
 ): Promise<boolean> {
-  const user = await getUser(true);
+  const user = await GetUser(true);
 
   if (!user) {
     return false;
   }
 
   const application = await prisma.application.findUnique({
-    where: { id: application_id },
+    where: { id: applicationId },
   });
 
   if (!application) {
@@ -28,7 +28,7 @@ export async function setApplicationStatus(
   }
 
   const listing = await prisma.listing.findUnique({
-    where: { id: application.listing_id },
+    where: { id: application.listingId },
   });
 
   if (!listing) {
@@ -36,8 +36,8 @@ export async function setApplicationStatus(
   }
 
   if (
-    !user.member_of.some((org) => org.id === listing.organization_id) &&
-    !user.owner_of.some((org) => org.id === listing.organization_id)
+    !user.memberOf.some((org) => org.id === listing.organizationId) &&
+    !user.ownerOf.some((org) => org.id === listing.organizationId)
   ) {
     return false;
   }
@@ -52,22 +52,19 @@ export async function setApplicationStatus(
 
 /**
  * Tries to set the listing status, checking permissions
- * @param {number} listing_id The listing to set status
+ * @param {number} listingId The listing to set status
  * @param {ListingStatus} status The status to set
  * @returns {boolean} `true` if the status was successfully set, otherwise false
  */
-export async function setListingStatus(
-  listing_id: number,
-  status: ListingStatus,
-): Promise<boolean> {
-  const user = await getUser(true);
+export async function SetListingStatus(listingId: number, status: ListingStatus): Promise<boolean> {
+  const user = await GetUser(true);
 
   if (!user) {
     return false;
   }
 
   const listing = await prisma.listing.findUnique({
-    where: { id: listing_id },
+    where: { id: listingId },
   });
 
   if (!listing) {
@@ -75,8 +72,8 @@ export async function setListingStatus(
   }
 
   if (
-    !user.member_of.some((org) => org.id === listing.organization_id) &&
-    !user.owner_of.some((org) => org.id === listing.organization_id)
+    !user.memberOf.some((org) => org.id === listing.organizationId) &&
+    !user.ownerOf.some((org) => org.id === listing.organizationId)
   ) {
     return false;
   }
@@ -91,28 +88,26 @@ export async function setListingStatus(
 
 /**
  * Tries to distribute points for a listing
- * @param {number} listing_id The listing update points for
+ * @param {number} listingId The listing update points for
  * @returns {boolean} `true` if the points were correctly applied
  */
-export async function distributePointsFor(
-  listing_id: number,
-): Promise<boolean> {
+export async function DistributePointsFor(listingId: number): Promise<boolean> {
   // todo, have all the initial checks be refactored into a separate thing.
   // is middleware an option here?
-  const user = await getUser(true);
+  const user = await GetUser(true);
 
   if (!user) return false;
 
   const listing = await prisma.listing.findUnique({
-    where: { id: listing_id },
+    where: { id: listingId },
     include: { applications: true },
   });
 
   if (!listing) return false;
 
   if (
-    !user.member_of.some((org) => org.id === listing.organization_id) &&
-    !user.owner_of.some((org) => org.id === listing.organization_id)
+    !user.memberOf.some((org) => org.id === listing.organizationId) &&
+    !user.ownerOf.some((org) => org.id === listing.organizationId)
   ) {
     return false;
   }
@@ -127,13 +122,13 @@ export async function distributePointsFor(
 
   for (const application of listing.applications) {
     const user = await prisma.user.findUnique({
-      where: { id: application.user_id },
+      where: { id: application.userId },
     });
-    if (!user || !user.region_id) continue;
+    if (!user || !user.regionId) continue;
 
     await prisma.region.update({
-      where: { id: user.region_id },
-      data: { points: { increment: listing.point_value } },
+      where: { id: user.regionId },
+      data: { points: { increment: listing.pointValue } },
     });
   }
 

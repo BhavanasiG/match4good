@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { DialogClose } from "@/components/ui/dialog";
+import { Button } from '@/components/ui/button';
+import { Card, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { DialogClose } from '@/components/ui/dialog';
 import {
   Dialog,
   DialogContent,
@@ -11,10 +11,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { User } from "@/lib/prisma";
-import Link from "next/link";
-import { DeleteOrganization } from "./submit";
+} from '@/components/ui/dialog';
+import { User } from '@/lib/prisma';
+import Link from 'next/link';
+import { DeleteOrganization } from './submit';
 
 export type Props = { user: User };
 /**
@@ -27,16 +27,16 @@ export default function OrganizationsForm({ user }: Props) {
     <div className="flex flex-col space-y-4">
       <div className="flex flex-col">
         <h3 className="text-lg font-medium">Owned organizations</h3>
-        {user.owner_of.length > 0 ? (
+        {user.ownerOf.length > 0 ? (
           <div className="flex flex-col space-y-4">
-            {user.owner_of.map((o) => (
+            {user.ownerOf.map((o) => (
               <Card className="rounded-md border" key={o.id}>
                 <CardHeader>
                   <CardTitle>{o.name}</CardTitle>
                   <p className="text-sm">{o.description}</p>
                 </CardHeader>
                 <CardFooter className="flex flex-row gap-2">
-                  <Button size={"sm"}>
+                  <Button size={'sm'}>
                     <Link href={`/org/${o.id}`}>View</Link>
                   </Button>
                   <Dialog>
@@ -53,8 +53,8 @@ export default function OrganizationsForm({ user }: Props) {
                       <DialogHeader>
                         <DialogTitle>Are you sure?</DialogTitle>
                         <DialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete your organization &quot;{o.name}&quot;.
+                          This action cannot be undone. This will permanently delete your
+                          organization &quot;{o.name}&quot;.
                         </DialogDescription>
                       </DialogHeader>
                       <DialogFooter>
@@ -82,23 +82,21 @@ export default function OrganizationsForm({ user }: Props) {
             ))}
           </div>
         ) : (
-          <p className="text-sm text-muted-foreground">
-            You do not own any organizations
-          </p>
+          <p className="text-sm text-muted-foreground">You do not own any organizations</p>
         )}
       </div>
       <div className="flex flex-col">
         <h3 className="text-lg font-medium">Joined organizations</h3>
-        {user.member_of.length > 0 ? (
+        {user.memberOf.length > 0 ? (
           <div className="flex flex-col space-y-4">
-            {user.member_of.map((o) => (
+            {user.memberOf.map((o) => (
               <Card className="rounded-md border" key={o.id}>
                 <CardHeader>
                   <CardTitle>{o.name}</CardTitle>
                   <p className="text-sm">{o.description}</p>
                 </CardHeader>
                 <CardFooter className="flex flex-row gap-2">
-                  <Button size={"sm"}>
+                  <Button size={'sm'}>
                     <Link href={`/org/${o.id}`}>View</Link>
                   </Button>
                 </CardFooter>
@@ -106,9 +104,7 @@ export default function OrganizationsForm({ user }: Props) {
             ))}
           </div>
         ) : (
-          <p className="text-sm text-muted-foreground">
-            You have not joined any organizations
-          </p>
+          <p className="text-sm text-muted-foreground">You have not joined any organizations</p>
         )}
       </div>
     </div>

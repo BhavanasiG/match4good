@@ -1,7 +1,7 @@
-import CreateListingButton from "@/components/createListing";
-import CreateOrgButton from "@/components/creatOrg";
-import DynamicLoginLogoutButton from "@/components/login";
-import ViewListingButton from "@/components/viewListing";
+import CreateListingButton from '@/components/createListing';
+import CreateOrgButton from '@/components/creatOrg';
+import DynamicLoginLogoutButton from '@/components/login';
+import ViewListingButton from '@/components/viewListing';
 
 export default function App() {
   return (

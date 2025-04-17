@@ -1,6 +1,6 @@
-import type { NextRequest } from "next/server";
+import type { NextRequest } from 'next/server';
 
-import { auth0 } from "./lib/auth0";
+import { auth0 } from './lib/auth0';
 
 /**
  *
@@ -8,12 +8,10 @@ import { auth0 } from "./lib/auth0";
  * @returns {Promise<Response>} - The response object
  * This middleware function handles authentication for the application.
  */
-export async function middleware(request: NextRequest) {
+export async function Middleware(request: NextRequest) {
   return await auth0.middleware(request);
 }
 
 export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
-  ],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)'],
 };
