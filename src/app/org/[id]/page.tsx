@@ -5,17 +5,17 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import prisma from "@/lib/prisma";
-import { notFound } from "next/navigation";
-import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ListingStatus } from "../../../../generated/prisma_client";
-import { GetUser } from "@/lib/prisma";
-import FollowButton from "@/components/FollowButton";
+} from '@/components/ui/card';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import prisma from '@/lib/prisma';
+import { notFound } from 'next/navigation';
+import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ListingStatus } from '../../../../generated/prisma_client';
+import { GetUser } from '@/lib/prisma';
+import FollowButton from '@/components/FollowButton';
 
 /* eslint-disable @typescript-eslint/naming-convention */
 

@@ -36,20 +36,30 @@ export default function CookieBanner(): React.ReactElement | null {
   if (!shouldRender) return null;
 
   return (
-    <div className={
-      cn("fixed bottom-0 left-0 w-full bg-accent/80 p-4 text-center z-10 transition duration-500 ease-out",
-        showBanner ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10",
-        "space-y-4"
-      )}>
+    <div
+      className={Cn(
+        'fixed bottom-0 left-0 w-full bg-accent/80 p-4 text-center z-10 transition duration-500 ease-out',
+        showBanner ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10',
+        'space-y-4',
+      )}
+    >
       <p>
-        We use cookies to improve your experience. Read our{" "}
+        We use cookies to improve your experience. Read our{' '}
         <Link href="/privacy-policy" className="underline text-primary hover:text-primary/70">
           privacy policy
         </Link>
       </p>
       <div className="flex justify-center gap-4">
-        <Button className="hover:cursor-pointer" onClick={() => handleConsent(true)}>Accept</Button>
-        <Button className="hover:cursor-pointer" variant="destructive" onClick={() => handleConsent(false)}>Reject</Button>
+        <Button className="hover:cursor-pointer" onClick={() => handleConsent(true)}>
+          Accept
+        </Button>
+        <Button
+          className="hover:cursor-pointer"
+          variant="destructive"
+          onClick={() => handleConsent(false)}
+        >
+          Reject
+        </Button>
       </div>
     </div>
   );

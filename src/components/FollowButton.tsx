@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React from "react";
-import { useState } from "react";
+import React from 'react';
+import { useState } from 'react';
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -25,18 +25,18 @@ export default function FollowButton({
   const handleClick = async () => {
     setLoading(true);
 
-    const endpoint = following ? "/api/unfollow" : "/api/follow";
+    const endpoint = following ? '/api/unfollow' : '/api/follow';
 
     const res = await fetch(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ organizationId }),
     });
 
     if (res.ok) {
       setFollowing(!following);
     } else {
-      console.error("Failed to toggle follow");
+      console.error('Failed to toggle follow');
     }
 
     setLoading(false);
@@ -47,10 +47,10 @@ export default function FollowButton({
       onClick={handleClick}
       disabled={loading}
       className={`px-4 py-2 rounded ${
-        following ? "bg-gray-300 text-black" : "bg-blue-600 text-white"
+        following ? 'bg-gray-300 text-black' : 'bg-blue-600 text-white'
       }`}
     >
-      {loading ? "Loading..." : following ? "Unfollow" : "Follow"}
+      {loading ? 'Loading...' : following ? 'Unfollow' : 'Follow'}
     </button>
   );
 }

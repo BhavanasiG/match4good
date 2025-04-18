@@ -1,8 +1,8 @@
 // app/api/unfollow/route.ts
 
-import { NextRequest, NextResponse } from "next/server";
-import { GetUser } from "@/lib/prisma";
-import prisma from "@/lib/prisma";
+import { NextRequest, NextResponse } from 'next/server';
+import { GetUser } from '@/lib/prisma';
+import prisma from '@/lib/prisma';
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -13,8 +13,7 @@ import prisma from "@/lib/prisma";
  */
 export async function POST(req: NextRequest) {
   const user = await GetUser();
-  if (!user)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const body = (await req.json()) as { organizationId: number };
   const { organizationId } = body;

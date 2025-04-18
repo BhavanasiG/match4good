@@ -1,8 +1,8 @@
 // app/api/follow/route.ts
 
-import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
-import { GetUser } from "@/lib/prisma";
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
+import { GetUser } from '@/lib/prisma';
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -14,7 +14,7 @@ import { GetUser } from "@/lib/prisma";
 export async function POST(req: Request) {
   const user = await GetUser();
   if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   const body = (await req.json()) as { organizationId: number };
@@ -30,10 +30,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error following organization:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 },
-    );
+    console.error('Error following organization:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
