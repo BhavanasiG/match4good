@@ -1,8 +1,8 @@
-import prisma, { getUser } from "@/lib/prisma";
+import prisma, { GetUser } from "@/lib/prisma";
 import Link from "next/link";
 
 export default async function FollowingPage() {
-  const user = await getUser(true);
+  const user = await GetUser(true);
 
   if (!user) {
     return (

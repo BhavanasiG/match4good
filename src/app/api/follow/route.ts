@@ -2,7 +2,7 @@
 
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { getUser } from "@/lib/prisma";
+import { GetUser } from "@/lib/prisma";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -12,7 +12,7 @@ import { getUser } from "@/lib/prisma";
  * @returns {Promise<Response>} JSON response with success or error message.
  */
 export async function POST(req: Request) {
-  const user = await getUser();
+  const user = await GetUser();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

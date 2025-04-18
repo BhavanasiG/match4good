@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ListingStatus } from "../../../../generated/prisma_client";
+import { GetUser } from "@/lib/prisma";
+import FollowButton from "@/components/FollowButton";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -58,7 +60,7 @@ export default async function App(props: { params: t_params }) {
   }
 
   // Get the current user
-  const user = await getUser();
+  const user = await GetUser(true);
 
   // Include followers in the org query for the FollowButton logic
   const org = await prisma.organization.findUnique({
