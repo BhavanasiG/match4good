@@ -14,6 +14,8 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ListingStatus } from '../../../../generated/prisma_client';
+import { GetUser } from '@/lib/prisma';
+import FollowButton from '@/components/FollowButton';
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -57,9 +59,16 @@ export default async function App(props: { params: t_params }) {
     return notFound();
   }
 
+  // Get the current user
+  const user = await GetUser(true);
+
+  // Include followers in the org query for the FollowButton logic
   const org = await prisma.organization.findUnique({
     where: {
       id: org_id,
+    },
+    include: {
+      followers: true, // <-- include followers
     },
   });
 
@@ -90,6 +99,17 @@ export default async function App(props: { params: t_params }) {
             <p className="text-2xl md:text-3xl font-semibold">{org?.name}</p>
             <p className="text-md md:text-lg text-muted-foreground">Category ⋅ {org?.address}</p>
           </CardTitle>
+
+          {/* ✅ Follow/Unfollow Button */}
+          {user && org?.followers && (
+            <div className="mt-2">
+              <FollowButton
+                organizationId={org.id}
+                isFollowing={org.followers.some((f) => f.userId === user.id)}
+              />
+            </div>
+          )}
+
           <CardDescription>
             <p className="text-md md:text-lg font-medium line-clamp-3"> {org?.description} </p>
           </CardDescription>

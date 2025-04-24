@@ -10,7 +10,7 @@ datasource db {
 
 model User {
   id       Int     @id @default(autoincrement())
-  userId  String  @unique
+  userId   String  @unique
   username String  @unique
   email    String? @unique
   bio      String?
@@ -19,27 +19,33 @@ model User {
   memberOf Organization[] @relation("membership")
 
   application Application[]
+  region      Region? @relation(fields: [regionId], references: [id])
+  regionId    Int?
 
-  region    Region? @relation(fields: [regionId], references: [id])
-  regionId Int?
+  follows     Follow[]
 }
 
 model Organization {
   id          Int       @id @default(autoincrement())
   name        String    @unique
   description String?
-  ownerId    Int
+  ownerId     Int
   address     String?
   postcode    String?
+  followers   Follow[] // <-- this is your addition
   listings    Listing[]
   owner       User      @relation("ownership", fields: [ownerId], references: [id])
   members     User[]    @relation("membership")
 }
 
-enum ApplicationStatus {
-  PENDING
-  ACCEPTED
-  REJECTED
+model Follow {
+  id             Int          @id @default(autoincrement())
+  userId         Int
+  organizationId Int
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  user           User         @relation(fields: [userId], references: [id])
+
+  @@unique([userId, organizationId])
 }
 
 model Application {
@@ -47,33 +53,26 @@ model Application {
   description String?
   status      ApplicationStatus @default(PENDING)
 
-  listing    Listing @relation(fields: [listingId], references: [id])
-  user       User    @relation(fields: [userId], references: [id])
-  listingId Int     @map("listingId")
-  userId    Int     @map("userId")
+  listing     Listing @relation(fields: [listingId], references: [id])
+  user        User    @relation(fields: [userId], references: [id])
+  listingId   Int
+  userId      Int
 }
 
 model Listing {
   id             Int           @id @default(autoincrement())
   name           String
   description    String?
-  startDatetime DateTime
-  endDatetime   DateTime
+  startDatetime  DateTime
+  endDatetime    DateTime
   status         ListingStatus @default(acceptingApplications)
-  pointValue    Int           @default(0)
+  pointValue     Int           @default(0)
   scored         Boolean       @default(false)
 
   organization    Organization @relation(fields: [organizationId], references: [id])
-  organizationId Int
+  organizationId  Int
 
   applications Application[]
-}
-
-enum ListingStatus {
-  acceptingApplications
-  applicationsClosed
-  completed
-  cancelled
 }
 
 model Region {
@@ -82,4 +81,17 @@ model Region {
   points Int    @default(0)
 
   users User[]
+}
+
+enum ApplicationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum ListingStatus {
+  acceptingApplications
+  applicationsClosed
+  completed
+  cancelled
 }
