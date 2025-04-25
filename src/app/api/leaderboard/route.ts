@@ -1,5 +1,5 @@
-import prisma  from "@/lib/prisma"; 
-import { NextResponse } from "next/server";
+import prisma from '@/lib/prisma';
+import { NextResponse } from 'next/server';
 
 // eslint-disable-next-line
 export async function GET() {
@@ -7,7 +7,7 @@ export async function GET() {
     const completedListings = await prisma.application.findMany({
       where: {
         listing: {
-          status: "completed",
+          status: 'completed',
         },
       },
       include: {
@@ -22,12 +22,12 @@ export async function GET() {
       const existing = leaderboardMap.get(user.id);
       if (existing) {
         leaderboardMap.set(user.id, {
-          name: user.username ?? "Unnamed",
+          name: user.username ?? 'Unnamed',
           points: existing.points + listing.pointValue,
         });
       } else {
         leaderboardMap.set(user.id, {
-          name: user.username ?? "Unnamed",
+          name: user.username ?? 'Unnamed',
           points: listing.pointValue,
         });
       }
@@ -44,7 +44,7 @@ export async function GET() {
 
     return NextResponse.json(leaderboard);
   } catch (err) {
-    console.error("Error building leaderboard:", err);
-    return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
+    console.error('Error building leaderboard:', err);
+    return NextResponse.json({ error: 'Something went wrong' }, { status: 500 });
   }
 }

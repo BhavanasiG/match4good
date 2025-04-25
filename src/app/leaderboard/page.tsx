@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 type LeaderboardEntry = {
   name: string;
@@ -12,7 +12,7 @@ export default function LeaderboardPage() {
 
   useEffect(() => {
     async function fetchLeaderboard() {
-      const res = await fetch("/api/leaderboard");
+      const res = await fetch('/api/leaderboard');
       const data = await res.json();
       setLeaderboard(data);
     }
