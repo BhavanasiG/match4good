@@ -1,27 +1,7 @@
 import prisma, { GetUser } from '@/lib/prisma';
 import { forbidden, notFound } from 'next/navigation';
-import { CloseApplications, ListingWithApplications, PresentApplication } from './client';
+import { ListingManagement } from './client';
 import ListingInfo from '@/components/listingInfo';
-import { ListingStatus } from '@/../generated/prisma_client';
-
-function Applicants({ listing }: { listing: ListingWithApplications }) {
-  return (
-    <div>
-      <h2>Pending Applications</h2>
-      <ul>
-        {listing.applications.map((application, i) => (
-          <li key={i}>
-            <PresentApplication application={application} />
-          </li>
-        ))}
-      </ul>
-
-      {listing.status === ListingStatus.acceptingApplications && (
-        <CloseApplications listing={listing} />
-      )}
-    </div>
-  );
-}
 
 export default async function App({ params }: { params: Promise<{ id: string }> }) {
   const user = await GetUser(true);
@@ -57,7 +37,7 @@ export default async function App({ params }: { params: Promise<{ id: string }> 
         <ListingInfo listing={listing} />
       </div>
       <div className="">
-        <Applicants listing={listing} />
+        <ListingManagement listing={listing} />
       </div>
     </span>
   );
