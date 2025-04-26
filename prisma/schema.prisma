@@ -108,7 +108,7 @@ model Subcategory {
   id                  Int      @id @default(autoincrement())
   name                String   @unique
   description         String?
-  primary_category_id Int
-  primary_category    Category @relation(fields: [primary_category_id], references: [id])
+  primaryCategoryId Int
+  primaryCategory    Category @relation(fields: [primaryCategoryId], references: [id])
   users               User[]
 }
