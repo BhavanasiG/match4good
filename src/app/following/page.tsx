@@ -10,7 +10,9 @@ export default async function FollowingPage() {
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold text-[#388e3c] mb-4">Organizations You Follow</h1>
           <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-            <p className="text-lg text-gray-600">Please log in to view your followed organizations.</p>
+            <p className="text-lg text-gray-600">
+              Please log in to view your followed organizations.
+            </p>
           </div>
         </div>
       </div>
@@ -30,15 +32,17 @@ export default async function FollowingPage() {
             <span>❤️</span>
             Organizations You Follow
           </h1>
-          <p className="text-gray-600">Stay updated with your favorite organizations' latest activities</p>
+          <p className="text-gray-600">
+            Stay updated with your favorite organizations' latest activities
+          </p>
         </header>
 
         {follows.length === 0 ? (
           <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
             <div className="text-4xl mb-4">📭</div>
             <p className="text-lg text-gray-600">You're not following any organizations yet.</p>
-            <Link 
-              href="/org" 
+            <Link
+              href="/org"
               className="mt-4 inline-block bg-gradient-to-r from-[#4CAF50] to-[#81C784] text-white px-6 py-2 rounded-full hover:from-[#388e3c] hover:to-[#66bb6a] transition"
             >
               Explore Organizations
@@ -47,8 +51,8 @@ export default async function FollowingPage() {
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-1">
             {follows.map(({ organization }) => (
-              <div 
-                key={organization.id} 
+              <div
+                key={organization.id}
                 className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow p-6"
               >
                 <div className="flex flex-col h-full">
@@ -56,7 +60,7 @@ export default async function FollowingPage() {
                     <h2 className="text-xl font-bold text-[#388e3c] mb-2">{organization.name}</h2>
                     <p className="text-gray-600 line-clamp-3 mb-4">{organization.description}</p>
                   </div>
-                  <Link 
+                  <Link
                     href={`/org/${organization.id}`}
                     className="mt-auto inline-block bg-gradient-to-r from-[#4CAF50] to-[#81C784] text-white px-4 py-2 rounded-full text-sm hover:from-[#388e3c] hover:to-[#66bb6a] transition"
                   >
