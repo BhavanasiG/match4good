@@ -103,16 +103,15 @@ export default function NewsPage() {
     fetchNationalNews();
   }, [topic, GNEWS_API_KEY]);
 
-  // Fixed conditional rendering here!
   const renderArticles = (articles: Article[], label: string) => (
-    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       {articles.map((article, idx) => (
         <a
           key={idx}
           href={article.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="border rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow bg-white flex flex-col"
+          className="bg-white border border-green-100 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow flex flex-col"
         >
           {article.image ? (
             <Image
@@ -124,19 +123,19 @@ export default function NewsPage() {
               className="w-full h-48 object-cover"
             />
           ) : (
-            <div className="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
+            <div className="w-full h-48 bg-green-50 flex items-center justify-center text-green-400 text-sm">
               No Image Available
             </div>
           )}
-          <div className="p-4 flex flex-col flex-grow">
+          <div className="p-5 flex flex-col flex-grow">
             {/* Badge */}
             <span className="inline-block bg-green-100 text-green-800 text-xs font-semibold rounded-full px-3 py-1 mb-2">
               {label}
             </span>
 
-            <h2 className="text-lg font-bold mb-1 line-clamp-2">{article.title}</h2>
+            <h2 className="text-lg font-bold mb-1 line-clamp-2 text-[#388e3c]">{article.title}</h2>
 
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-500 mb-2">
               {new Date(article.publishedAt).toLocaleDateString('en-GB', {
                 day: 'numeric',
                 month: 'short',
@@ -153,52 +152,62 @@ export default function NewsPage() {
   );
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">🤝 Volunteering News Feed</h1>
+    <div className="min-h-screen bg-gradient-to-br from-[#e8f5e9] to-[#f1f8e9] py-10 px-4">
+      <div className="max-w-7xl mx-auto">
+        <header className="mb-10 text-center">
+          <div className="text-4xl mb-2">📰</div>
+          <h1 className="text-4xl font-extrabold text-[#388e3c] mb-2">Volunteering News Feed</h1>
+          <p className="text-lg text-[#388e3c] max-w-2xl mx-auto">
+            Stay up to date with the latest volunteering, charity, and community news in your area and across the UK.
+          </p>
+        </header>
 
-      <div className="space-y-12">
-        {/* Local Volunteering News */}
-        <div>
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-semibold">
-              📍 Local Volunteering {localCity && `in ${localCity}`}
+        <div className="space-y-16">
+          {/* Local Volunteering News */}
+          <section>
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+              <h2 className="text-2xl font-bold text-[#388e3c] flex items-center gap-2">
+                📍 Local Volunteering {localCity && <span className="text-green-700">in {localCity}</span>}
+              </h2>
+              <select
+                value={topic}
+                onChange={(e) => setTopic(e.target.value)}
+                className="border border-green-200 p-2 rounded-lg bg-green-50 text-green-900 font-semibold focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+              >
+                {TOPICS.map((t) => (
+                  <option key={t.query} value={t.query}>
+                    {t.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {loadingLocal ? (
+              <div className="text-center text-green-600 py-8 font-semibold">Loading local volunteering news...</div>
+            ) : localArticles.length > 0 ? (
+              renderArticles(localArticles, 'Local Opportunity')
+            ) : (
+              <div className="text-center text-green-400 py-8">
+                No local volunteering news found yet. Try another topic!
+              </div>
+            )}
+          </section>
+
+          {/* National Volunteering News */}
+          <section>
+            <h2 className="text-2xl font-bold text-[#388e3c] mb-6 flex items-center gap-2">
+              🇬🇧 UK National Volunteering News
             </h2>
-            <select
-              value={topic}
-              onChange={(e) => setTopic(e.target.value)}
-              className="border p-2 rounded"
-            >
-              {TOPICS.map((t) => (
-                <option key={t.query} value={t.query}>
-                  {t.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {loadingLocal ? (
-            <p>Loading local volunteering news...</p>
-          ) : localArticles.length > 0 ? (
-            renderArticles(localArticles, 'Local Opportunity')
-          ) : (
-            <p className="text-gray-500">
-              No local volunteering news found yet. Try another topic!
-            </p>
-          )}
-        </div>
-
-        {/* National Volunteering News */}
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">🇬🇧 UK National Volunteering News</h2>
-          {loadingNational ? (
-            <p>Loading national volunteering news...</p>
-          ) : nationalArticles.length > 0 ? (
-            renderArticles(nationalArticles, 'National Opportunity')
-          ) : (
-            <p className="text-gray-500">
-              No national volunteering news found yet. Try another topic!
-            </p>
-          )}
+            {loadingNational ? (
+              <div className="text-center text-green-600 py-8 font-semibold">Loading national volunteering news...</div>
+            ) : nationalArticles.length > 0 ? (
+              renderArticles(nationalArticles, 'National Opportunity')
+            ) : (
+              <div className="text-center text-green-400 py-8">
+                No national volunteering news found yet. Try another topic!
+              </div>
+            )}
+          </section>
         </div>
       </div>
     </div>
