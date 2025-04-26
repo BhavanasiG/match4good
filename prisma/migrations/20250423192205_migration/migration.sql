@@ -45,6 +45,7 @@ COMMIT;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 ALTER TABLE "Listing" 
 -- DROP COLUMN "end_datetime",
@@ -76,6 +77,13 @@ ALTER TABLE "Listing"
 =======
 
 >>>>>>> 47e546e (Fixed prisma migration issue)
+=======
+ALTER TABLE "Listing" 
+-- DROP COLUMN "end_datetime",
+=======
+-- ALTER TABLE "Listing" DROP COLUMN "end_datetime",
+>>>>>>> 76ba511 (Rebase changes)
+>>>>>>> 66b9f12 (Rebase changes)
 -- DROP COLUMN "organization_id",
 -- DROP COLUMN "point_value",
 -- DROP COLUMN "start_datetime",
@@ -87,6 +95,7 @@ ALTER TABLE "Listing"
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 <<<<<<< HEAD
@@ -96,6 +105,8 @@ ALTER TABLE "Listing"
 =======
 
 >>>>>>> 47e546e (Fixed prisma migration issue)
+=======
+>>>>>>> 66b9f12 (Rebase changes)
 ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 
 -- AlterTable
@@ -110,6 +121,7 @@ ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 9ebd15b (Rebase changes)
@@ -156,6 +168,8 @@ ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 >>>>>>> 76ba511 (Rebase changes)
 >>>>>>> 1ecb8f5 (Rebase changes)
 =======
+>>>>>>> 66b9f12 (Rebase changes)
+=======
 -- ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 
 -- AlterTable
@@ -166,8 +180,11 @@ ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 -- ALTER TABLE "User" DROP COLUMN "region_id",
 -- DROP COLUMN "user_id",
 >>>>>>> 76ba511 (Rebase changes)
+<<<<<<< HEAD
 =======
 >>>>>>> 47e546e (Fixed prisma migration issue)
+=======
+>>>>>>> 66b9f12 (Rebase changes)
 -- ADD COLUMN     "regionId" INTEGER,
 -- ADD COLUMN     "userId" TEXT NOT NULL;
 

@@ -318,7 +318,7 @@ async function main() {
     },
   });
   const education_development = await prisma.category.upsert({
-    where: { name: "Education & Development" },
+    where: { name: 'Education & Development' },
     update: {},
     create: {
       name: 'Education & Development',
@@ -350,7 +350,7 @@ async function main() {
     },
   });
   const environmental_conservation = await prisma.category.upsert({
-    where: { name: "Environmental Conservation" },
+    where: { name: 'Environmental Conservation' },
     update: {},
     create: {
       name: 'Environmental Conservation',
@@ -366,8 +366,8 @@ async function main() {
             description: 'Projects for conservation',
           },
           {
-            name: "Sustainability initiatives",
-            description: "Initiatives for sustainability",
+            name: 'Sustainability initiatives',
+            description: 'Initiatives for sustainability',
           },
           {
             name: 'Clean-up campaigns',
@@ -382,7 +382,7 @@ async function main() {
     },
   });
   const health_wellbeing = await prisma.category.upsert({
-    where: { name: "Health & Wellbeing" },
+    where: { name: 'Health & Wellbeing' },
     update: {},
     create: {
       name: 'Health & Wellbeing',
@@ -414,7 +414,7 @@ async function main() {
     },
   });
   const arts_culture_heritage = await prisma.category.upsert({
-    where: { name: "Arts, Culture & Heritage" },
+    where: { name: 'Arts, Culture & Heritage' },
     update: {},
     create: {
       name: 'Arts, Culture & Heritage',
@@ -446,7 +446,7 @@ async function main() {
     },
   });
   const animal_welfare = await prisma.category.upsert({
-    where: { name: "Animal Welfare" },
+    where: { name: 'Animal Welfare' },
     update: {},
     create: {
       name: 'Animal Welfare',
@@ -478,7 +478,7 @@ async function main() {
     },
   });
   const administrative_organizational = await prisma.category.upsert({
-    where: { name: "Administrative & Organizational" },
+    where: { name: 'Administrative & Organizational' },
     update: {},
     create: {
       name: 'Administrative & Organizational',
