@@ -36,7 +36,9 @@ export default function NewsPage() {
       async (position) => {
         const { latitude, longitude } = position.coords;
         try {
-          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,
+          );
           const data = await res.json();
           const foundCity = data.address.city || data.address.town || data.address.village;
           setLocalCity(foundCity);
@@ -57,14 +59,14 @@ export default function NewsPage() {
       setLoadingLocal(true);
       try {
         let res = await fetch(
-          `https://gnews.io/api/v4/search?q=${encodeURIComponent(topic + ' ' + localCity)}&token=${GNEWS_API_KEY}&lang=en&country=gb&max=10`
+          `https://gnews.io/api/v4/search?q=${encodeURIComponent(topic + ' ' + localCity)}&token=${GNEWS_API_KEY}&lang=en&country=gb&max=10`,
         );
         let data = await res.json();
 
         // Fallback if no articles
         if (!data.articles || data.articles.length === 0) {
           res = await fetch(
-            `https://gnews.io/api/v4/search?q=${encodeURIComponent(localCity)}&token=${GNEWS_API_KEY}&lang=en&country=gb&max=10`
+            `https://gnews.io/api/v4/search?q=${encodeURIComponent(localCity)}&token=${GNEWS_API_KEY}&lang=en&country=gb&max=10`,
           );
           data = await res.json();
         }
@@ -87,7 +89,7 @@ export default function NewsPage() {
       setLoadingNational(true);
       try {
         const res = await fetch(
-          `https://gnews.io/api/v4/search?q=${encodeURIComponent(topic + ' UK')}&token=${GNEWS_API_KEY}&lang=en&country=gb&max=10`
+          `https://gnews.io/api/v4/search?q=${encodeURIComponent(topic + ' UK')}&token=${GNEWS_API_KEY}&lang=en&country=gb&max=10`,
         );
         const data = await res.json();
         setNationalArticles(data.articles || []);
@@ -136,8 +138,11 @@ export default function NewsPage() {
 
             <p className="text-sm text-gray-600">
               {new Date(article.publishedAt).toLocaleDateString('en-GB', {
-                day: 'numeric', month: 'short', year: 'numeric',
-              })} – {article.source.name}
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+              })}{' '}
+              – {article.source.name}
             </p>
 
             <p className="text-gray-700 mt-2 text-sm line-clamp-3">{article.description}</p>
@@ -176,7 +181,9 @@ export default function NewsPage() {
           ) : localArticles.length > 0 ? (
             renderArticles(localArticles, 'Local Opportunity')
           ) : (
-            <p className="text-gray-500">No local volunteering news found yet. Try another topic!</p>
+            <p className="text-gray-500">
+              No local volunteering news found yet. Try another topic!
+            </p>
           )}
         </div>
 
@@ -188,7 +195,9 @@ export default function NewsPage() {
           ) : nationalArticles.length > 0 ? (
             renderArticles(nationalArticles, 'National Opportunity')
           ) : (
-            <p className="text-gray-500">No national volunteering news found yet. Try another topic!</p>
+            <p className="text-gray-500">
+              No national volunteering news found yet. Try another topic!
+            </p>
           )}
         </div>
       </div>
