@@ -44,8 +44,12 @@ COMMIT;
 
 -- AlterTable
 <<<<<<< HEAD
+<<<<<<< HEAD
 ALTER TABLE "Listing" 
 -- DROP COLUMN "end_datetime",
+=======
+-- ALTER TABLE "Listing" DROP COLUMN "end_datetime",
+>>>>>>> 76ba511 (Rebase changes)
 =======
 -- ALTER TABLE "Listing" DROP COLUMN "end_datetime",
 >>>>>>> 76ba511 (Rebase changes)
@@ -56,6 +60,7 @@ ALTER TABLE "Listing"
 -- ADD COLUMN     "organizationId" INTEGER NOT NULL,
 -- ADD COLUMN     "pointValue" INTEGER NOT NULL DEFAULT 0,
 -- ADD COLUMN     "startDatetime" TIMESTAMP(3) NOT NULL,
+<<<<<<< HEAD
 <<<<<<< HEAD
 ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 
@@ -68,6 +73,17 @@ ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 -- ALTER TABLE "User" 
 -- -- DROP COLUMN "region_id",
 -- -- DROP COLUMN "user_id",
+=======
+-- ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
+
+-- AlterTable
+-- ALTER TABLE "Organization" DROP COLUMN "owner_id",
+-- ADD COLUMN     "ownerId" INTEGER NOT NULL;
+
+-- AlterTable
+-- ALTER TABLE "User" DROP COLUMN "region_id",
+-- DROP COLUMN "user_id",
+>>>>>>> 76ba511 (Rebase changes)
 =======
 -- ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 
