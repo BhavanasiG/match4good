@@ -41,49 +41,25 @@ COMMIT;
 -- DROP INDEX "User_user_id_key";
 
 -- AlterTable
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-ALTER TABLE "Listing" 
+
+-- ALTER TABLE "Listing" 
+-- -- DROP COLUMN "end_datetime",
+
+-- -- ALTER TABLE "Listing" DROP COLUMN "end_datetime",
+
+-- -- ALTER TABLE "Listing" DROP COLUMN "end_datetime",
+
+-- ALTER TABLE "Listing" 
+
+-- -- ALTER TABLE "Listing" DROP COLUMN "end_datetime",
+
+-- ALTER TABLE "Listing" 
 -- DROP COLUMN "end_datetime",
 
 -- ALTER TABLE "Listing" DROP COLUMN "end_datetime",
 
--- ALTER TABLE "Listing" DROP COLUMN "end_datetime",
 
-=======
-<<<<<<< HEAD
-=======
->>>>>>> 47e546e (Fixed prisma migration issue)
-ALTER TABLE "Listing" 
-
--- ALTER TABLE "Listing" DROP COLUMN "end_datetime",
-<<<<<<< HEAD
->>>>>>> 76ba511 (Rebase changes)
->>>>>>> 9ebd15b (Rebase changes)
-=======
-ALTER TABLE "Listing" 
--- DROP COLUMN "end_datetime",
-=======
--- ALTER TABLE "Listing" DROP COLUMN "end_datetime",
->>>>>>> 76ba511 (Rebase changes)
->>>>>>> 1ecb8f5 (Rebase changes)
-=======
--- ALTER TABLE "Listing" DROP COLUMN "end_datetime",
->>>>>>> 76ba511 (Rebase changes)
-=======
-
->>>>>>> 47e546e (Fixed prisma migration issue)
-=======
-ALTER TABLE "Listing" 
--- DROP COLUMN "end_datetime",
-=======
--- ALTER TABLE "Listing" DROP COLUMN "end_datetime",
->>>>>>> 76ba511 (Rebase changes)
->>>>>>> 66b9f12 (Rebase changes)
 -- DROP COLUMN "organization_id",
 -- DROP COLUMN "point_value",
 -- DROP COLUMN "start_datetime",
@@ -91,23 +67,8 @@ ALTER TABLE "Listing"
 -- ADD COLUMN     "organizationId" INTEGER NOT NULL,
 -- ADD COLUMN     "pointValue" INTEGER NOT NULL DEFAULT 0,
 -- ADD COLUMN     "startDatetime" TIMESTAMP(3) NOT NULL,
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-<<<<<<< HEAD
->>>>>>> 9ebd15b (Rebase changes)
-=======
->>>>>>> 1ecb8f5 (Rebase changes)
-=======
-
->>>>>>> 47e546e (Fixed prisma migration issue)
-=======
->>>>>>> 66b9f12 (Rebase changes)
-ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
+-- ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 
 -- AlterTable
 -- ALTER TABLE "Organization" 
@@ -118,17 +79,16 @@ ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 -- ALTER TABLE "User" 
 -- -- DROP COLUMN "region_id",
 -- -- DROP COLUMN "user_id",
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 9ebd15b (Rebase changes)
-=======
-=======
->>>>>>> 1ecb8f5 (Rebase changes)
-=======
+
+
+-- ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
+
+-- AlterTable
+-- ALTER TABLE "Organization" DROP COLUMN "owner_id",
+-- ADD COLUMN     "ownerId" INTEGER NOT NULL;
+
+-- AlterTable
+-- ALTER TABLE "User" DROP COLUMN "region_id",
 
 -- ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 
@@ -139,7 +99,16 @@ ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 -- AlterTable
 -- ALTER TABLE "User" DROP COLUMN "region_id",
 -- DROP COLUMN "user_id",
->>>>>>> 47e546e (Fixed prisma migration issue)
+
+-- ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
+
+-- AlterTable
+-- ALTER TABLE "Organization" DROP COLUMN "owner_id",
+-- ADD COLUMN     "ownerId" INTEGER NOT NULL;
+
+-- AlterTable
+-- ALTER TABLE "User" DROP COLUMN "region_id",
+
 -- ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 
 -- AlterTable
@@ -149,9 +118,7 @@ ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 -- AlterTable
 -- ALTER TABLE "User" DROP COLUMN "region_id",
 -- DROP COLUMN "user_id",
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 -- ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 
 -- AlterTable
@@ -161,30 +128,7 @@ ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 -- AlterTable
 -- ALTER TABLE "User" DROP COLUMN "region_id",
 -- DROP COLUMN "user_id",
-=======
->>>>>>> 76ba511 (Rebase changes)
->>>>>>> 9ebd15b (Rebase changes)
-=======
->>>>>>> 76ba511 (Rebase changes)
->>>>>>> 1ecb8f5 (Rebase changes)
-=======
->>>>>>> 66b9f12 (Rebase changes)
-=======
--- ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 
--- AlterTable
--- ALTER TABLE "Organization" DROP COLUMN "owner_id",
--- ADD COLUMN     "ownerId" INTEGER NOT NULL;
-
--- AlterTable
--- ALTER TABLE "User" DROP COLUMN "region_id",
--- DROP COLUMN "user_id",
->>>>>>> 76ba511 (Rebase changes)
-<<<<<<< HEAD
-=======
->>>>>>> 47e546e (Fixed prisma migration issue)
-=======
->>>>>>> 66b9f12 (Rebase changes)
 -- ADD COLUMN     "regionId" INTEGER,
 -- ADD COLUMN     "userId" TEXT NOT NULL;
 
