@@ -41,6 +41,7 @@ COMMIT;
 -- DROP INDEX "User_user_id_key";
 
 -- AlterTable
+<<<<<<< HEAD
 
 
 -- ALTER TABLE "Listing" 
@@ -55,11 +56,29 @@ COMMIT;
 -- -- ALTER TABLE "Listing" DROP COLUMN "end_datetime",
 
 -- ALTER TABLE "Listing" 
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1ecb8f5 (Rebase changes)
+ALTER TABLE "Listing" 
+>>>>>>> 4c8def6 (Rebase changes)
 -- DROP COLUMN "end_datetime",
 
 -- ALTER TABLE "Listing" DROP COLUMN "end_datetime",
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 76ba511 (Rebase changes)
+<<<<<<< HEAD
+=======
+-- ALTER TABLE "Listing" DROP COLUMN "end_datetime",
+>>>>>>> 76ba511 (Rebase changes)
+=======
+>>>>>>> 1ecb8f5 (Rebase changes)
+>>>>>>> 4c8def6 (Rebase changes)
 -- DROP COLUMN "organization_id",
 -- DROP COLUMN "point_value",
 -- DROP COLUMN "start_datetime",
@@ -67,8 +86,17 @@ COMMIT;
 -- ADD COLUMN     "organizationId" INTEGER NOT NULL,
 -- ADD COLUMN     "pointValue" INTEGER NOT NULL DEFAULT 0,
 -- ADD COLUMN     "startDatetime" TIMESTAMP(3) NOT NULL,
+<<<<<<< HEAD
 
 -- ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1ecb8f5 (Rebase changes)
+ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
+>>>>>>> 4c8def6 (Rebase changes)
 
 -- AlterTable
 -- ALTER TABLE "Organization" 
@@ -99,6 +127,7 @@ COMMIT;
 -- AlterTable
 -- ALTER TABLE "User" DROP COLUMN "region_id",
 -- DROP COLUMN "user_id",
+<<<<<<< HEAD
 
 -- ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 
@@ -108,6 +137,22 @@ COMMIT;
 
 -- AlterTable
 -- ALTER TABLE "User" DROP COLUMN "region_id",
+
+=======
+>>>>>>> 76ba511 (Rebase changes)
+<<<<<<< HEAD
+=======
+>>>>>>> 4c8def6 (Rebase changes)
+-- ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
+
+-- AlterTable
+-- ALTER TABLE "Organization" DROP COLUMN "owner_id",
+-- ADD COLUMN     "ownerId" INTEGER NOT NULL;
+
+-- AlterTable
+-- ALTER TABLE "User" DROP COLUMN "region_id",
+-- DROP COLUMN "user_id",
+<<<<<<< HEAD
 
 -- ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 
@@ -119,16 +164,11 @@ COMMIT;
 -- ALTER TABLE "User" DROP COLUMN "region_id",
 -- DROP COLUMN "user_id",
 
--- ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
-
--- AlterTable
--- ALTER TABLE "Organization" DROP COLUMN "owner_id",
--- ADD COLUMN     "ownerId" INTEGER NOT NULL;
-
--- AlterTable
--- ALTER TABLE "User" DROP COLUMN "region_id",
--- DROP COLUMN "user_id",
-
+=======
+>>>>>>> 76ba511 (Rebase changes)
+=======
+>>>>>>> 1ecb8f5 (Rebase changes)
+>>>>>>> 4c8def6 (Rebase changes)
 -- ADD COLUMN     "regionId" INTEGER,
 -- ADD COLUMN     "userId" TEXT NOT NULL;
 
