@@ -46,6 +46,7 @@ COMMIT;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 1ecb8f5 (Rebase changes)
 ALTER TABLE "Listing" 
@@ -59,6 +60,9 @@ ALTER TABLE "Listing"
 >>>>>>> 76ba511 (Rebase changes)
 =======
 >>>>>>> 1ecb8f5 (Rebase changes)
+=======
+-- ALTER TABLE "Listing" DROP COLUMN "end_datetime",
+>>>>>>> 76ba511 (Rebase changes)
 -- DROP COLUMN "organization_id",
 -- DROP COLUMN "point_value",
 -- DROP COLUMN "start_datetime",
@@ -66,6 +70,7 @@ ALTER TABLE "Listing"
 -- ADD COLUMN     "organizationId" INTEGER NOT NULL,
 -- ADD COLUMN     "pointValue" INTEGER NOT NULL DEFAULT 0,
 -- ADD COLUMN     "startDatetime" TIMESTAMP(3) NOT NULL,
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -107,6 +112,17 @@ ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 >>>>>>> 76ba511 (Rebase changes)
 =======
 >>>>>>> 1ecb8f5 (Rebase changes)
+=======
+-- ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
+
+-- AlterTable
+-- ALTER TABLE "Organization" DROP COLUMN "owner_id",
+-- ADD COLUMN     "ownerId" INTEGER NOT NULL;
+
+-- AlterTable
+-- ALTER TABLE "User" DROP COLUMN "region_id",
+-- DROP COLUMN "user_id",
+>>>>>>> 76ba511 (Rebase changes)
 -- ADD COLUMN     "regionId" INTEGER,
 -- ADD COLUMN     "userId" TEXT NOT NULL;
 
@@ -121,4 +137,7 @@ ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 
 -- AddForeignKey
 -- ALTER TABLE "Listing" ADD CONSTRAINT "Listing_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+<<<<<<< HEAD
 >>>>>>> 9ebd15b (Rebase changes)
+=======
+>>>>>>> 76ba511 (Rebase changes)
