@@ -158,7 +158,8 @@ export default function NewsPage() {
           <div className="text-4xl mb-2">📰</div>
           <h1 className="text-4xl font-extrabold text-[#388e3c] mb-2">Volunteering News Feed</h1>
           <p className="text-lg text-[#388e3c] max-w-2xl mx-auto">
-            Stay up to date with the latest volunteering, charity, and community news in your area and across the UK.
+            Stay up to date with the latest volunteering, charity, and community news in your area
+            and across the UK.
           </p>
         </header>
 
@@ -167,7 +168,8 @@ export default function NewsPage() {
           <section>
             <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
               <h2 className="text-2xl font-bold text-[#388e3c] flex items-center gap-2">
-                📍 Local Volunteering {localCity && <span className="text-green-700">in {localCity}</span>}
+                📍 Local Volunteering{' '}
+                {localCity && <span className="text-green-700">in {localCity}</span>}
               </h2>
               <select
                 value={topic}
@@ -183,7 +185,9 @@ export default function NewsPage() {
             </div>
 
             {loadingLocal ? (
-              <div className="text-center text-green-600 py-8 font-semibold">Loading local volunteering news...</div>
+              <div className="text-center text-green-600 py-8 font-semibold">
+                Loading local volunteering news...
+              </div>
             ) : localArticles.length > 0 ? (
               renderArticles(localArticles, 'Local Opportunity')
             ) : (
@@ -199,7 +203,9 @@ export default function NewsPage() {
               🇬🇧 UK National Volunteering News
             </h2>
             {loadingNational ? (
-              <div className="text-center text-green-600 py-8 font-semibold">Loading national volunteering news...</div>
+              <div className="text-center text-green-600 py-8 font-semibold">
+                Loading national volunteering news...
+              </div>
             ) : nationalArticles.length > 0 ? (
               renderArticles(nationalArticles, 'National Opportunity')
             ) : (
