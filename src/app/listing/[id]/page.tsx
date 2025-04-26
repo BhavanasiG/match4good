@@ -62,7 +62,7 @@ export default async function ListingPage({ params }: PageProps) {
         </div>
 
         {/* Right side: Map */}
-        <div>
+        <div className="relative z-10">
           {listing.organization?.address && listing.organization?.postcode ? (
             <MapComponent
               address={listing.organization.address}
