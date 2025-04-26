@@ -9,22 +9,18 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  userId   String  @unique
-  username String  @unique
-  email    String? @unique
-  bio      String?
-
-  ownerOf  Organization[] @relation("ownership")
-  memberOf Organization[] @relation("membership")
-
+  id          Int            @id @default(autoincrement())
+  userId      String         @unique
+  username    String         @unique
+  email       String?        @unique
+  bio         String?
+  ownerOf     Organization[] @relation("ownership")
+  memberOf    Organization[] @relation("membership")
   application Application[]
-  region      Region? @relation(fields: [regionId], references: [id])
+  region      Region?        @relation(fields: [regionId], references: [id])
   regionId    Int?
-
   follows     Follow[]
-
-  interests Subcategory[]
+  interests   Subcategory[]
 }
 
 model Organization {
@@ -54,9 +50,8 @@ model Application {
   id          Int               @id @default(autoincrement())
   description String?
   status      ApplicationStatus @default(PENDING)
-
-  listing     Listing @relation(fields: [listingId], references: [id])
-  user        User    @relation(fields: [userId], references: [id])
+  listing     Listing           @relation(fields: [listingId], references: [id])
+  user        User              @relation(fields: [userId], references: [id])
   listingId   Int
   userId      Int
 }
@@ -70,9 +65,8 @@ model Listing {
   status         ListingStatus @default(acceptingApplications)
   pointValue     Int           @default(0)
   scored         Boolean       @default(false)
-
-  organization    Organization @relation(fields: [organizationId], references: [id])
-  organizationId  Int
+  organization   Organization  @relation(fields: [organizationId], references: [id])
+  organizationId Int
 
   applications Application[]
 }
@@ -97,6 +91,7 @@ enum ListingStatus {
   completed
   cancelled
 }
+
 model Category {
   id            Int           @id @default(autoincrement())
   name          String        @unique
@@ -105,10 +100,10 @@ model Category {
 }
 
 model Subcategory {
-  id                  Int      @id @default(autoincrement())
-  name                String   @unique
-  description         String?
-  primary_category_id Int
-  primary_category    Category @relation(fields: [primary_category_id], references: [id])
-  users               User[]
+  id                Int      @id @default(autoincrement())
+  name              String   @unique
+  description       String?
+  primaryCategoryId Int
+  primaryCategory   Category @relation(fields: [primaryCategoryId], references: [id])
+  users             User[]
 }

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { User } from "@/lib/prisma";
+import { User } from '@/lib/prisma';
 // TODO
 //import { ChangeEvent, FormEvent, useState } from "react";
 //import { createInterests, CreateInterestsData } from "./submit";
