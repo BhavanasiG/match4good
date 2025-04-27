@@ -31,7 +31,6 @@ export default function NewsPage() {
   // Get user's city
   useEffect(() => {
     if (!navigator.geolocation) return;
-
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
@@ -59,14 +58,18 @@ export default function NewsPage() {
       setLoadingLocal(true);
       try {
         let res = await fetch(
-          `https://gnews.io/api/v4/search?q=${encodeURIComponent(topic + ' ' + localCity)}&token=${GNEWS_API_KEY}&lang=en&country=gb&max=10`,
+          `https://gnews.io/api/v4/search?q=${encodeURIComponent(
+            topic + ' ' + localCity,
+          )}&token=${GNEWS_API_KEY}&lang=en&country=gb&max=10`,
         );
         let data = await res.json();
 
         // Fallback if no articles
         if (!data.articles || data.articles.length === 0) {
           res = await fetch(
-            `https://gnews.io/api/v4/search?q=${encodeURIComponent(localCity)}&token=${GNEWS_API_KEY}&lang=en&country=gb&max=10`,
+            `https://gnews.io/api/v4/search?q=${encodeURIComponent(
+              localCity,
+            )}&token=${GNEWS_API_KEY}&lang=en&country=gb&max=10`,
           );
           data = await res.json();
         }
@@ -89,7 +92,9 @@ export default function NewsPage() {
       setLoadingNational(true);
       try {
         const res = await fetch(
-          `https://gnews.io/api/v4/search?q=${encodeURIComponent(topic + ' UK')}&token=${GNEWS_API_KEY}&lang=en&country=gb&max=10`,
+          `https://gnews.io/api/v4/search?q=${encodeURIComponent(
+            topic + ' UK',
+          )}&token=${GNEWS_API_KEY}&lang=en&country=gb&max=10`,
         );
         const data = await res.json();
         setNationalArticles(data.articles || []);
@@ -132,9 +137,7 @@ export default function NewsPage() {
             <span className="inline-block bg-green-100 text-green-800 text-xs font-semibold rounded-full px-3 py-1 mb-2">
               {label}
             </span>
-
             <h2 className="text-lg font-bold mb-1 line-clamp-2 text-[#388e3c]">{article.title}</h2>
-
             <p className="text-sm text-gray-500 mb-2">
               {new Date(article.publishedAt).toLocaleDateString('en-GB', {
                 day: 'numeric',
@@ -143,7 +146,6 @@ export default function NewsPage() {
               })}{' '}
               – {article.source.name}
             </p>
-
             <p className="text-gray-700 mt-2 text-sm line-clamp-3">{article.description}</p>
           </div>
         </a>
