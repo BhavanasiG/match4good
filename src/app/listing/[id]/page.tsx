@@ -78,7 +78,7 @@ export default async function ListingPage({ params }: PageProps) {
           </div>
 
           {/* Right side: Map */}
-          <div className="flex flex-col space-y-6">
+          <div className="relative z-10">
             <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col h-full">
               <h2 className="text-2xl font-bold text-[#388e3c] mb-4 flex items-center gap-2">
                 <span>📍</span> Location
