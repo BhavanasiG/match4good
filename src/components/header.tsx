@@ -10,8 +10,6 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { IconMenu2 } from '@tabler/icons-react';
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from './ui/navigation-menu';
-import { useState } from 'react';
 
 /**
  * Header component for the site
@@ -21,41 +19,46 @@ export default function Header() {
   const pages = {
     explore: [
       {
-        name: "Jobs",
-        href: "/listing",
-        description: "Browse available volunteering opportunities across various sectors, causes, and locations."  
+        name: 'Jobs',
+        href: '/listing',
+        description:
+          'Browse available volunteering opportunities across various sectors, causes, and locations.',
       },
       {
-        name: "Organizations",
-        href: "/org",
-        description: "Discover the nonprofits, charities, and community groups offering volunteer opportunities."
-      }
+        name: 'Organizations',
+        href: '/org',
+        description:
+          'Discover the nonprofits, charities, and community groups offering volunteer opportunities.',
+      },
     ],
     social: [
       {
-        name: "Leaderboard",
-        href: "/leaderboard",
-        description: "Explore our top volunteering regions ranked by hours contributed, projects completed, and impact made."
+        name: 'Leaderboard',
+        href: '/leaderboard',
+        description:
+          'Explore our top volunteering regions ranked by hours contributed, projects completed, and impact made.',
       },
       {
-        name: "Following",
-        href: "/following",
-        description: "Keep up with organizations you care about. Customize your feed to see updates from causes you follow."
+        name: 'Following',
+        href: '/following',
+        description:
+          'Keep up with organizations you care about. Customize your feed to see updates from causes you follow.',
       },
       {
-        name: "News",
-        href: "/news",
-        description: "Stay informed with the latest updates, success stories, and upcoming events from our community."
-      }
+        name: 'News',
+        href: '/news',
+        description:
+          'Stay informed with the latest updates, success stories, and upcoming events from our community.',
+      },
     ],
     discover: [
       {
-        name: "About",
-        href: "/about-us",
-        description: "Learn about our mission to connect volunteers with meaningful opportunities."
-      }
-    ]
-  }
+        name: 'About',
+        href: '/about-us',
+        description: 'Learn about our mission to connect volunteers with meaningful opportunities.',
+      },
+    ],
+  };
 
   return (
     <header className="sticky top-0 z-50 grid grid-cols-10 p-3 px-6 md:px-12 lg:px-24 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
@@ -120,7 +123,9 @@ export default function Header() {
                 <Link href={route.href}>
                   <div className="p-1 w-96">
                     <h2 className="font-medium">{route.name}</h2>
-                    <p className="text-muted-foreground line-clamp-2 text-sm">{route.description}</p>
+                    <p className="text-muted-foreground line-clamp-2 text-sm">
+                      {route.description}
+                    </p>
                   </div>
                 </Link>
               </DropdownMenuItem>
@@ -135,7 +140,9 @@ export default function Header() {
                 <Link href={route.href}>
                   <div className="p-1 w-96">
                     <h2 className="font-medium">{route.name}</h2>
-                    <p className="text-muted-foreground line-clamp-2 text-sm">{route.description}</p>
+                    <p className="text-muted-foreground line-clamp-2 text-sm">
+                      {route.description}
+                    </p>
                   </div>
                 </Link>
               </DropdownMenuItem>
@@ -150,7 +157,9 @@ export default function Header() {
                 <Link href={route.href}>
                   <div className="p-1 w-96">
                     <h2 className="font-medium">{route.name}</h2>
-                    <p className="text-muted-foreground line-clamp-2 text-sm">{route.description}</p>
+                    <p className="text-muted-foreground line-clamp-2 text-sm">
+                      {route.description}
+                    </p>
                   </div>
                 </Link>
               </DropdownMenuItem>
