@@ -1,6 +1,6 @@
 // import SignUpForm from "./form"; TODO
-import prisma, { GetUser } from "@/lib/prisma";
-import { forbidden } from "next/navigation";
+import prisma, { GetUser } from '@/lib/prisma';
+import { forbidden } from 'next/navigation';
 
 export default async function SignUpForm() {
   const user = await GetUser(true);
