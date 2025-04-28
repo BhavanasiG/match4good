@@ -227,7 +227,7 @@ async function main() {
     },
   });
   const advocacy_awareness = await prisma.category.upsert({
-    where: { name: "Advocacy & Awareness" },
+    where: { name: 'Advocacy & Awareness' },
     update: {},
     create: {
       name: 'Advocacy & Awareness',
