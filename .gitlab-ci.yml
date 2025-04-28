@@ -27,7 +27,7 @@ install:
     - npm ci
     - npx prisma generate
   cache:
-    key: "$CI_COMMIT_REF_SLUG-$(sha256sum package-lock.json | cut -d' ' -f1)"  # Cache based on package-lock.json hash
+    key: "$CI_COMMIT_REF_SLUG-$(sha256sum package-lock.json | cut -d' ' -f1)" # Cache based on package-lock.json hash
     paths:
       - node_modules/
       - generated/
@@ -70,7 +70,7 @@ build:
   script:
     - npm run build
   cache:
-    key: "$CI_COMMIT_REF_SLUG-$(sha256sum package-lock.json | cut -d' ' -f1)"  # Cache build artifacts if node_modules hasn't changed
+    key: "$CI_COMMIT_REF_SLUG-$(sha256sum package-lock.json | cut -d' ' -f1)" # Cache build artifacts if node_modules hasn't changed
     paths:
       - .next/cache/
   artifacts:
