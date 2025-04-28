@@ -1,4 +1,5 @@
-import prisma from '../src/lib/prisma.ts';
+import { PrismaClient, Prisma } from '../generated/prisma_client/index.js';
+const prisma = new PrismaClient();
 
 async function main() {
   const comm_outreach = await prisma.category.upsert({
