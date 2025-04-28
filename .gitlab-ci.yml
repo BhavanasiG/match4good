@@ -31,7 +31,6 @@ install:
     paths:
       - node_modules/
       - generated/
-    expire_in: 12 hours
   artifacts:
     paths:
       - node_modules
