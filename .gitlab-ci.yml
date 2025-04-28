@@ -76,6 +76,9 @@ build:
   artifacts:
     paths:
       - .next/cache/
+  artifacts:
+    paths:
+      - .next/cache/
     expire_in: 12 hours
 
 deploy_static:
