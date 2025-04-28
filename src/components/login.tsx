@@ -37,7 +37,7 @@ export function LoginButton() {
 export function LogoutButton() {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger className="cursor-pointer">
         <Avatar className="size-8">
           <AvatarImage
             src="https://avatars.githubusercontent.com/u/83641209?v=4"
@@ -49,6 +49,9 @@ export function LogoutButton() {
       <DropdownMenuContent>
         <DropdownMenuItem>
           <Link href="/settings">Settings</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href="/user">Profile</Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
           <Link href="/auth/logout" className="text-destructive">
