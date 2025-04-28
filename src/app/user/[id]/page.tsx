@@ -14,24 +14,9 @@ export default async function App({ params }: PageProps) {
     return notFound();
   }
 
-<<<<<<< HEAD
   const user = await prisma.user.findUnique({
     where: { id: numericId },
     include: { memberOf: true, ownerOf: true },
-=======
-export default async function App({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  // const id = (await params).id;
-  const { id } = await params;
-  const user = await prisma.user.findUnique({
-    where: {
-      id: parseInt(id),
-    },
-    include: { member_of: true, owner_of: true },
->>>>>>> d7e39de (Fixed an issue with user/[id] not loading)
   });
 
   if (!user) {

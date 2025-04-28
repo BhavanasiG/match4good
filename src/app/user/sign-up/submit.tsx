@@ -1,8 +1,8 @@
 'use server';
 
-import prisma, { GetUser } from "@/lib/prisma";
-import { redirect } from "next/navigation";
-import { Category } from "@/../generated/prisma_client";
+import prisma, { GetUser } from '@/lib/prisma';
+import { redirect } from 'next/navigation';
+import { Category } from '@/../generated/prisma_client';
 
 export interface CreateInterestsData {
   userId: number;
