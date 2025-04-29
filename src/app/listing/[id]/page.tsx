@@ -77,16 +77,17 @@ export default async function ListingPage({ params }: PageProps) {
             </div>
           </div>
 
-        {/* Right side: Map */}
-        <div className="relative z-10">
-          {listing.organization?.address && listing.organization?.postcode ? (
-            <MapComponent
-              address={listing.organization.address}
-              postcode={listing.organization.postcode}
-            />
-          ) : (
-            <p className="text-gray-500">Location not available.</p>
-          )}
+          {/* Right side: Map */}
+          <div className="relative z-10">
+            {listing.organization?.address && listing.organization?.postcode ? (
+              <MapComponent
+                address={listing.organization.address}
+                postcode={listing.organization.postcode}
+              />
+            ) : (
+              <p className="text-gray-500">Location not available.</p>
+            )}
+          </div>
         </div>
       </div>
     </div>
