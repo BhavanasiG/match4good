@@ -14,8 +14,11 @@
     "test": "jest",
     "prepare": "husky"
   },
+  "prisma": {
+    "seed": "ts-node -O {\"module\":\"commonjs\"} prisma/seed.ts"
+  },
   "dependencies": {
-    "@auth0/nextjs-auth0": "^4.5.0",
+    "@auth0/nextjs-auth0": "^4.5.1",
     "@hookform/resolvers": "^5.0.1",
     "@prisma/client": "^6.7.0",
     "@radix-ui/react-avatar": "^1.1.7",
@@ -51,6 +54,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@faker-js/faker": "^9.7.0",
     "@tailwindcss/postcss": "^4.1.4",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
@@ -60,6 +64,7 @@
     "@types/node": "^22",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19",
+    "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.25.1",
     "eslint-config-next": "^15.3.1",
@@ -79,7 +84,8 @@
     "ts-jest": "^29.3.2",
     "ts-node": "^10.9.2",
     "typescript": "^5",
-    "typescript-eslint": "^8.31.1"
+    "typescript-eslint": "^8.31.1",
+    "uuid": "^11.1.0"
   },
   "lint-staged": {
     "*.{js,ts,tsx}": "eslint --cache --fix",
