@@ -4,12 +4,7 @@ import { useState } from 'react';
 import updateUser from './submit';
 import { User } from '@/lib/prisma';
 
-/**
- * EditUserForm component displays a form for editing the user's username.
- * @param {Props} props - The props object containing the user.
- * @returns {React.ReactElement} The form for editing user information.
- */
-export default function EditUserForm({ user }: { user: User }) {
+export default function EditUserForm({ user }: Props) {
   const [username, setUsername] = useState(user.username);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
