@@ -70,7 +70,7 @@ export default function Header() {
           <DropdownMenuContent>
             <DropdownMenuLabel className="font-semibold">Explore</DropdownMenuLabel>
             {pages.explore.map((route) => (
-              <DropdownMenuItem key={route.name}>
+              <DropdownMenuItem key={route.name} asChild>
                 <Link href={route.href}>
                   <div className="p-1">
                     <h2>{route.name}</h2>
@@ -81,7 +81,7 @@ export default function Header() {
             <DropdownMenuSeparator />
             <DropdownMenuLabel className="font-semibold">Social</DropdownMenuLabel>
             {pages.social.map((route) => (
-              <DropdownMenuItem key={route.name}>
+              <DropdownMenuItem key={route.name} asChild>
                 <Link href={route.href}>
                   <div className="p-1">
                     <h2>{route.name}</h2>
@@ -92,7 +92,7 @@ export default function Header() {
             <DropdownMenuSeparator />
             <DropdownMenuLabel className="font-semibold">Discover</DropdownMenuLabel>
             {pages.discover.map((route) => (
-              <DropdownMenuItem key={route.name}>
+              <DropdownMenuItem key={route.name} asChild>
                 <Link href={route.href}>
                   <div className="p-1">
                     <h2>{route.name}</h2>
