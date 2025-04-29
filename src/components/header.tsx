@@ -119,7 +119,7 @@ export default function Header() {
           <DropdownMenuTrigger className="cursor-pointer">Explore</DropdownMenuTrigger>
           <DropdownMenuContent>
             {pages.explore.map((route) => (
-              <DropdownMenuItem key={route.name}>
+              <DropdownMenuItem key={route.name} asChild>
                 <Link href={route.href}>
                   <div className="p-1 w-96">
                     <h2 className="font-medium">{route.name}</h2>
@@ -136,7 +136,7 @@ export default function Header() {
           <DropdownMenuTrigger className="cursor-pointer">Social</DropdownMenuTrigger>
           <DropdownMenuContent>
             {pages.social.map((route) => (
-              <DropdownMenuItem key={route.name}>
+              <DropdownMenuItem key={route.name} asChild>
                 <Link href={route.href}>
                   <div className="p-1 w-96">
                     <h2 className="font-medium">{route.name}</h2>
@@ -153,7 +153,7 @@ export default function Header() {
           <DropdownMenuTrigger className="cursor-pointer">Discover</DropdownMenuTrigger>
           <DropdownMenuContent>
             {pages.discover.map((route) => (
-              <DropdownMenuItem key={route.name}>
+              <DropdownMenuItem key={route.name} asChild>
                 <Link href={route.href}>
                   <div className="p-1 w-96">
                     <h2 className="font-medium">{route.name}</h2>
