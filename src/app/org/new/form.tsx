@@ -17,6 +17,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { CreateOrganization } from './submit';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   name: z
@@ -56,6 +57,7 @@ const formSchema = z.object({
  * @returns {Element} A form with fields for creating a new organization
  */
 export default function CreateOrganizationForm() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -76,11 +78,19 @@ export default function CreateOrganizationForm() {
       description: values.description || '',
       address: values.address,
       postcode: values.postcode,
-    }).catch((e: Error) => {
-      console.error(e);
-    });
-
-    toast.success('Organization created successfully!');
+    })
+      .then((status) => {
+        if (status === 0) {
+          toast.error('An organization with that name already exists.');
+        } else {
+          toast.success('Organization created successfully!');
+          router.push(`/org/${status}`);
+        }
+      })
+      .catch((e: Error) => {
+        console.error(e.message);
+        toast.error('An unexpected error occured');
+      });
   }
 
   return (
