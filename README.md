@@ -22,16 +22,13 @@ Once your database is running, you have two options to start the development ser
 
 1.  **Full Setup (Deploy, Seed, Start Server):** Run this command for the initial setup, after a database reset, or whenever you need to refresh your database with sample data.
 
-    ```bash
-    npm run dev:setup
-    ```
+    `npm run dev:setup`
 
     This command will first ensure your database schema is up-to-date (`npm run db:deploy`), then populate it with sample data using the seed script (`npx prisma db seed`), and finally start the Next.js development server (`npm run dev`).
 
 2.  **Server Only (Start Server):** Run this command if your database is already deployed and seeded, and you just need to start or restart the web server process.
-    ```bash
-    npm run dev
-    ```
+
+    `npm run dev`
 
 ### Making a production build
 
