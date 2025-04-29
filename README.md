@@ -16,10 +16,20 @@ You need a running Postgres instance: a connection at `localhost:5432` is expect
 How this is done is up to you, either directly or in a docker container.
 An easy way to get this running is with `docker run -p 5432:5432 -e POSTGRES_PASSWORD=prisma -d postgres`.
 
-Then, run the following command to deploy the database schema, seed it with sample data, and start the webserver:
-`npm run dev:setup`
+Once your database is running, you have two options to start the development server:
 
-This command will first ensure your database schema is up-to-date (`npm run db:deploy`), then populate it with sample data (`npx prisma db seed`), and finally start the Next.js development server (`npm run dev`).
+1.  **Full Setup (Deploy, Seed, Start Server):** Run this command for the initial setup, after a database reset, or whenever you need to refresh your database with sample data.
+
+    ```bash
+    npm run dev:setup
+    ```
+
+    This command will first ensure your database schema is up-to-date (`npm run db:deploy`), then populate it with sample data using the seed script (`npx prisma db seed`), and finally start the Next.js development server (`npm run dev`).
+
+2.  **Server Only (Start Server):** Run this command if your database is already deployed and seeded, and you just need to start or restart the web server process.
+    ```bash
+    npm run dev
+    ```
 
 ### Making a production build
 
