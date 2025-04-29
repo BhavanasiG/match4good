@@ -77,7 +77,6 @@ ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 -- AlterTable
 -- ALTER TABLE "User" DROP COLUMN "region_id",
 -- DROP COLUMN "user_id",
-
 -- ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 
 -- AlterTable
@@ -87,7 +86,6 @@ ALTER COLUMN "status" SET DEFAULT 'acceptingApplications';
 -- AlterTable
 -- ALTER TABLE "User" DROP COLUMN "region_id",
 -- DROP COLUMN "user_id",
-
 -- ADD COLUMN     "regionId" INTEGER,
 -- ADD COLUMN     "userId" TEXT NOT NULL;
 
