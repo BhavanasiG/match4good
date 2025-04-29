@@ -78,17 +78,19 @@ export default function CreateOrganizationForm() {
       description: values.description || '',
       address: values.address,
       postcode: values.postcode,
-    }).then((status) => {
-      if (status === 0) {
-        toast.error('An organization with that name already exists.');
-      } else {
-        toast.success('Organization created successfully!');
-        router.push(`/org/${status}`);
-      }
-    }).catch((e : Error) => {
-      console.error(e.message)
-      toast.error("An unexpected error occured");
-    });
+    })
+      .then((status) => {
+        if (status === 0) {
+          toast.error('An organization with that name already exists.');
+        } else {
+          toast.success('Organization created successfully!');
+          router.push(`/org/${status}`);
+        }
+      })
+      .catch((e: Error) => {
+        console.error(e.message);
+        toast.error('An unexpected error occured');
+      });
   }
 
   return (
