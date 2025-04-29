@@ -23,6 +23,16 @@ export default async function App() {
     if (num_of_interests >= minimum_interests) {
       return forbidden();
     } else {
+      const categories = await prisma.category.findMany();
+      const subcategories = await prisma.subcategory.findMany({
+        select: {
+          name: true,
+          description: true,
+          primaryCategoryId: true,
+        },
+      });
+
+      console.log(categories);
       return (
         <div className="self-center flex justify-center p-12 w-screen max-w-4xl">
           <SignUpForm />
