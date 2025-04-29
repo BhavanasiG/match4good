@@ -36,5 +36,8 @@ Once your database is running, you have two options to start the development ser
 
 ### Making a production build
 
-To run the deployment, use `docker compose up`.
+To run the deployment, use:
+
+    docker compose up
+
 It should just work :)
