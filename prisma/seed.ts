@@ -4,8 +4,44 @@ import {
   ListingStatus,
   ApplicationStatus,
 } from '../generated/prisma_client/index.js';
-import { faker } from '@faker-js/faker';
 import { v4 as uuidv4 } from 'uuid';
+import { fakerEN_GB as faker } from '@faker-js/faker';
+
+// --- Define Relevant Text Snippets ---
+const orgDescriptionSnippets = [
+  'Our organization is dedicated to supporting vulnerable people in the local community through various outreach programs.',
+  'Join us in our mission to protect and improve the environment. We organize clean-up drives and conservation projects.',
+  'We provide educational support and mentoring for young people from disadvantaged backgrounds.',
+  'Help us care for rescued animals and promote animal welfare awareness.',
+  'We run various community events throughout the year and need volunteers to help make them a success.',
+  'Looking for volunteers to assist with administrative tasks, data entry, and communications to help our operations run smoothly.',
+  'Our charity provides crisis support services for individuals and families in need.',
+  'Work with us to help preserve local historical sites and promote cultural heritage.',
+  'We offer health and wellbeing programs and need volunteers to support participants.',
+  'Volunteer with us to assist refugees and migrants in settling into their new community.',
+];
+
+const listingDescriptionSnippets = [
+  'Volunteer needed to help serve hot meals at our weekly soup kitchen on Saturday evenings.',
+  "We're organizing a park clean-up this Sunday from 10 AM to 1 PM. Gloves and bags provided.",
+  'Seeking volunteer tutors for Maths and English for GCSE students. Sessions are online, flexible hours.',
+  'Help us set up and run our annual fundraising gala. Roles include registration, ushering, and silent auction support.',
+  'Animal care volunteers needed at our shelter. Tasks include feeding, cleaning kennels, and walking dogs.',
+  'We need help with data entry and managing volunteer applications in our office on weekday mornings.',
+  'Assist with gardening and maintenance at our community garden project.',
+  'Help lead activities and mentor young people in our after-school program.',
+  'Provide companionship and support to elderly residents at a local care home.',
+  'Join our team for a beach clean-up day next month.',
+];
+
+const applicationDescriptionSnippets = [
+  'I am very interested in this opportunity and available on the dates listed.',
+  'I have prior experience volunteering in a similar role and am eager to contribute.',
+  'This cause is very important to me, and I would be grateful for the chance to help.',
+  'I am enthusiastic and a quick learner, looking forward to supporting your organization.',
+  'Please consider my application. I am motivated and reliable.',
+  'I have skills in [mention a potential skill if known, otherwise keep general] that I believe would be useful.',
+];
 
 const prisma = new PrismaClient();
 
@@ -13,7 +49,7 @@ async function main() {
   console.log('Start seeding realistic data...');
 
   // --- Clean up existing data (Optional, but good for a fresh seed) ---
-  // You might want to delete data in a specific order to satisfy foreign key constraints
+  // Might want to delete data in a specific order to satisfy foreign key constraints
   console.log('Cleaning up existing data...');
   await prisma.application.deleteMany({});
   await prisma.follow.deleteMany({});
@@ -55,7 +91,7 @@ async function main() {
     const firstName = faker.person.firstName();
     const lastName = faker.person.lastName();
     const username =
-      faker.internet.userName({ firstName, lastName }) + faker.string.alphanumeric(4); // Add random suffix for uniqueness
+      faker.internet.username({ firstName, lastName }) + faker.string.alphanumeric(4); // Add random suffix for uniqueness
     const email = faker.internet
       .email({ firstName, lastName, allowSpecialCharacters: false })
       .toLowerCase();
@@ -91,6 +127,25 @@ async function main() {
     Math.min(orgsToCreate, createdUsers.length),
   );
 
+  // --- Add a list of real, geocodable UK postcodes ---
+  const ukPostcodes = [
+    'SW1A 0AA', // Westminster, London
+    'M1 1AE', // City Centre, Manchester
+    'B1 1QU', // City Centre, Birmingham
+    'BS1 4DJ', // City Centre, Bristol
+    'LS1 5AN', // City Centre, Leeds
+    'S1 2HE', // City Centre, Sheffield
+    'L1 8JQ', // City Centre, Liverpool
+    'EH1', // Edinburgh (Partial postcode also often works)
+    'CF10', // Cardiff (Partial postcode)
+    'BT1', // Belfast (Partial postcode)
+    'NE1', // Newcastle upon Tyne (Partial postcode)
+    'G1', // Glasgow (Partial postcode)
+    'PL1', // Plymouth (Partial postcode)
+    'SO14', // Southampton (Partial postcode)
+    'LE1', // Leicester (Partial postcode)
+  ];
+
   for (let i = 0; i < potentialOwners.length; i++) {
     const orgName =
       faker.company.name() +
@@ -102,10 +157,11 @@ async function main() {
         'Alliance',
         'Project',
       ]); // More realistic names
-    const description = faker.lorem.paragraphs(2, ' '); // Ensure descriptions are strings
+    // Use a relevant snippet for the description
+    const description = faker.helpers.arrayElement(orgDescriptionSnippets); // <-- Use relevant text
     const owner = potentialOwners[i];
-    const address = faker.location.streetAddress();
-    const postcode = faker.location.zipCode('#####'); // Generic postcode format
+    const address = faker.location.streetAddress(); // Keep fake address for display
+    const postcode = faker.helpers.arrayElement(ukPostcodes); // <-- Use a real postcode
 
     try {
       const organization = await prisma.organization.create({
@@ -113,8 +169,8 @@ async function main() {
           name: orgName,
           description: description,
           ownerId: owner.id,
-          address: address,
-          postcode: postcode,
+          address: address, // Save the fake address
+          postcode: postcode, // Save the real postcode
         },
       });
       createdOrgs.push(organization);
@@ -143,7 +199,8 @@ async function main() {
         ]) +
         ' - ' +
         faker.lorem.words(3); // Combine type with random words
-      const description = faker.lorem.paragraphs(3, ' ');
+      // Use a relevant snippet for the description
+      const description = faker.helpers.arrayElement(listingDescriptionSnippets); // <-- Use relevant text
       const startDate = faker.date.soon({ days: 60 }); // Opportunities in the next 60 days
       const endDate = faker.date.soon({
         refDate: startDate,
@@ -172,6 +229,7 @@ async function main() {
 
   // --- Seed Applications ---
   console.log('Seeding Applications...');
+  const applicationStatuses = Object.values(ApplicationStatus);
   const applicationsToCreate = Math.min(createdUsers.length * 3, createdListings.length * 5); // Create a reasonable number of applications
 
   for (let i = 0; i < applicationsToCreate; i++) {
@@ -180,7 +238,7 @@ async function main() {
 
     // Ensure a user doesn't apply to the same listing twice
     try {
-      const description = faker.lorem.sentences(2);
+      const description = faker.helpers.arrayElement(applicationDescriptionSnippets); // <-- Use relevant text
       const status = faker.helpers.arrayElement(applicationStatuses);
 
       await prisma.application.create({
@@ -235,8 +293,3 @@ main()
     await prisma.$disconnect();
     process.exit(1);
   });
-
-// // Helper types for enum values (needed because Object.values returns string)
-// // Ensure these match your schema exact enum values
-// type ApplicationStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED';
-// type ListingStatus = 'acceptingApplications' | 'applicationsClosed' | 'completed' | 'cancelled';
