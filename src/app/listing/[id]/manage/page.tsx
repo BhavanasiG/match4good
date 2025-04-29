@@ -1,4 +1,4 @@
-import prisma, { GetUser } from '@/lib/prisma';
+﻿import prisma, { GetUser } from '@/lib/prisma';
 import { forbidden, notFound } from 'next/navigation';
 import { ListingManagement } from './client';
 import ListingInfo from '@/components/listingInfo';
