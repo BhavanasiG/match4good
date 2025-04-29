@@ -50,6 +50,7 @@ const formSchema = z.object({
     }),
 });
 
+<<<<<<< HEAD
 const validateAddress = async (address: string, postcode: string): Promise<boolean> => {
   const query = encodeURIComponent(`${address}, ${postcode}, UK`);
   const url = `https://nominatim.openstreetmap.org/search?q=${query}&format=json`;
@@ -64,6 +65,8 @@ const validateAddress = async (address: string, postcode: string): Promise<boole
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
+=======
+>>>>>>> 29baa26 (Added subcategories under categories, added tooltip descriptions, created initial form interface)
 /**
  * Form component for creating new organizations.
  * @returns {Element} A form with fields for creating a new organization
@@ -84,6 +87,7 @@ export default function CreateOrganizationForm() {
    * Handles the submission of the form.
    * @param {z.infer<typeof formSchema>} values - The values of the form
    */
+<<<<<<< HEAD
   async function OnSubmit(values: z.infer<typeof formSchema>) {
     const isValid = await validateAddress(values.address, values.postcode);
 
@@ -92,6 +96,9 @@ export default function CreateOrganizationForm() {
       return;
     }
 
+=======
+  function onSubmit(values: z.infer<typeof formSchema>) {
+>>>>>>> 29baa26 (Added subcategories under categories, added tooltip descriptions, created initial form interface)
     CreateOrganization({
       name: values.name,
       description: values.description || '',
@@ -120,7 +127,7 @@ export default function CreateOrganizationForm() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
                 name="name"
