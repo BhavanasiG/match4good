@@ -50,8 +50,6 @@ const formSchema = z.object({
     }),
 });
 
-/* eslint-disable @typescript-eslint/naming-convention */
-
 /**
  * Form component for creating new organizations.
  * @returns {Element} A form with fields for creating a new organization
@@ -72,7 +70,7 @@ export default function CreateOrganizationForm() {
    * Handles the submission of the form.
    * @param {z.infer<typeof formSchema>} values - The values of the form
    */
-  function OnSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof formSchema>) {
     CreateOrganization({
       name: values.name,
       description: values.description || '',
@@ -101,7 +99,7 @@ export default function CreateOrganizationForm() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
                 name="name"

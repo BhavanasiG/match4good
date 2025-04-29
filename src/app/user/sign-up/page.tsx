@@ -1,8 +1,9 @@
 // import SignUpForm from "./form"; TODO
 import prisma, { GetUser } from '@/lib/prisma';
 import { forbidden } from 'next/navigation';
+import SignUpForm from './form';
 
-export default async function SignUpForm() {
+export default async function App() {
   const user = await GetUser(true);
   const minimum_interests = 3;
 
@@ -20,13 +21,21 @@ export default async function SignUpForm() {
     const num_of_interests = interests.length;
 
     if (num_of_interests >= minimum_interests) {
-      return <div>You have already signed up.</div>;
+      return forbidden();
     } else {
+      const categories = await prisma.category.findMany();
+      const subcategories = await prisma.subcategory.findMany({
+        select: {
+          name: true,
+          description: true,
+          primaryCategoryId: true,
+        },
+      });
+
+      console.log(categories);
       return (
-        <div>
-          <b>Sign Up Page</b>
-          {/* TODO */}
-          {/* <SignUpForm user={user} /> */}
+        <div className="self-center flex justify-center p-12 md:p-24 w-screen max-w-4xl">
+          <SignUpForm categories={categories} subcategories={subcategories} />
         </div>
       );
     }
