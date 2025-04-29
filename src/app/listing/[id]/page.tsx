@@ -77,42 +77,16 @@ export default async function ListingPage({ params }: PageProps) {
             </div>
           </div>
 
-          {/* Right side: Map */}
-          <div className="relative z-10">
-            <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col h-full">
-              <h2 className="text-2xl font-bold text-[#388e3c] mb-4 flex items-center gap-2">
-                <span>📍</span> Location
-              </h2>
-              {listing.organization?.address && listing.organization?.postcode ? (
-                <div className="flex-grow min-h-[400px] relative rounded-lg overflow-hidden border border-[#c8e6c9]">
-                  <MapComponent
-                    address={listing.organization.address}
-                    postcode={listing.organization.postcode}
-                  />
-                </div>
-              ) : (
-                <p className="text-gray-500">Location not available.</p>
-              )}
-              {listing.organization?.name && (
-                <div className="mt-6 text-sm text-gray-700">
-                  <span className="font-semibold text-[#388e3c]">Organization:</span>{' '}
-                  {listing.organization.name}
-                </div>
-              )}
-              {listing.organization?.address && (
-                <div className="text-sm text-gray-700">
-                  <span className="font-semibold text-[#388e3c]">Address:</span>{' '}
-                  {listing.organization.address}
-                </div>
-              )}
-              {listing.organization?.postcode && (
-                <div className="text-sm text-gray-700">
-                  <span className="font-semibold text-[#388e3c]">Postcode:</span>{' '}
-                  {listing.organization.postcode}
-                </div>
-              )}
-            </div>
-          </div>
+        {/* Right side: Map */}
+        <div className="relative z-10">
+          {listing.organization?.address && listing.organization?.postcode ? (
+            <MapComponent
+              address={listing.organization.address}
+              postcode={listing.organization.postcode}
+            />
+          ) : (
+            <p className="text-gray-500">Location not available.</p>
+          )}
         </div>
       </div>
     </div>
