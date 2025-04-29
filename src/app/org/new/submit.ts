@@ -11,7 +11,7 @@
 'use server';
 
 import prisma, { GetUser } from '@/lib/prisma';
-import { forbidden, redirect } from 'next/navigation';
+import { forbidden } from 'next/navigation';
 
 export type Props = {
   name: string;
@@ -32,15 +32,25 @@ export async function CreateOrganization({ name, description, address, postcode 
     return forbidden();
   }
 
-  const org = await prisma.organization.create({
-    data: {
+  const exists = await prisma.organization.findUnique({
+    where: {
       name: name,
-      description: description,
-      address: address,
-      postcode: postcode,
-      ownerId: user.id,
     },
   });
 
-  return redirect(`/org/${org.id}`);
+  if (exists) {
+    return 0;
+  } else {
+    const org = await prisma.organization.create({
+      data: {
+        name: name,
+        description: description,
+        address: address,
+        postcode: postcode,
+        ownerId: user.id,
+      },
+    });
+
+    return org.id;
+  }
 }
