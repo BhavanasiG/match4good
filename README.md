@@ -16,7 +16,7 @@ You need a running Postgres instance: a connection at `localhost:5432` is expect
 How this is done is up to you, either directly or in a docker container.
 An easy way to get this running is with:
 
-    ```bash
+    ```
     docker run -p 5432:5432 -e POSTGRES_PASSWORD=prisma -d postgres
     ```
 
