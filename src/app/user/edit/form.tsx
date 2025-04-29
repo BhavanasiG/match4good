@@ -1,24 +1,25 @@
 'use client';
 
+import type React from 'react';
 import { useState } from 'react';
 import updateUser from './submit';
 import { User } from '@/lib/prisma';
 
-<<<<<<< HEAD
 /**
  *
  * @param {User} param0 - Accepts a user object
  * @returns {Element} - Returns a form for editing the user
  */
 export default function EditUserForm({ user }: { user: User }) {
-=======
-export default function EditUserForm({ user }: Props) {
->>>>>>> 7e78f0c (Improved UI On Some Of The PagesV8)
   const [username, setUsername] = useState(user.username);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  /**
+   * Handles the form submission for updating the user's username.
+   * @param {React.FormEvent} e - The form submission event.
+   */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
@@ -27,7 +28,7 @@ export default function EditUserForm({ user }: Props) {
     try {
       await updateUser({ username });
       setSuccess('Profile updated!');
-    } catch (err) {
+    } catch {
       setError('Failed to update profile.');
     } finally {
       setLoading(false);

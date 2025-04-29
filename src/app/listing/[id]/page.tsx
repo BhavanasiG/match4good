@@ -1,7 +1,7 @@
 ﻿import { notFound } from 'next/navigation';
 import prisma, { GetUser } from '@/lib/prisma';
 import ListingInfo from '@/components/listingInfo';
-import MapComponent from '@/components/MapComponent';
+import MapWrapper from '@/components/MapWrapper'; // Updated import
 import Link from 'next/link';
 
 interface PageProps {
@@ -10,12 +10,9 @@ interface PageProps {
 
 export default async function ListingPage({ params }: PageProps) {
   const { id } = await params;
-
   const user = await GetUser(true);
 
-  if (isNaN(parseInt(id))) {
-    return notFound();
-  }
+  if (isNaN(parseInt(id))) return notFound();
 
   const listing = await prisma.listing.findUnique({
     where: { id: parseInt(id) },
@@ -48,6 +45,7 @@ export default async function ListingPage({ params }: PageProps) {
                 <span className="text-3xl">🤝</span>
                 <h1 className="text-3xl font-extrabold text-[#388e3c]">{listing.name}</h1>
               </div>
+
               <ListingInfo listing={listing} />
 
               <div className="mt-8 flex flex-col gap-4">
@@ -78,39 +76,28 @@ export default async function ListingPage({ params }: PageProps) {
           </div>
 
           {/* Right side: Map */}
-          <div className="flex flex-col space-y-6">
-            <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col h-full">
-              <h2 className="text-2xl font-bold text-[#388e3c] mb-4 flex items-center gap-2">
-                <span>📍</span> Location
-              </h2>
-              {listing.organization?.address && listing.organization?.postcode ? (
-                <div className="flex-grow min-h-[400px] relative rounded-lg overflow-hidden border border-[#c8e6c9]">
-                  <MapComponent
+          <div className="relative z-10">
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden h-full">
+              <div className="p-6 border-b border-gray-200">
+                <h2 className="text-2xl font-bold text-[#388e3c] flex items-center gap-2">
+                  🗺️ Location
+                </h2>
+                <p className="text-gray-600 mt-1">
+                  {listing.organization?.address}, {listing.organization?.postcode}
+                </p>
+              </div>
+              <div className="h-[400px] w-full">
+                {listing.organization?.address && listing.organization?.postcode ? (
+                  <MapWrapper
                     address={listing.organization.address}
                     postcode={listing.organization.postcode}
                   />
-                </div>
-              ) : (
-                <p className="text-gray-500">Location not available.</p>
-              )}
-              {listing.organization?.name && (
-                <div className="mt-6 text-sm text-gray-700">
-                  <span className="font-semibold text-[#388e3c]">Organization:</span>{' '}
-                  {listing.organization.name}
-                </div>
-              )}
-              {listing.organization?.address && (
-                <div className="text-sm text-gray-700">
-                  <span className="font-semibold text-[#388e3c]">Address:</span>{' '}
-                  {listing.organization.address}
-                </div>
-              )}
-              {listing.organization?.postcode && (
-                <div className="text-sm text-gray-700">
-                  <span className="font-semibold text-[#388e3c]">Postcode:</span>{' '}
-                  {listing.organization.postcode}
-                </div>
-              )}
+                ) : (
+                  <div className="flex items-center justify-center h-full text-gray-500">
+                    Location not available.
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
