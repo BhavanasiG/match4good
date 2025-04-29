@@ -1,10 +1,16 @@
 'use client';
 
+import type React from 'react';
 import { useState } from 'react';
 import updateUser from './submit';
 import { User } from '@/lib/prisma';
 
-export default function EditUserForm({ user }: Props) {
+/**
+ *
+ * @param {User} param0 - Accepts a user object
+ * @returns {Element} - Returns a form for editing the user
+ */
+export default function EditUserForm({ user }: { user: User }) {
   const [username, setUsername] = useState(user.username);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
