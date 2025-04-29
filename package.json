@@ -12,7 +12,8 @@
     "format:check": "prettier --check .",
     "db:deploy": "npx prisma migrate deploy && npx prisma generate",
     "test": "jest",
-    "prepare": "husky"
+    "prepare": "husky",
+    "dev:setup": "npm run db:deploy && npx prisma db seed && npm run dev"
   },
   "prisma": {
     "seed": "ts-node -O {\"module\":\"commonjs\"} prisma/seed.ts"
