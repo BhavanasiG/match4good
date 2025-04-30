@@ -32,7 +32,6 @@ export default async function App() {
         },
       });
 
-      console.log(categories);
       return (
         <div className="self-center flex justify-center p-12 md:p-24 w-screen max-w-4xl">
           <SignUpForm categories={categories} subcategories={subcategories} />
