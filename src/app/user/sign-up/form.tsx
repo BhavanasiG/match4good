@@ -17,30 +17,56 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
-//import { ChangeEvent, FormEvent, useState } from "react";
-//import { createInterests, CreateInterestsData } from "./submit";
+import { CreateInterests, GetCategories } from './submit';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
-  categories: z.array(z.string()).refine((value) => value.length >= 3, {
+  categories: z.array(z.number()).refine((arr) => arr.length >= 3, {
     message: `You must select at least three interests.`,
   }),
 });
 
+interface Category {
+  id: number;
+  name: string;
+  description: string | null;
+  subcategories: {
+    id: number;
+    name: string;
+    description: string | null;
+  }[];
+}
+
 /**
  * A form component for user sign-up that allows selection of interests from various categories.
- * @param {object} props - The component props
- * @param {Array<{name: string, description: string | null, id: number}>} props.categories - List of primary interest categories
- * @param {Array<{name: string, description: string | null, primaryCategoryId: number}>} props.subcategories - List of subcategories with their parent category IDs
- * @returns {Element} A form with toggleable interest selections
+ * The form fetches categories and their subcategories from the server, displays them in a scrollable area,
+ * and allows users to select at least three interests before submission.
+ * @returns {Element} - SignUpForm component
  */
-export default function SignUpForm({
-  categories,
-  subcategories,
-}: {
-  categories: { name: string; description: string | null; id: number }[];
-  subcategories: { name: string; description: string | null; primaryCategoryId: number }[];
-}) {
+export default function SignUpForm() {
+  const router = useRouter();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await GetCategories();
+        setCategories(data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCategories().catch((e: Error) => {
+      console.log('Error fetching categories: ' + e.message);
+    });
+  }, []);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -49,12 +75,26 @@ export default function SignUpForm({
   });
 
   /**
-   * Handles form submission when the user has selected their interests.
-   * @param {object} data - The form data containing selected categories
-   * @param {string[]} data.categories - Array of selected subcategory names
+   * Handles form submission by creating user interests and redirecting to home page on success.
+   * Shows toast notifications for success/error states.
+   * @param {z.infer<typeof formSchema>} values - The form data containing selected subcategory IDs
    */
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    CreateInterests({
+      interests: values.categories,
+    })
+      .then((status) => {
+        if (status === 0) {
+          toast.error('An unexpected error occured (status: 0)');
+        } else {
+          toast.success('Interests saved');
+          router.push(`/`);
+        }
+      })
+      .catch((e: Error) => {
+        console.error(e.message);
+        toast.error('An unexpected error occured');
+      });
   }
 
   return (
@@ -77,17 +117,14 @@ export default function SignUpForm({
                     </FormDescription>
                     <div className="space-y-6 mt-4">
                       <ScrollArea className="h-[300px] md:h-[500px]">
-                        {categories.map((category) => (
-                          <div key={category.name}>
-                            <h2 key={category.name} className="font-semibold text-base mb-4">
-                              {category.name}
-                            </h2>
-                            <div className="flex flex-wrap space-x-2 space-y-2 mb-8">
-                              {subcategories
-                                .filter(
-                                  (subcategory) => subcategory.primaryCategoryId === category.id,
-                                )
-                                .map((subcategory) => (
+                        {isLoading ? (
+                          <div>Loading categories...</div>
+                        ) : (
+                          categories.map((category) => (
+                            <div key={category.name}>
+                              <h2 className="font-semibold text-base mb-4">{category.name}</h2>
+                              <div className="flex flex-wrap space-x-2 space-y-2 mb-8">
+                                {category.subcategories.map((subcategory) => (
                                   <FormField
                                     key={subcategory.name}
                                     control={form.control}
@@ -99,13 +136,13 @@ export default function SignUpForm({
                                             size={'sm'}
                                             variant={'outline'}
                                             className="w-fit hover:cursor-pointer"
-                                            pressed={field.value?.includes(subcategory.name)}
+                                            pressed={field.value?.includes(subcategory.id)}
                                             onPressedChange={(checked) => {
                                               const currentValues = field.value || [];
                                               const newValues = checked
-                                                ? [...currentValues, subcategory.name]
+                                                ? [...currentValues, subcategory.id]
                                                 : currentValues.filter(
-                                                    (value) => value !== subcategory.name,
+                                                    (value) => value !== subcategory.id,
                                                   );
                                               field.onChange(newValues);
                                             }}
@@ -126,9 +163,10 @@ export default function SignUpForm({
                                     )}
                                   />
                                 ))}
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          ))
+                        )}
                         <ScrollBar />
                       </ScrollArea>
                     </div>
