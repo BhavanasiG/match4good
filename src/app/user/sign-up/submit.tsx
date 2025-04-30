@@ -1,20 +1,24 @@
 'use server';
 
 import prisma, { GetUser } from '@/lib/prisma';
-import { redirect } from 'next/navigation';
-import { Category } from '@/../generated/prisma_client';
-
-export interface CreateInterestsData {
-  userId: number;
-  interests: number[]; // Array of interest IDs
-}
+import { forbidden } from 'next/navigation';
 
 /**
- * This function fetches all categories and their subcategories from the database
- * and returns them in a structured format.
- * @returns {Promise<Category[]>} An array of categories with their subcategories.
+ * Fetches all categories and their subcategories from the database.
+ * Returns a structured format suitable for the sign-up form.
+ * @returns {Promise<Array<{
+ *   id: number;
+ *   name: string;
+ *   description: string | null;
+ *   subcategories: Array<{
+ *     id: number;
+ *     name: string;
+ *     description: string | null;
+ *   }>;
+ * }>>} An array of categories with their nested subcategories
+ * @throws {Error} If database query fails
  */
-export async function GetCategories(): Promise<Category[]> {
+export async function GetCategories() {
   const categories = await prisma.category.findMany({
     include: {
       subcategories: true,
@@ -37,21 +41,21 @@ export async function GetCategories(): Promise<Category[]> {
 }
 
 /**
- * In-progress function to handles form submission for creating interests
- * by validating the input fields
- * @param {CreateInterestsData} formData Form data inputted/submitted by user.
- * @returns {redirect} - Redirects to the home page if successful, otherwise returns an error message.
+ * Creates or updates user interests in the database.
+ * Connects the selected subcategory IDs to the current user's profile.
+ * @param {object} formData - The form data containing selected interests
+ * @param {number[]} formData.interests - Array of subcategory IDs to connect to user
+ * @returns {Promise<number>} Status code (1 for success, 0 for failure)
+ * @throws {Error} If user is not authenticated or database operation fails
  */
-export async function CreateInterests(formData: CreateInterestsData) {
-  const user = await GetUser(true);
+export async function CreateInterests(formData: { interests: number[] }) {
+  const user = await GetUser();
+
   if (!user) {
-    return 'User not logged in';
+    return forbidden();
   }
 
   const { interests } = formData;
-  if (interests.length < 3) {
-    return 'Please select at least 3 interests.';
-  }
 
   const userObj = await prisma.user.findUnique({
     where: { id: user.id },
@@ -61,11 +65,10 @@ export async function CreateInterests(formData: CreateInterestsData) {
   });
 
   if (!userObj) {
-    return 'User not found';
+    return 0;
   }
 
   const existingInterests = userObj.interests.map((interest) => interest.id);
-
   const newInterests = interests.filter((interest) => !existingInterests.includes(interest));
 
   await prisma.user.update({
@@ -77,5 +80,5 @@ export async function CreateInterests(formData: CreateInterestsData) {
     },
   });
 
-  redirect('/');
+  return 1;
 }
