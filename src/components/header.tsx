@@ -71,7 +71,7 @@ export default function Header() {
             <DropdownMenuLabel className="font-semibold">Explore</DropdownMenuLabel>
             {pages.explore.map((route) => (
               <DropdownMenuItem key={route.name} asChild>
-                <Link href={route.href}>
+                <Link href={route.href} className="hover:cursor-pointer">
                   <div className="p-1">
                     <h2>{route.name}</h2>
                   </div>
@@ -82,7 +82,7 @@ export default function Header() {
             <DropdownMenuLabel className="font-semibold">Social</DropdownMenuLabel>
             {pages.social.map((route) => (
               <DropdownMenuItem key={route.name} asChild>
-                <Link href={route.href}>
+                <Link href={route.href} className="hover:cursor-pointer">
                   <div className="p-1">
                     <h2>{route.name}</h2>
                   </div>
@@ -93,7 +93,7 @@ export default function Header() {
             <DropdownMenuLabel className="font-semibold">Discover</DropdownMenuLabel>
             {pages.discover.map((route) => (
               <DropdownMenuItem key={route.name} asChild>
-                <Link href={route.href}>
+                <Link href={route.href} className="hover:cursor-pointer">
                   <div className="p-1">
                     <h2>{route.name}</h2>
                   </div>
@@ -120,7 +120,7 @@ export default function Header() {
           <DropdownMenuContent>
             {pages.explore.map((route) => (
               <DropdownMenuItem key={route.name} asChild>
-                <Link href={route.href}>
+                <Link href={route.href} className="hover:cursor-pointer">
                   <div className="p-1 w-96">
                     <h2 className="font-medium">{route.name}</h2>
                     <p className="text-muted-foreground line-clamp-2 text-sm">
@@ -137,7 +137,7 @@ export default function Header() {
           <DropdownMenuContent>
             {pages.social.map((route) => (
               <DropdownMenuItem key={route.name} asChild>
-                <Link href={route.href}>
+                <Link href={route.href} className="hover:cursor-pointer">
                   <div className="p-1 w-96">
                     <h2 className="font-medium">{route.name}</h2>
                     <p className="text-muted-foreground line-clamp-2 text-sm">
@@ -154,7 +154,7 @@ export default function Header() {
           <DropdownMenuContent>
             {pages.discover.map((route) => (
               <DropdownMenuItem key={route.name} asChild>
-                <Link href={route.href}>
+                <Link href={route.href} className="hover:cursor-pointer">
                   <div className="p-1 w-96">
                     <h2 className="font-medium">{route.name}</h2>
                     <p className="text-muted-foreground line-clamp-2 text-sm">

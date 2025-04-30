@@ -11,6 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Toggle } from '@/components/ui/toggle';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -58,7 +59,7 @@ export default function SignUpForm({
 
   return (
     <div className="self-center p-12 md:p-24 w-screen max-w-4xl">
-      <Card className="mt-6">
+      <Card className="md:mt-6">
         <CardHeader>
           <CardTitle>Complete your onboarding</CardTitle>
         </CardHeader>
@@ -70,63 +71,66 @@ export default function SignUpForm({
                 name="categories"
                 render={() => (
                   <FormItem>
-                    <FormLabel className="text-base">Select Interests</FormLabel>
+                    <FormLabel className="text-sm md:text-base">Select Interests</FormLabel>
                     <FormDescription className="text-sm">
                       Select at least three interests.
                     </FormDescription>
                     <div className="space-y-6 mt-4">
-                      {categories.map((category) => (
-                        <div key={category.name}>
-                          <h2 key={category.name} className="font-semibold text-base mb-4">
-                            {category.name}
-                          </h2>
-                          <div className="flex flex-wrap space-x-2 space-y-2">
-                            {subcategories
-                              .filter(
-                                (subcategory) => subcategory.primaryCategoryId === category.id,
-                              )
-                              .map((subcategory) => (
-                                <FormField
-                                  key={subcategory.name}
-                                  control={form.control}
-                                  name="categories"
-                                  render={({ field }) => (
-                                    <FormItem key={subcategory.name}>
-                                      <FormControl>
-                                        <Toggle
-                                          size={'lg'}
-                                          variant={'outline'}
-                                          className="w-fit hover:cursor-pointer"
-                                          pressed={field.value?.includes(subcategory.name)}
-                                          onPressedChange={(checked) => {
-                                            const currentValues = field.value || [];
-                                            const newValues = checked
-                                              ? [...currentValues, subcategory.name]
-                                              : currentValues.filter(
-                                                  (value) => value !== subcategory.name,
-                                                );
-                                            field.onChange(newValues);
-                                          }}
-                                        >
-                                          <TooltipProvider>
-                                            <Tooltip delayDuration={700}>
-                                              <TooltipTrigger asChild>
-                                                <span>{subcategory.name}</span>
-                                              </TooltipTrigger>
-                                              <TooltipContent>
-                                                <p>{subcategory.description}</p>
-                                              </TooltipContent>
-                                            </Tooltip>
-                                          </TooltipProvider>
-                                        </Toggle>
-                                      </FormControl>
-                                    </FormItem>
-                                  )}
-                                />
-                              ))}
+                      <ScrollArea className="h-[300px] md:h-[500px]">
+                        {categories.map((category) => (
+                          <div key={category.name}>
+                            <h2 key={category.name} className="font-semibold text-base mb-4">
+                              {category.name}
+                            </h2>
+                            <div className="flex flex-wrap space-x-2 space-y-2 mb-8">
+                              {subcategories
+                                .filter(
+                                  (subcategory) => subcategory.primaryCategoryId === category.id,
+                                )
+                                .map((subcategory) => (
+                                  <FormField
+                                    key={subcategory.name}
+                                    control={form.control}
+                                    name="categories"
+                                    render={({ field }) => (
+                                      <FormItem key={subcategory.name}>
+                                        <FormControl>
+                                          <Toggle
+                                            size={'sm'}
+                                            variant={'outline'}
+                                            className="w-fit hover:cursor-pointer"
+                                            pressed={field.value?.includes(subcategory.name)}
+                                            onPressedChange={(checked) => {
+                                              const currentValues = field.value || [];
+                                              const newValues = checked
+                                                ? [...currentValues, subcategory.name]
+                                                : currentValues.filter(
+                                                    (value) => value !== subcategory.name,
+                                                  );
+                                              field.onChange(newValues);
+                                            }}
+                                          >
+                                            <TooltipProvider>
+                                              <Tooltip delayDuration={700}>
+                                                <TooltipTrigger asChild>
+                                                  <span>{subcategory.name}</span>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                  <p>{subcategory.description}</p>
+                                                </TooltipContent>
+                                              </Tooltip>
+                                            </TooltipProvider>
+                                          </Toggle>
+                                        </FormControl>
+                                      </FormItem>
+                                    )}
+                                  />
+                                ))}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                        <ScrollBar />
+                      </ScrollArea>
                     </div>
                     <FormMessage />
                   </FormItem>
