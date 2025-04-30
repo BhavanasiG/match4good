@@ -1,5 +1,6 @@
 'use client';
 
+import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -28,7 +29,7 @@ interface GeocodeResult {
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-const MapComponent = ({ address, postcode }: MapProps): JSX.Element => {
+const MapComponent = ({ address, postcode }: MapProps) => {
   const [coordinates, setCoordinates] = useState<[number, number] | null>(null);
 
   useEffect(() => {
