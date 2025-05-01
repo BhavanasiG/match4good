@@ -57,11 +57,12 @@ const validateAddress = async (address: string, postcode: string): Promise<boole
   const res = await fetch(url);
   /* eslint-disable @typescript-eslint/no-unsafe-assignment */
   const data = await res.json();
-
-  /* eslint-disable @typescript-eslint/no-unsafe-return */
   /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+  /* eslint-disable @typescript-eslint/no-unsafe-return */
   return data && data.length > 0;
 };
+
+/* eslint-disable @typescript-eslint/naming-convention */
 
 /**
  * Form component for creating new organizations.
@@ -83,7 +84,6 @@ export default function CreateOrganizationForm() {
    * Handles the submission of the form.
    * @param {z.infer<typeof formSchema>} values - The values of the form
    */
-  /* eslint-disable @typescript-eslint/naming-convention */
   async function OnSubmit(values: z.infer<typeof formSchema>) {
     const isValid = await validateAddress(values.address, values.postcode);
   
