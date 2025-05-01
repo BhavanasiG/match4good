@@ -1,60 +1,80 @@
 'use client';
-
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 
 interface Charity {
-  id: number;
-  charity_name: string;
-  date_of_registration: string;
-  removal_reason: string;
+  id: string;
+  name: string;
+  activities: string;
+  registrationDate: string;
+  address: string;
+  postcode: string;
 }
 
-export default function OrganizationsPage() {
+export default function OrgPage() {
   const [charities, setCharities] = useState<Charity[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    void (async function fetchCharities() {
+    const fetchCharities = async () => {
       try {
         const res = await fetch('/api/charity_api');
-        if (!res.ok) {
-          throw new Error(`Failed to fetch charities, Status Code: ${res.status}`);
-        }
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
-        const data: Charity[] = (await res.json()) as Charity[]; // **Explicitly type the response**
+        const data = await res.json();
+
+        if (data.error) throw new Error(data.error);
+        if (!data.length) throw new Error('No charities found');
 
         setCharities(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error');
+        setError(null);
+      } catch (err: any) {
+        setError(err.message);
       } finally {
         setLoading(false);
       }
-    })();
+    };
+
+    fetchCharities();
   }, []);
 
+  const formatDate = (dateString: string) => {
+    if (dateString === 'Unknown') return 'Unknown';
+    const date = new Date(dateString);
+    return isNaN(date.getTime()) ? 'Invalid Date' : date.toLocaleDateString('en-GB');
+  };
+
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-4">Charities</h1>
+    <div className="p-4 max-w-4xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Registered Charities</h1>
 
-      {error && <p className="text-red-500">{error}</p>}
-      {loading && <p className="text-gray-600">Loading charity data...</p>}
+      {loading && <p className="text-gray-600">Loading charities...</p>}
 
-      {!loading && !error && charities.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 p-3 rounded mb-4">
+          Error: {error}
+        </div>
+      )}
+
+      {!loading && !error && (
+        <div className="space-y-4">
           {charities.map((charity) => (
-            <Link key={charity.id} href={`/org/${charity.id}`} passHref>
-              <div className="border p-6 rounded-lg shadow-md bg-white hover:bg-gray-100 cursor-pointer">
-                <h2 className="text-2xl font-semibold mb-2">{charity.charity_name}</h2>
-                <p className="text-gray-700">
-                  <strong>Date of Registration:</strong> {charity.date_of_registration ?? 'N/A'}
+            <div key={charity.id} className="bg-white p-4 rounded shadow">
+              <h2 className="text-xl font-semibold mb-2">{charity.name}</h2>
+              <p className="text-gray-600">
+                <span className="font-medium">Activities:</span> {charity.activities}
+              </p>
+              <p className="text-gray-600">
+                <span className="font-medium">Registered:</span>{' '}
+                {formatDate(charity.registrationDate)}
+              </p>
+              {(charity.address || charity.postcode) && (
+                <p className="text-gray-600">
+                  <span className="font-medium">Location:</span>{' '}
+                  {[charity.address, charity.postcode].filter(Boolean).join(', ')}
                 </p>
-                <p className="text-gray-700">
-                  <strong>Removal Reason:</strong> {charity.removal_reason ?? 'N/A'}
-                </p>
-              </div>
-            </Link>
+              )}
+            </div>
           ))}
         </div>
       )}
