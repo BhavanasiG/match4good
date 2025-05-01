@@ -50,7 +50,18 @@ const formSchema = z.object({
     }),
 });
 
-/* eslint-disable @typescript-eslint/naming-convention */
+const validateAddress = async (address: string, postcode: string): Promise<boolean> => {
+  const query = encodeURIComponent(`${address}, ${postcode}, UK`);
+  const url = `https://nominatim.openstreetmap.org/search?q=${query}&format=json`;
+
+  const res = await fetch(url);
+  /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+  const data = await res.json();
+
+  /* eslint-disable @typescript-eslint/no-unsafe-return */
+  /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+  return data && data.length > 0;
+};
 
 /**
  * Form component for creating new organizations.
@@ -72,7 +83,15 @@ export default function CreateOrganizationForm() {
    * Handles the submission of the form.
    * @param {z.infer<typeof formSchema>} values - The values of the form
    */
-  function OnSubmit(values: z.infer<typeof formSchema>) {
+  /* eslint-disable @typescript-eslint/naming-convention */
+  async function OnSubmit(values: z.infer<typeof formSchema>) {
+    const isValid = await validateAddress(values.address, values.postcode);
+  
+    if (!isValid) {
+      toast.error('Address not found. Please enter a valid UK address.');
+      return;
+    }
+  
     CreateOrganization({
       name: values.name,
       description: values.description || '',
@@ -89,9 +108,10 @@ export default function CreateOrganizationForm() {
       })
       .catch((e: Error) => {
         console.error(e.message);
-        toast.error('An unexpected error occured');
+        toast.error('An unexpected error occurred');
       });
   }
+  
 
   return (
     <div className="self-center p-12 md:p-24 w-screen max-w-4xl">
