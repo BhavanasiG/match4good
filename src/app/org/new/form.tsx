@@ -86,12 +86,12 @@ export default function CreateOrganizationForm() {
    */
   async function OnSubmit(values: z.infer<typeof formSchema>) {
     const isValid = await validateAddress(values.address, values.postcode);
-  
+
     if (!isValid) {
       toast.error('Address not found. Please enter a valid UK address.');
       return;
     }
-  
+
     CreateOrganization({
       name: values.name,
       description: values.description || '',
@@ -111,7 +111,6 @@ export default function CreateOrganizationForm() {
         toast.error('An unexpected error occurred');
       });
   }
-  
 
   return (
     <div className="self-center p-12 md:p-24 w-screen max-w-4xl">
