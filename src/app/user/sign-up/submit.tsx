@@ -71,8 +71,8 @@ export async function CreateInterests(formData: { interests: number[] }) {
   const existingInterests = userObj.interests.map((interest) => interest.id);
   const newInterests = interests.filter((interest) => !existingInterests.includes(interest));
 
-  const num_of_interests = newInterests.length;
-  const signedUp = num_of_interests >= 3 ? true : false;
+  const numOfInterests = newInterests.length;
+  const signedUp = numOfInterests >= 3 ? true : false;
 
   await prisma.user.update({
     where: { id: user.id },
