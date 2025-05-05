@@ -1,5 +1,5 @@
-﻿import { notFound } from 'next/navigation';
-import prisma, { GetUser } from '@/lib/prisma';
+﻿import { notFound, redirect } from 'next/navigation';
+import prisma, { GetUser, signupComplete } from '@/lib/prisma';
 import ListingInfo from '@/components/listingInfo';
 import MapWrapper from '@/components/MapWrapper'; // Updated import
 import Link from 'next/link';
@@ -11,6 +11,13 @@ interface PageProps {
 export default async function ListingPage({ params }: PageProps) {
   const { id } = await params;
   const user = await GetUser(true);
+
+  if (user) {
+    const signupCompleted = await signupComplete();
+    if (!signupCompleted) {
+      redirect('/user/sign-up');
+    }
+  }
 
   if (isNaN(parseInt(id))) return notFound();
 

@@ -55,4 +55,12 @@ export async function GetUser(organizations: boolean = false): Promise<User | nu
 
   return user;
 }
+
+export async function signupComplete() {
+  const user = await GetUser();
+  if (!user) {
+    return false;
+  }
+  return user.signupCompleted;
+}
 export default prisma;
