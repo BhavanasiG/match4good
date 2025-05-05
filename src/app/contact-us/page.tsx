@@ -1,17 +1,7 @@
 ﻿'use client';
-import { GetUser, SignupComplete } from '@/lib/prisma';
-import { redirect } from 'next/navigation';
 import React, { useState } from 'react';
 
-export default async function ContactUsPage() {
-  const user = await GetUser();
-  if (user) {
-    const signupCompleted = await SignupComplete();
-    if (!signupCompleted) {
-      redirect('/user/sign-up');
-    }
-  }
-
+export default function ContactUsPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
