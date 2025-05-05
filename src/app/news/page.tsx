@@ -68,14 +68,12 @@ export default function NewsPage() {
         let q = `${topic} ${region}`;
         let from = date;
         const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(
-          q
+          q,
         )}&language=en&sortBy=${sortBy}&pageSize=18${from ? `&from=${from}` : ''}&apiKey=${NEWS_API_KEY}`;
         const res = await fetch(url);
         const data = await res.json();
         if (data.status !== 'ok') throw new Error(data.message || 'Failed to fetch news');
-        setArticles(
-          data.articles.filter((a: Article) => a.title && a.description)
-        );
+        setArticles(data.articles.filter((a: Article) => a.title && a.description));
       } catch (err: any) {
         setError(err.message || 'Failed to load news');
       } finally {
@@ -91,7 +89,9 @@ export default function NewsPage() {
       <div className="max-w-7xl mx-auto">
         <header className="mb-10 text-center">
           <div className="text-4xl mb-2">📰</div>
-          <h1 className="text-4xl font-extrabold text-[#388e3c] mb-2">UK Volunteering & Charity News</h1>
+          <h1 className="text-4xl font-extrabold text-[#388e3c] mb-2">
+            UK Volunteering & Charity News
+          </h1>
           <p className="text-lg text-[#388e3c] max-w-2xl mx-auto">
             Latest news about volunteering, charity, and community initiatives across the UK.
           </p>
@@ -144,12 +144,10 @@ export default function NewsPage() {
           </select>
         </div>
 
-        {loading && <div className="text-center text-green-600 py-8 font-semibold">Loading news...</div>}
-        {error && (
-          <div className="text-center text-red-600 py-8 font-semibold">
-            Error: {error}
-          </div>
+        {loading && (
+          <div className="text-center text-green-600 py-8 font-semibold">Loading news...</div>
         )}
+        {error && <div className="text-center text-red-600 py-8 font-semibold">Error: {error}</div>}
 
         {!loading && !error && (
           <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
@@ -177,9 +175,11 @@ export default function NewsPage() {
                 )}
                 <div className="p-5 flex flex-col flex-grow">
                   <span className="inline-block bg-green-100 text-green-800 text-xs font-semibold rounded-full px-3 py-1 mb-2">
-                    {TOPICS.find(t => t.query === topic)?.label}
+                    {TOPICS.find((t) => t.query === topic)?.label}
                   </span>
-                  <h2 className="text-lg font-bold mb-1 line-clamp-2 text-[#388e3c]">{article.title}</h2>
+                  <h2 className="text-lg font-bold mb-1 line-clamp-2 text-[#388e3c]">
+                    {article.title}
+                  </h2>
                   <p className="text-sm text-gray-500 mb-2">
                     {new Date(article.publishedAt).toLocaleDateString('en-GB', {
                       day: 'numeric',
