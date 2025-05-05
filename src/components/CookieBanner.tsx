@@ -3,7 +3,6 @@ import React from 'react'; // <-- This brings in JSX.Element
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button } from './ui/button';
-import { Cn } from '@/lib/utils';
 
 /**
  * Displays cookie consent banner at bottom of page.
@@ -37,11 +36,9 @@ export default function CookieBanner(): React.ReactElement | null {
 
   return (
     <div
-      className={Cn(
-        'fixed bottom-0 left-0 w-full bg-accent/80 p-4 text-center z-10 transition duration-500 ease-out',
-        showBanner ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10',
-        'space-y-4',
-      )}
+      className={`fixed bottom-0 left-0 w-full bg-accent/80 p-4 text-center z-10 transition duration-500 ease-out
+        ${showBanner ? `opacity-100 translate-y-0` : `opacity-0 translate-y-1`}
+        space-y-4`}
     >
       <p>
         We use cookies to improve your experience. Read our{' '}
