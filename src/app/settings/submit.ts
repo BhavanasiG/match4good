@@ -1,6 +1,6 @@
 'use server';
 
-import prisma, { GetUser } from '@/lib/prisma';
+import prisma, { GetUser, User } from '@/lib/prisma';
 import { forbidden } from 'next/navigation';
 
 /**
@@ -59,7 +59,7 @@ export async function DeleteOrganization(org: number) {
  * @returns {Promise<void>} - Returns a promise that resolves when the user is updated
  */
 export async function DeleteUser() {
-  const user = await GetUser();
+  const user: User | null = await GetUser();
 
   if (!user) {
     return forbidden();

@@ -29,7 +29,7 @@ import { DeleteUser } from './submit';
  */
 export default function SecurityForm() {
   const handleAccountDeletion = async () => {
-    const deleted = await DeleteUser().catch((error) => {
+    const deleted: boolean | void = await DeleteUser().catch((error) => {
       console.error(error);
       toast.error('Failed to delete account: ' + error);
     });
