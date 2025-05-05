@@ -3,41 +3,38 @@
 
 import { NextResponse } from 'next/server';
 
-/**
- * Fetches a list of registered charities from the CharityBase API.
- * @returns {Promise<NextResponse>} A response containing charity data or an error message.
- */
 export async function GET() {
-  const URL = 'https://charitybase.uk/api/graphql';
   const API_KEY = process.env.CHARITYBASE_API_KEY;
+  const URL = 'https://charitybase.uk/api/graphql';
 
   if (!API_KEY) {
     return NextResponse.json({ error: 'Missing API Key' }, { status: 500 });
   }
 
   const query = `
-    query GetCharities {
+    query {
       CHC {
         getCharities(filters: {}) {
-          list(limit: 10) {
+          list(limit: 5) {
             id
             names {
               value
               primary
             }
             activities
-            registrations {
-              registrationDate
-            }
             contact {
               address
               postcode
+            }
+            registrations {
+              registrationDate
             }
           }
         }
       }
     }
   `;
+
 
   try {
     const response = await fetch(URL, {
@@ -52,29 +49,35 @@ export async function GET() {
     const {
       data,
       errors,
-    }: { data?: { CHC?: { getCharities?: { list: Charity[] } } }; errors?: unknown } =
-      await response.json();
+    }: {
+      data?: { CHC?: { getCharities?: { list: Charity[] } } };
+      errors?: unknown;
+    } = await response.json();
 
     if (errors) {
       console.error('GraphQL Errors:', errors);
       return NextResponse.json({ error: 'GraphQL Error', details: errors }, { status: 500 });
     }
 
-    const charityList = data?.CHC?.getCharities?.list || [];
+    const charities = data?.CHC?.getCharities?.list || [];
 
-    const simplifiedData = charityList.map((charity) => ({
-      id: charity.id,
-      names: charity.names || [], // Ensuring required field
-      activities: charity.activities || 'Not provided',
-      registrations: charity.registrations || [], // Ensuring required field
-      contact: charity.contact || { address: [], postcode: '' }, // Ensuring required field
-      name: charity.names.find((n) => n.primary)?.value || charity.names[0]?.value || 'Unknown',
-      registrationDate: charity.registrations?.[0]?.registrationDate || 'Unknown',
-      address: charity.contact?.address?.join(', ') || '',
-      postcode: charity.contact?.postcode || '',
-    }));
+    
 
-    return NextResponse.json(simplifiedData);
+    const simplified = charities.map((charity: Charity) => {
+      const nameObj = charity.names.find((n) => n.primary) || charity.names[0];
+      return {
+        id: charity.id,
+        name: nameObj?.value || 'Unnamed Charity',
+        activities: charity.activities || 'No description available',
+        address: charity.contact?.address?.join(', ') || 'No address provided',
+        postcode: charity.contact?.postcode || '',
+        registrationDate: charity.registrations?.[0]?.registrationDate || 'Unknown',
+        url: `https://search.charitybase.uk/charities/${charity.id}`,
+      };
+    });
+    
+
+    return NextResponse.json(simplified);
   } catch (error) {
     console.error('Fetch Error:', error);
     return NextResponse.json(
@@ -85,12 +88,15 @@ export async function GET() {
 }
 
 /**
- * Defines the structure of charity objects received from the API.
+ * Interface for the expected charity structure from the API.
  */
 interface Charity {
   id: string;
   names: { value: string; primary: boolean }[];
-  activities: string;
-  registrations: { registrationDate: string }[];
-  contact: { address: string[]; postcode: string };
+  activities?: string;
+  contact?: {
+    address?: string[];
+    postcode?: string;
+  };
+  registrations?: { registrationDate: string }[];
 }
