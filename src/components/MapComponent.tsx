@@ -1,4 +1,6 @@
 'use client';
+
+import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -7,8 +9,7 @@ import * as L from 'leaflet';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
-/* eslint-disable @typescript-eslint/naming-convention */
-const customIcon: L.Icon<L.IconOptions> = new L.Icon<L.IconOptions>({
+const customIcon: L.Icon<L.IconOptions> = new L.Icon({
   iconUrl: markerIcon.src,
   shadowUrl: markerShadow.src,
   iconSize: [25, 41],
@@ -22,59 +23,61 @@ interface MapProps {
   postcode: string;
 }
 
-// Define API response type
 interface GeocodeResult {
   lat: string;
   lon: string;
 }
 
-const MapComponent: React.FC<MapProps> = ({ address, postcode }) => {
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const MapComponent = ({ address, postcode }: MapProps) => {
   const [coordinates, setCoordinates] = useState<[number, number] | null>(null);
 
   useEffect(() => {
-    const fetchCoordinates = async (): Promise<void> => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    (async () => {
       try {
         const response = await fetch(
           `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(postcode)}`,
         );
 
-        if (!response.ok) {
-          throw new Error(`API request failed with status: ${response.status}`);
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const data: GeocodeResult[] = await response.json();
+        if (!response.ok) throw new Error(`API error: ${response.status}`);
 
-        if (Array.isArray(data) && data.length > 0) {
-          const lat = parseFloat(data[0]?.lat ?? '0'); // Ensure valid number
-          const lon = parseFloat(data[0]?.lon ?? '0');
+        const data = (await response.json()) as GeocodeResult[];
+
+        if (data.length > 0) {
+          const lat = parseFloat(data[0].lat);
+          const lon = parseFloat(data[0].lon);
           setCoordinates([lat, lon]);
         }
-      } catch (error) {
-        console.error('Error fetching coordinates:', error);
+      } catch (err) {
+        console.error('Failed to fetch coordinates:', err);
       }
-    };
-
-    void fetchCoordinates();
+    })();
   }, [postcode]);
 
   if (!coordinates) {
-    return <p>Loading map...</p>;
+    return (
+      <div className="flex items-center justify-center h-full text-gray-500">Loading map...</div>
+    );
   }
 
   return (
-    <MapContainer
-      center={coordinates}
-      zoom={13}
-      style={{ height: '400px', width: '100%', zIndex: -1 }}
-    >
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      />
-      <Marker position={coordinates} icon={customIcon}>
-        <Popup>{address}</Popup>
-      </Marker>
-    </MapContainer>
+    <div className="rounded-b-2xl overflow-hidden">
+      <MapContainer
+        center={coordinates}
+        zoom={13}
+        scrollWheelZoom={false}
+        style={{ height: '400px', width: '100%' }}
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+        <Marker position={coordinates} icon={customIcon}>
+          <Popup>{address}</Popup>
+        </Marker>
+      </MapContainer>
+    </div>
   );
 };
 
