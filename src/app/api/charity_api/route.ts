@@ -1,63 +1,128 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable prefer-const */
+/* eslint-disable jsdoc/require-jsdoc */
+
 import { NextResponse } from 'next/server';
 
-interface CharityData {
-  id: number;
-  charityName: string;
-  dateOfRegistration: string;
-  removalReason: string;
-}
+const API_KEY = process.env.CHARITYBASE_API_KEY;
+const URL = 'https://charitybase.uk/api/graphql';
 
-/**
- * This API route fetches charity data from the Charity Commission API
- * and returns it as a JSON response.
- * @returns {Promise<NextResponse>} - JSON response containing charity data
- */
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export async function GET(): Promise<NextResponse> {
+// Mapping common city names to their corresponding GeoRegion codes
+const cityToRegionMap: Record<string, string> = {
+  Newcastle: 'E12000001',
+  Manchester: 'E12000002',
+  Liverpool: 'E12000002',
+  Leeds: 'E12000003',
+  Sheffield: 'E12000003',
+  Nottingham: 'E12000004',
+  Birmingham: 'E12000005',
+  Coventry: 'E12000005',
+  Cambridge: 'E12000006',
+  Norwich: 'E12000006',
+  London: 'E12000007',
+  Brighton: 'E12000008',
+  Southampton: 'E12000008',
+  Bristol: 'E12000009',
+  Plymouth: 'E12000009',
+  Cardiff: 'W99999999',
+};
+
+export async function GET(request: Request) {
+  if (!API_KEY) {
+    return NextResponse.json({ error: 'Missing API Key' }, { status: 500 });
+  }
+
+  const searchParams = new URLSearchParams(request.url.split('?')[1] || '');
+  const regionFilter = searchParams.get('region') || '';
+
+  // Convert city name to GeoRegion code if applicable
+  const mappedRegion = cityToRegionMap[regionFilter] || regionFilter;
+
+  let filters: any = {};
+  if (mappedRegion) filters.geo = { region: mappedRegion };
+
+  console.log('Filters being sent:', filters); // Debugging
+
+  const query = regionFilter
+    ? `query GetCharities($filters: FilterCHCInput!) {
+        CHC {
+          getCharities(filters: $filters) {
+            list(limit: 5) {
+              id
+              names { value primary }
+              activities
+              geo { region }
+            }
+          }
+        }
+      }`
+    : `query {
+        CHC {
+          getCharities(filters: {}) {
+            list(limit: 5) {
+              id
+              names { value primary }
+              activities
+            }
+          }
+        }
+      }`;
+
   try {
-    console.log('Fetching charity data...');
+    const response = await fetch(URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Apikey ${API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(regionFilter ? { query, variables: { filters } } : { query }),
+    });
 
-    const apiKey = process.env.CHARITY_API_KEY;
-    if (!apiKey) {
-      throw new Error('API Key is missing. Check .env.local');
+    const {
+      data,
+      errors,
+    }: { data?: { CHC?: { getCharities?: { list: Charity[] } } }; errors?: unknown } =
+      await response.json();
+
+    console.log('API Response:', data?.CHC?.getCharities?.list); // Debugging
+
+    if (errors) {
+      console.error('GraphQL Errors:', errors);
+      return NextResponse.json({ error: 'GraphQL Error', details: errors }, { status: 500 });
     }
 
-    const registeredNumbers = ['1000000', '1000001', '1000002', '1000003', '1000004'];
-    const charityData: CharityData[] = [];
+    const charities = data?.CHC?.getCharities?.list || [];
 
-    for (const [index, registeredNumber] of registeredNumbers.entries()) {
-      const suffix = '0';
-      const url = `https://api.charitycommission.gov.uk/register/api/allcharitydetailsV2/${registeredNumber}/${suffix}`;
+    const simplified = charities.map((charity: Charity) => {
+      const nameObj = charity.names.find((n) => n.primary) || charity.names[0];
+      return {
+        id: charity.id,
+        name: nameObj?.value || 'Unnamed Charity',
+        activities: charity.activities || 'No description available',
+        region: charity.geo?.region || 'Unknown Region',
+        url: `https://search.charitybase.uk/charities/${charity.id}`,
+      };
+    });
 
-      console.log('Fetching charity:', url);
-
-      const res = await fetch(url, {
-        headers: {
-          // eslint-disable-next-line @typescript-eslint/naming-convention
-          'Ocp-Apim-Subscription-Key': apiKey,
-        },
-      });
-
-      if (!res.ok) {
-        console.error(`Failed to fetch charity ${registeredNumber}, Status:`, res.status);
-        continue;
-      }
-      const data: Partial<CharityData> = (await res.json()) as Partial<CharityData>;
-      charityData.push({
-        id: index + 1,
-        charityName: data.charityName ?? 'Unknown',
-        dateOfRegistration: data.dateOfRegistration ?? 'N/A',
-        removalReason: data.removalReason ?? 'N/A',
-      });
-    }
-
-    console.log('Fetched Charities:', charityData);
-    return NextResponse.json(charityData);
-  } catch (err) {
-    console.error('Error in API route:', err);
+    return NextResponse.json(simplified);
+  } catch (error) {
+    console.error('Fetch Error:', error);
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Unknown error' },
+      { error: error instanceof Error ? error.message : 'Failed to fetch charity data' },
       { status: 500 },
     );
   }
+}
+
+/**
+ * Defines the structure of charity objects received from the API.
+ */
+interface Charity {
+  id: string;
+  names: { value: string; primary: boolean }[];
+  activities?: string;
+  geo?: { region: string };
 }
