@@ -55,3 +55,4 @@ export async function GetUser(organizations: boolean = false): Promise<User | nu
 
   return user;
 }
+export default prisma;
