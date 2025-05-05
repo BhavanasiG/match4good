@@ -46,14 +46,12 @@ const formSchema = z.object({
   bio: z.string().max(160).optional(),
 });
 
-export type Props = { user: User };
-
 /**
  *
  * @param {User} param0 - user: The user object to display
  * @returns {Element} - Returns a form for updating the user's profile
  */
-export default function ProfileForm({ user }: Props) {
+export default function ProfileForm({ user }: { user: User }) {
   /**
    * Make sure to include defaultValues for each form or
    * Next.js will not be happy about controlled and uncontrolled inputs
