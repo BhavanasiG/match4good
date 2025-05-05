@@ -15,7 +15,7 @@
     "prepare": "husky"
   },
   "prisma": {
-    "seed": "ts-node --esm prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^4.5.1",
