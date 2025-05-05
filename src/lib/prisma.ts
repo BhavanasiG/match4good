@@ -1,15 +1,5 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 import { PrismaClient, Prisma } from '../../generated/prisma_client/index.js';
 import { auth0 } from './auth0.ts';
-=======
-import { PrismaClient, Prisma } from "../../generated/prisma_client/index.js";
-import { auth0 } from "./auth0.ts";
->>>>>>> 0b6065d (Fixed import errors)
-=======
-import { PrismaClient, Prisma } from "../../generated/prisma_client/index.js";
-import { auth0 } from "./auth0.ts";
->>>>>>> 0b6065d (Fixed import errors)
 
 const prisma = new PrismaClient();
 
