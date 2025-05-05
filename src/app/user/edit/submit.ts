@@ -1,6 +1,6 @@
 'use server';
 
-import prisma, { GetUser } from '@/lib/prisma';
+import prisma, { GetUser, User } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 
 type Data = {
@@ -13,7 +13,7 @@ type Data = {
  * @returns {Promise<void>} - Returns a promise that resolves when the user is updated
  */
 export default async function UpdateUser({ username }: Data) {
-  const user = await GetUser();
+  const user: User | null = await GetUser();
 
   if (!user) {
     return;
