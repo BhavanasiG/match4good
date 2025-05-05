@@ -1,7 +1,6 @@
 import { PrismaClient, Prisma } from '../../generated/prisma_client/index.js';
 import { auth0 } from './auth0.ts';
 
-
 const prisma = new PrismaClient();
 
 const globalForPrisma = global as unknown as { prisma: typeof prisma };
