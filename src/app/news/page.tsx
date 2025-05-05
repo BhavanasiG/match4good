@@ -8,176 +8,192 @@ type Article = {
   url: string;
   source: { name: string };
   publishedAt: string;
-  image?: string;
+  urlToImage?: string;
   description: string;
 };
 
-const CATEGORIES = [
-  'general',
-  'world',
-  'nation',
-  'business',
-  'technology',
-  'entertainment',
-  'sports',
-  'science',
-  'health',
+const TOPICS = [
+  { label: 'Volunteering', query: 'volunteering' },
+  { label: 'Charity', query: 'charity' },
+  { label: 'Community Initiatives', query: '"community initiatives"' },
+  { label: 'Fundraising', query: 'fundraising' },
+  { label: 'Youth Volunteering', query: '"youth volunteering"' },
+  { label: 'Environmental', query: 'environment volunteering' },
+];
+
+const REGIONS = [
+  { label: 'UK (default)', query: 'UK' },
+  { label: 'England', query: 'England' },
+  { label: 'Scotland', query: 'Scotland' },
+  { label: 'Wales', query: 'Wales' },
+  { label: 'Northern Ireland', query: '"Northern Ireland"' },
+];
+
+// Pre-calculate date strings for filters
+const today = new Date();
+const weekAgo = new Date();
+weekAgo.setDate(today.getDate() - 7);
+const monthAgo = new Date();
+monthAgo.setMonth(today.getMonth() - 1);
+
+const DATES = [
+  { label: 'Any time', value: '' },
+  { label: 'Past week', value: weekAgo.toISOString().split('T')[0] },
+  { label: 'Past month', value: monthAgo.toISOString().split('T')[0] },
+];
+
+const SORTS = [
+  { label: 'Latest', value: 'publishedAt' },
+  { label: 'Relevancy', value: 'relevancy' },
+  { label: 'Popularity', value: 'popularity' },
 ];
 
 export default function NewsPage() {
-  const [category, setCategory] = useState('general');
-  const [localCity, setLocalCity] = useState<string | null>(null);
-  const [localArticles, setLocalArticles] = useState<Article[]>([]);
-  const [nationalArticles, setNationalArticles] = useState<Article[]>([]);
-  const [loadingLocal, setLoadingLocal] = useState(false);
-  const [loadingNational, setLoadingNational] = useState(false);
+  const [topic, setTopic] = useState(TOPICS[0].query);
+  const [region, setRegion] = useState(REGIONS[0].query);
+  const [date, setDate] = useState(DATES[0].value);
+  const [sortBy, setSortBy] = useState(SORTS[0].value);
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const GNEWS_API_KEY = process.env.NEXT_PUBLIC_GNEWS_API_KEY;
+  const NEWS_API_KEY = process.env.NEXT_PUBLIC_NEWS_API_KEY;
 
-  // Get user location and set local city
   useEffect(() => {
-    if (!navigator.geolocation) return;
-
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude, longitude } = position.coords;
-        try {
-          const res = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,
-          );
-          const data = await res.json();
-          const foundCity = data.address.city || data.address.town || data.address.village;
-          setLocalCity(foundCity);
-        } catch (err) {
-          console.error('Failed to get city from geolocation', err);
-        }
-      },
-      (err) => {
-        console.error('Geolocation error:', err);
-      },
-    );
-  }, []);
-
-  // Fetch local news based on city
-  useEffect(() => {
-    const fetchLocalNews = async () => {
-      if (!localCity || !GNEWS_API_KEY) return;
-      setLoadingLocal(true);
+    const fetchNews = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        const res = await fetch(
-          `https://gnews.io/api/v4/search?q=${encodeURIComponent(
-            localCity,
-          )}&token=${GNEWS_API_KEY}&lang=en&country=gb&max=10`,
-        );
+        // Compose query
+        let q = `${topic} ${region}`;
+        let from = date;
+        const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(
+          q,
+        )}&language=en&sortBy=${sortBy}&pageSize=18${from ? `&from=${from}` : ''}&apiKey=${NEWS_API_KEY}`;
+        const res = await fetch(url);
         const data = await res.json();
-        setLocalArticles(data.articles || []);
-      } catch (err) {
-        console.error('Failed to fetch local news', err);
+        if (data.status !== 'ok') throw new Error(data.message || 'Failed to fetch news');
+        setArticles(data.articles.filter((a: Article) => a.title && a.description));
+      } catch (err: any) {
+        setError(err.message || 'Failed to load news');
       } finally {
-        setLoadingLocal(false);
+        setLoading(false);
       }
     };
 
-    fetchLocalNews();
-  }, [localCity, GNEWS_API_KEY]);
-
-  // Fetch national news based on category
-  useEffect(() => {
-    const fetchNationalNews = async () => {
-      if (!GNEWS_API_KEY) return;
-      setLoadingNational(true);
-      try {
-        const res = await fetch(
-          `https://gnews.io/api/v4/top-headlines?token=${GNEWS_API_KEY}&lang=en&country=gb&topic=${category}&max=10`,
-        );
-        const data = await res.json();
-        setNationalArticles(data.articles || []);
-      } catch (err) {
-        console.error('Failed to fetch national news', err);
-      } finally {
-        setLoadingNational(false);
-      }
-    };
-
-    fetchNationalNews();
-  }, [category, GNEWS_API_KEY]);
-
-  const renderArticles = (articles: Article[]) => (
-    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-      {articles.map((article, idx) => (
-        <a
-          key={idx}
-          href={article.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="border rounded overflow-hidden shadow hover:shadow-md transition-shadow bg-white flex flex-col"
-        >
-          {article.image && (
-            <Image
-              src={article.image}
-              alt="Article"
-              width={400}
-              height={200}
-              unoptimized
-              className="w-full h-48 object-cover"
-            />
-          )}
-          <div className="p-4 flex flex-col flex-grow">
-            <h2 className="text-lg font-semibold">{article.title}</h2>
-            <p className="text-sm text-gray-600 mt-1">
-              {new Date(article.publishedAt).toLocaleString()} – {article.source.name}
-            </p>
-            <p className="text-gray-700 mt-2 line-clamp-3">{article.description}</p>
-          </div>
-        </a>
-      ))}
-    </div>
-  );
+    fetchNews();
+  }, [topic, region, date, sortBy, NEWS_API_KEY]);
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">📰 News Feed</h1>
+    <div className="min-h-screen bg-gradient-to-br from-[#e8f5e9] to-[#f1f8e9] py-10 px-4">
+      <div className="max-w-7xl mx-auto">
+        <header className="mb-10 text-center">
+          <div className="text-4xl mb-2">📰</div>
+          <h1 className="text-4xl font-extrabold text-[#388e3c] mb-2">
+            UK Volunteering & Charity News
+          </h1>
+          <p className="text-lg text-[#388e3c] max-w-2xl mx-auto">
+            Latest news about volunteering, charity, and community initiatives across the UK.
+          </p>
+        </header>
 
-      <div className="space-y-12">
-        {/* Local News Section */}
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">
-            📍 Local News {localCity && `in ${localCity}`}
-          </h2>
-          {loadingLocal ? (
-            <p>Loading local news...</p>
-          ) : localArticles.length > 0 ? (
-            renderArticles(localArticles)
-          ) : (
-            <p className="text-gray-500">No local news found.</p>
-          )}
+        <div className="flex flex-wrap gap-4 justify-center mb-8">
+          <select
+            value={topic}
+            onChange={(e) => setTopic(e.target.value)}
+            className="border border-green-200 p-2 rounded-lg bg-green-50 text-green-900 font-semibold"
+          >
+            {TOPICS.map((t) => (
+              <option key={t.query} value={t.query}>
+                {t.label}
+              </option>
+            ))}
+          </select>
+          <select
+            value={region}
+            onChange={(e) => setRegion(e.target.value)}
+            className="border border-green-200 p-2 rounded-lg bg-green-50 text-green-900 font-semibold"
+          >
+            {REGIONS.map((r) => (
+              <option key={r.query} value={r.query}>
+                {r.label}
+              </option>
+            ))}
+          </select>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="border border-green-200 p-2 rounded-lg bg-green-50 text-green-900 font-semibold"
+          >
+            {SORTS.map((s) => (
+              <option key={s.value} value={s.value}>
+                {s.label}
+              </option>
+            ))}
+          </select>
+          <select
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="border border-green-200 p-2 rounded-lg bg-green-50 text-green-900 font-semibold"
+          >
+            {DATES.map((d) => (
+              <option key={d.label} value={d.value}>
+                {d.label}
+              </option>
+            ))}
+          </select>
         </div>
 
-        {/* National News Section */}
-        <div>
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-semibold">🇬🇧 UK National News</h2>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="border p-2 rounded"
-            >
-              {CATEGORIES.map((c) => (
-                <option key={c} value={c}>
-                  {c[0].toUpperCase() + c.slice(1)}
-                </option>
-              ))}
-            </select>
+        {loading && (
+          <div className="text-center text-green-600 py-8 font-semibold">Loading news...</div>
+        )}
+        {error && <div className="text-center text-red-600 py-8 font-semibold">Error: {error}</div>}
+
+        {!loading && !error && (
+          <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+            {articles.map((article, idx) => (
+              <a
+                key={idx}
+                href={article.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white border border-green-100 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow flex flex-col"
+              >
+                {article.urlToImage ? (
+                  <Image
+                    src={article.urlToImage}
+                    alt="Article Image"
+                    width={400}
+                    height={200}
+                    unoptimized
+                    className="w-full h-48 object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-48 bg-green-50 flex items-center justify-center text-green-400 text-sm">
+                    No Image Available
+                  </div>
+                )}
+                <div className="p-5 flex flex-col flex-grow">
+                  <span className="inline-block bg-green-100 text-green-800 text-xs font-semibold rounded-full px-3 py-1 mb-2">
+                    {TOPICS.find((t) => t.query === topic)?.label}
+                  </span>
+                  <h2 className="text-lg font-bold mb-1 line-clamp-2 text-[#388e3c]">
+                    {article.title}
+                  </h2>
+                  <p className="text-sm text-gray-500 mb-2">
+                    {new Date(article.publishedAt).toLocaleDateString('en-GB', {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric',
+                    })}{' '}
+                    – {article.source.name}
+                  </p>
+                  <p className="text-gray-700 mt-2 text-sm line-clamp-3">{article.description}</p>
+                </div>
+              </a>
+            ))}
           </div>
-
-          {loadingNational ? (
-            <p>Loading national news...</p>
-          ) : nationalArticles.length > 0 ? (
-            renderArticles(nationalArticles)
-          ) : (
-            <p className="text-gray-500">No national news found.</p>
-          )}
-        </div>
+        )}
       </div>
     </div>
   );
