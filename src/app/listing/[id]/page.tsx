@@ -1,5 +1,5 @@
 ﻿import { notFound, redirect } from 'next/navigation';
-import prisma, { GetUser, signupComplete } from '@/lib/prisma';
+import prisma, { GetUser, SignupComplete } from '@/lib/prisma';
 import ListingInfo from '@/components/listingInfo';
 import MapWrapper from '@/components/MapWrapper'; // Updated import
 import Link from 'next/link';
@@ -13,7 +13,7 @@ export default async function ListingPage({ params }: PageProps) {
   const user = await GetUser(true);
 
   if (user) {
-    const signupCompleted = await signupComplete();
+    const signupCompleted = await SignupComplete();
     if (!signupCompleted) {
       redirect('/user/sign-up');
     }

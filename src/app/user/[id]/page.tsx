@@ -1,5 +1,5 @@
-﻿import { notFound } from 'next/navigation';
-import prisma from '@/lib/prisma';
+﻿import { notFound, redirect } from 'next/navigation';
+import prisma, { SignupComplete } from '@/lib/prisma';
 import { UserInfo } from '../user';
 
 interface PageProps {
@@ -21,6 +21,13 @@ export default async function App({ params }: PageProps) {
 
   if (!user) {
     return notFound();
+  }
+
+  if (user) {
+    const signupCompleted = await SignupComplete();
+    if (!signupCompleted) {
+      redirect('/user/sign-up');
+    }
   }
 
   return (

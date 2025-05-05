@@ -1,6 +1,6 @@
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import prisma, { signupComplete } from '@/lib/prisma';
+import prisma, { SignupComplete } from '@/lib/prisma';
 import { notFound, redirect } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
@@ -26,7 +26,7 @@ export default async function App(props: { params: t_params }) {
   const user = await GetUser(true);
 
   if (user) {
-    const signupCompleted = await signupComplete();
+    const signupCompleted = await SignupComplete();
     if (!signupCompleted) {
       redirect('/user/sign-up');
     }

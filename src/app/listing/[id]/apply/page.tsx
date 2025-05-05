@@ -1,4 +1,4 @@
-import prisma, { GetUser, signupComplete } from '@/lib/prisma';
+import prisma, { GetUser, SignupComplete } from '@/lib/prisma';
 import { forbidden, notFound, redirect } from 'next/navigation';
 import ApplicationForm from './form';
 import ListingInfo from '@/components/listingInfo';
@@ -10,8 +10,8 @@ export default async function App({ params }: { params: Promise<{ id: string }> 
     return forbidden();
   }
 
-  if (user){
-    const signupCompleted = await signupComplete();
+  if (user) {
+    const signupCompleted = await SignupComplete();
     if (!signupCompleted) {
       redirect('/user/sign-up');
     }

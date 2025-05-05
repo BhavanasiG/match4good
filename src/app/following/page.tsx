@@ -1,4 +1,4 @@
-﻿import prisma, { GetUser, signupComplete } from '@/lib/prisma';
+﻿import prisma, { GetUser, SignupComplete } from '@/lib/prisma';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
@@ -21,7 +21,7 @@ export default async function FollowingPage() {
   }
 
   if (user) {
-    const signupCompleted = await signupComplete();
+    const signupCompleted = await SignupComplete();
     if (!signupCompleted) {
       redirect('/user/sign-up');
     }

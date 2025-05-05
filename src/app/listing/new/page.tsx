@@ -1,4 +1,4 @@
-﻿import { GetUser, signupComplete } from '@/lib/prisma';
+﻿import { GetUser, SignupComplete } from '@/lib/prisma';
 import CreateListingForm from './form';
 import { forbidden, redirect } from 'next/navigation';
 
@@ -10,7 +10,7 @@ export default async function App() {
   }
 
   if (user) {
-    const signupCompleted = await signupComplete();
+    const signupCompleted = await SignupComplete();
     if (!signupCompleted) {
       redirect('/user/sign-up');
     }
