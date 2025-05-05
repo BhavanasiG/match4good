@@ -99,7 +99,7 @@ export default function SignUpForm() {
 
   return (
     <div className="self-center md:p-12 w-screen max-w-4xl">
-      <Card className='md:mt-6'>
+      <Card className="md:mt-6">
         <CardHeader>
           <CardTitle>Complete your onboarding</CardTitle>
         </CardHeader>
