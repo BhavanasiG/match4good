@@ -3,6 +3,10 @@
 
 import { NextResponse } from 'next/server';
 
+/**
+ * Handles the GET request to fetch a list of registered charities from the CharityBase API.
+ * @returns {Promise<NextResponse>} JSON response containing charity data or an error message.
+ */
 export async function GET() {
   const API_KEY = process.env.CHARITYBASE_API_KEY;
   const URL = 'https://charitybase.uk/api/graphql';
@@ -35,7 +39,6 @@ export async function GET() {
     }
   `;
 
-
   try {
     const response = await fetch(URL, {
       method: 'POST',
@@ -61,8 +64,6 @@ export async function GET() {
 
     const charities = data?.CHC?.getCharities?.list || [];
 
-    
-
     const simplified = charities.map((charity: Charity) => {
       const nameObj = charity.names.find((n) => n.primary) || charity.names[0];
       return {
@@ -75,7 +76,6 @@ export async function GET() {
         url: `https://search.charitybase.uk/charities/${charity.id}`,
       };
     });
-    
 
     return NextResponse.json(simplified);
   } catch (error) {
