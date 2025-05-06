@@ -1,9 +1,29 @@
-﻿import DynamicLoginLogoutButton from '@/components/login';
-import { GetUser } from '@/lib/prisma';
+﻿import ListingInfo from '@/components/listingInfo';
+import { Button } from '@/components/ui/button';
+import { auth0 } from '@/lib/auth0';
+import prisma, { GetUser } from '@/lib/prisma';
+import { IconArrowRight, IconExternalLink, IconHeartHandshake } from '@tabler/icons-react';
 import { headers } from 'next/headers';
+import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
+async function SessionButton() {
+  const session = await auth0.getSession();
+
+  if (session) {
+    return <></>;
+  } else {
+    return (
+      <Link href={'/listings/'}>
+        <Button variant={'secondary'} className="cursor-pointer" size={'lg'}>
+          Join us
+          <IconArrowRight />
+        </Button>
+      </Link>
+    );
+  }
+}
 export default async function App() {
   const user = await GetUser();
 
@@ -25,134 +45,153 @@ export default async function App() {
 
   // If the user is not logged in, or if they are logged in and signup is complete,
   // render the content of the home page.
+
+  const recentListings = await prisma.listing.findMany({
+    where: {
+      status: 'acceptingApplications',
+    },
+    take: 4,
+  });
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#e8f5e9] to-[#f1f8e9] flex flex-col">
-      {/* Navbar */}
-      <nav className="w-full px-6 py-4 flex justify-end">
-        {/* Remove className for now if your component doesn't support it */}
-        <DynamicLoginLogoutButton />
-      </nav>
-
-      {/* Hero Section */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-[#388e3c] text-center mb-4 tracking-tight">
-          <span className="block">Connect for Good with</span>
-          <span className="block bg-gradient-to-r from-green-600 to-green-400 bg-clip-text text-transparent">
-            Match4Good
-          </span>
-        </h1>
-        <p className="text-lg text-gray-700 max-w-2xl text-center mb-8">
-          Your gateway to meaningful volunteering opportunities and community impact.
-        </p>
-
-        {/* Call to Action Buttons */}
-        <div className="flex flex-wrap justify-center gap-5 mb-10">
-          <Link href="/listing/new" passHref>
-            <button
-              className="
-              flex items-center gap-2
-              px-5 py-2
-              bg-gradient-to-r from-green-300 to-green-500
-              text-green-900 uppercase font-semibold rounded-full
-              shadow-md
-              hover:scale-105 hover:shadow-lg hover:bg-green-400
-              focus:outline-none focus:ring-2 focus:ring-green-200
-              transition-all duration-200
-              text-base
-            "
-            >
-              <span className="text-2xl">✨</span>
-              Create Volunteering Opportunity
-            </button>
-          </Link>
-          <Link href="/listing" passHref>
-            <button
-              className="
-              flex items-center gap-2
-              px-5 py-2
-              bg-gradient-to-r from-green-300 to-green-500
-              text-green-900 uppercase font-semibold rounded-full
-              shadow-md
-              hover:scale-105 hover:shadow-lg hover:bg-green-400
-              focus:outline-none focus:ring-2 focus:ring-green-200
-              transition-all duration-200
-              text-base
-            "
-            >
-              <span className="text-2xl">🔍</span>
-              View Volunteering Opportunities
-            </button>
-          </Link>
-          <Link href="/org/new" passHref>
-            <button
-              className="
-              flex items-center gap-2
-              px-5 py-2
-              bg-gradient-to-r from-green-300 to-green-500
-              text-green-900 uppercase font-semibold rounded-full
-              shadow-md
-              hover:scale-105 hover:shadow-lg hover:bg-green-400
-              focus:outline-none focus:ring-2 focus:ring-green-200
-              transition-all duration-200
-              text-base
-            "
-            >
-              <span className="text-2xl">🏢</span>
-              Create Organization
-            </button>
-          </Link>
+    <div className="min-h-screen flex flex-col">
+      {/** Hero */}
+      <section className="flex flex-col md:flex-row md:h-120">
+        <div className="flex items-center basis-4/7 overflow-hidden relative">
+          <Image
+            src={'/hero-background.jpg'}
+            alt="Hero Image"
+            fill
+            style={{ objectFit: 'cover' }}
+          />
         </div>
-
-        {/* How It Works Section */}
-        <section className="max-w-4xl w-full mx-auto mt-10">
-          <h2 className="text-xl font-bold text-[#388e3c] text-center mb-8">
-            How Match4Good Works
+        <div className="flex flex-col bg-primary justify-center items-left p-12 basis-3/7 space-y-10">
+          <Image
+            src={'/logo_extended_white.svg'}
+            width={392}
+            height={73}
+            alt="Match4Good logo"
+            className="hidden md:block"
+          />
+          <h2 className="text-2xl text-primary-foreground">
+            Your gateway to meaningful volunteering opportunities and community impact.
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-xl transition-shadow duration-300 group">
-              <div className="text-green-600 text-3xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                🔎
-              </div>
-              <h3 className="text-base font-semibold mb-2">Discover Opportunities</h3>
-              <p className="text-gray-600 text-sm">
-                Browse or search for volunteering roles and community initiatives that match your
-                interests.
-              </p>
-            </div>
-            <div className="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-xl transition-shadow duration-300 group">
-              <div className="text-green-600 text-3xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                🤝
-              </div>
-              <h3 className="text-base font-semibold mb-2">Get Involved</h3>
-              <p className="text-gray-600 text-sm">
-                Apply to volunteer, join organizations, or create your own opportunities to help
-                others.
-              </p>
-            </div>
-            <div className="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-xl transition-shadow duration-300 group">
-              <div className="text-green-600 text-3xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                🎉
-              </div>
-              <h3 className="text-base font-semibold mb-2">Make an Impact</h3>
-              <p className="text-gray-600 text-sm">
-                Track your contributions and see the difference you make in your community.
-              </p>
-            </div>
+          <div className="flex space-x-5">
+            <SessionButton />
           </div>
-        </section>
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-green-800 text-white py-8 mt-20">
-        <div className="container mx-auto text-center">
-          <p className="mb-4">
-            Ready to make a difference? Start your journey with Match4Good today!
-          </p>
-          <p className="mt-4 text-sm opacity-75">
-            © 2024 Match4Good. Empowering communities through volunteerism.
-          </p>
         </div>
-      </footer>
+      </section>
+      {/** Recent listings */}
+      <section className="flex flex-col p-12 md:p-24 xl:px-40 space-y-10">
+        <h2 className="text-3xl text-primary font-semibold mb-10">Upcoming Opportunities</h2>
+        <div className="grid grid-rows-4 sm:grid-rows-2 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-none gap-10">
+          {recentListings.map((listing) => (
+            <ListingInfo key={listing.id} listing={listing} />
+          ))}
+        </div>
+        <Link href={'/listing/'}>
+          <Button variant={'secondary'} className="cursor-pointer" size={'lg'}>
+            View all opportunities
+            <IconArrowRight />
+          </Button>
+        </Link>
+      </section>
+      {/** Organisation Subhero */}
+      <section className="flex flex-col md:flex-row md:h-80 overflow-hidden">
+        <div className="flex flex-col bg-primary justify-center items-left p-12 basis-3/7 space-y-10">
+          <h2 className="text-xl lg:text-2xl xl:text-3xl text-primary-foreground">
+            Discover the amazing organizations working alongside us to create positive change in our
+            communities.
+          </h2>
+          <div className="flex space-x-5">
+            <Link href={'/org/'}>
+              <Button variant={'secondary'} className="cursor-pointer" size={'lg'}>
+                Meet our partnering organizations
+                <IconArrowRight />
+              </Button>
+            </Link>
+          </div>
+        </div>
+        <div className="flex items-center basis-4/7 overflow-hidden relative">
+          <Image
+            src={'/subhero-background.jpg'}
+            alt="Hero Image"
+            fill
+            style={{ objectFit: 'cover' }}
+          />
+        </div>
+      </section>
+      {/** Leaderboard */}
+      <section className="flex flex-col md:flex-row md:h-80 overflow-hidden">
+        <div className="flex items-center basis-4/7 overflow-hidden relative">
+          <Image
+            src={'/leaderboard-background.jpg'}
+            alt="Hero Image"
+            fill
+            style={{ objectFit: 'cover' }}
+          />
+        </div>
+        <div className="flex flex-col bg-primary justify-center items-left p-12 basis-3/7 space-y-10">
+          <h2 className="text-xl lg:text-2xl xl:text-3xl text-primary-foreground">
+            Discover where you stand, challenge yourself to climb higher, and become part of our
+            thriving community by viewing and joining our leaderboard today!
+          </h2>
+          <div className="flex space-x-5">
+            <Link href={'/leaderboard/'}>
+              <Button variant={'secondary'} className="cursor-pointer" size={'lg'}>
+                View community leaderboard
+                <IconArrowRight />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+      {/** Mission Statement */}
+      <section className="flex flex-col bg-accent text-accent-foreground text-center justify-center p-12 md:p-16 lg:p-24 xl:px-80 space-y-10">
+        <h2 className="text-primary text-2xl md:text-4xl font-semibold">Our Mission</h2>
+        <p className="text-base md:text-lg">
+          At Match4Good, we believe that everyone has the power to make a positive impact. Our
+          mission is to connect passionate individuals with meaningful volunteer opportunities that
+          address critical community needs and create lasting change. Whether you have just an hour,
+          a week, or waMission Statement nt to commit to a long-term project - we have opportunities
+          that match your skills, interests, and availability.
+        </p>
+      </section>
+      {/** Values*/}
+      <section className="flex flex-col items-center space-y-5 md:space-y-10 justify-center p-5 md:p-16 lg:p-24 xl:px-80">
+        <div className="grid grid-rows-3 md:grid-rows-none md:grid-cols-3 p-8 gap-10 md:gap-20">
+          <div className="flex flex-col justify-start items-center space-y-3">
+            <IconHeartHandshake size={50} className="text-primary" />
+            <h3 className="text-xl font-semibold text-primary">Community</h3>
+            <p className="text-wrap text-center">
+              We harness individual contributions to strengthen communities and drive meaningful
+              change.
+            </p>
+          </div>
+          <div className="flex flex-col justify-start items-center space-y-3">
+            <IconHeartHandshake size={50} className="text-primary" />
+            <h3 className="text-xl font-semibold text-primary">Inclusivity</h3>
+            <p className="text-wrap text-center">
+              We create pathways for everyone to serve, recognizing that diversity of volunteers
+              enriches impact.
+            </p>
+          </div>
+          <div className="flex flex-col justify-start items-center space-y-3">
+            <IconHeartHandshake size={50} className="text-primary" />
+            <h3 className="text-xl font-semibold text-primary">Connection</h3>
+            <p className="text-wrap text-center">
+              We match volunteers' skills and passions with genuine community needs, creating
+              fulfilling experiences that matter.
+            </p>
+          </div>
+        </div>
+        <Link href={'/about-us'}>
+          <Button size={'lg'}>
+            Read more about us
+            <IconExternalLink />
+          </Button>
+        </Link>
+      </section>
     </div>
   );
 }
