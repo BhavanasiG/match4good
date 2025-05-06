@@ -18,7 +18,6 @@ An easy way to get this running is with:
 
     docker run -p 5432:5432 -e POSTGRES_PASSWORD=prisma -d postgres
 
-
 Once your database is running, you have two options to start the development server:
 
 1.  **Full Setup (Deploy, Seed, Start Server):** Run this command for the initial setup, after a database reset, or whenever you need to refresh your database with sample data.

@@ -1,11 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import prisma from '@/lib/prisma';
 import { notFound } from 'next/navigation';
@@ -16,39 +9,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ListingStatus } from '../../../../generated/prisma_client';
 import { GetUser } from '@/lib/prisma';
 import FollowButton from '@/components/FollowButton';
+import ListingInfo from '@/components/listingInfo';
 
 /* eslint-disable @typescript-eslint/naming-convention */
-
-function getTimeString(start_date: Date, end_date: Date) {
-  const difference: Date = new Date(end_date.getTime() - start_date.getTime());
-  const hours: number = Math.floor(difference.getTime() / (1000 * 60 * 60));
-
-  if (start_date.getDate() === end_date.getDate()) {
-    return (
-      <>
-        <p>{start_date.toLocaleDateString(undefined, { dateStyle: 'full' })}</p>
-        <p>
-          {start_date.toLocaleTimeString(undefined, { timeStyle: 'short' })} -&nbsp;
-          {end_date.toLocaleTimeString(undefined, { timeStyle: 'short' })}
-        </p>
-      </>
-    );
-  } else if (hours < 168) {
-    return (
-      <p>
-        {start_date.toLocaleDateString(undefined, { dateStyle: 'full' })} -&nbsp;
-        {end_date.toLocaleDateString(undefined, { dateStyle: 'full' })}
-      </p>
-    );
-  } else {
-    return (
-      <p>
-        {start_date.toLocaleDateString(undefined, { dateStyle: 'long' })} -&nbsp;
-        {end_date.toLocaleDateString(undefined, { dateStyle: 'long' })}
-      </p>
-    );
-  }
-}
 
 type t_params = Promise<{ id: string }>;
 
@@ -137,29 +100,7 @@ export default async function App(props: { params: t_params }) {
           ) : (
             listings.map((listing) => {
               if (listing.status == ListingStatus.acceptingApplications) {
-                return (
-                  <div key={listing.id}>
-                    <Card className="basis-1/3 hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out h-full flex flex-col justify-between">
-                      <CardHeader>
-                        <CardTitle>
-                          <p>{listing.name}</p>
-                          <p className="text-sm text-muted-foreground mt-1">Location</p>
-                        </CardTitle>
-                        <CardDescription className="line-clamp-3">
-                          {listing.description}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent className="text-base">
-                        {getTimeString(listing.startDatetime, listing.endDatetime)}
-                      </CardContent>
-                      <CardFooter>
-                        <Link href={`/listing/${listing.id}`}>
-                          <Button className="cursor-pointer">View Listing</Button>
-                        </Link>
-                      </CardFooter>
-                    </Card>
-                  </div>
-                );
+                return <ListingInfo key={listing.id} listing={listing} />;
               }
             })
           )}
@@ -175,29 +116,7 @@ export default async function App(props: { params: t_params }) {
           ) : (
             listings.map((listing) => {
               if (listing.status != ListingStatus.acceptingApplications) {
-                return (
-                  <div key={listing.id}>
-                    <Card className="basis-1/3 hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out">
-                      <CardHeader>
-                        <CardTitle>
-                          <p>{listing.name}</p>
-                          <p className="text-sm text-muted-foreground mt-1">Location</p>
-                        </CardTitle>
-                        <CardDescription className="line-clamp-3">
-                          {listing.description}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent className="text-base">
-                        {getTimeString(listing.startDatetime, listing.endDatetime)}
-                      </CardContent>
-                      <CardFooter>
-                        <Link href={`/listing/${listing.id}`}>
-                          <Button className="cursor-pointer">View Listing</Button>
-                        </Link>
-                      </CardFooter>
-                    </Card>
-                  </div>
-                );
+                return <ListingInfo key={listing.id} listing={listing} />;
               }
             })
           )}
