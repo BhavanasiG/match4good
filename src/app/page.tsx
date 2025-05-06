@@ -118,7 +118,8 @@ export default async function App() {
         </div>
         <div className="flex flex-col bg-primary justify-center items-left p-12 basis-3/7 space-y-10">
           <h2 className="text-3xl text-primary-foreground">
-            Discover where you stand, challenge yourself to climb higher, and become part of our thriving community by viewing and joining our leaderboard today!
+            Discover where you stand, challenge yourself to climb higher, and become part of our
+            thriving community by viewing and joining our leaderboard today!
           </h2>
           <div className="flex space-x-5">
             <Link href={'/listings/'}>
@@ -142,29 +143,32 @@ export default async function App() {
           skills, interests, and availability.
         </p>
       </section>
-      <section className='flex flex-col items-center space-y-10 justify-center p-24 px-80'>
-        <div className='grid grid-cols-3 p-8 gap-20'>
+      <section className="flex flex-col items-center space-y-10 justify-center p-24 px-80">
+        <div className="grid grid-cols-3 p-8 gap-20">
           <div className="flex flex-col justify-center items-center space-y-3">
-            <IconHeartHandshake size={50} className='text-primary' />
-            <h3 className='text-xl font-semibold text-primary'>Community</h3>
+            <IconHeartHandshake size={50} className="text-primary" />
+            <h3 className="text-xl font-semibold text-primary">Community</h3>
             <p className="text-wrap text-center">
-              We harness individual contributions to strengthen communities and drive meaningful change.
+              We harness individual contributions to strengthen communities and drive meaningful
+              change.
             </p>
           </div>
           <div className="flex flex-col justify-center items-center space-y-3">
-            <IconHeartHandshake size={50} className='text-primary' />
-            <h3 className='text-xl font-semibold text-primary'>Inclusivity</h3>
+            <IconHeartHandshake size={50} className="text-primary" />
+            <h3 className="text-xl font-semibold text-primary">Inclusivity</h3>
             <p className="text-wrap text-center">
-              We create pathways for everyone to serve, recognizing that diversity of volunteers enriches impact.
+              We create pathways for everyone to serve, recognizing that diversity of volunteers
+              enriches impact.
             </p>
           </div>
           <div className="flex flex-col justify-center items-center space-y-3">
-            <IconHeartHandshake size={50} className='text-primary' />
-            <h3 className='text-xl font-semibold text-primary'>Connection</h3>
+            <IconHeartHandshake size={50} className="text-primary" />
+            <h3 className="text-xl font-semibold text-primary">Connection</h3>
             <p className="text-wrap text-center">
-              We match volunteers' skills and passions with genuine community needs, creating fulfilling experiences that matter.
+              We match volunteers' skills and passions with genuine community needs, creating
+              fulfilling experiences that matter.
             </p>
-          </div>  
+          </div>
         </div>
         <Link href={'/about-us'}>
           <Button size={'lg'}>
