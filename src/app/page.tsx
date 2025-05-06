@@ -58,7 +58,12 @@ export default async function App() {
       {/** Hero */}
       <section className="flex flex-col md:flex-row md:h-120">
         <div className="flex items-center basis-4/7 overflow-hidden relative">
-          <Image src={'/hero-background.jpg'} alt="Hero Image" fill style={{objectFit: 'cover'}} />
+          <Image
+            src={'/hero-background.jpg'}
+            alt="Hero Image"
+            fill
+            style={{ objectFit: 'cover' }}
+          />
         </div>
         <div className="flex flex-col bg-primary justify-center items-left p-12 basis-3/7 space-y-10">
           <Image
@@ -66,7 +71,7 @@ export default async function App() {
             width={392}
             height={73}
             alt="Match4Good logo"
-            className='hidden md:block'
+            className="hidden md:block"
           />
           <h2 className="text-2xl text-primary-foreground">
             Your gateway to meaningful volunteering opportunities and community impact.
@@ -108,13 +113,23 @@ export default async function App() {
           </div>
         </div>
         <div className="flex items-center basis-4/7 overflow-hidden relative">
-          <Image src={'/subhero-background.jpg'} alt="Hero Image" fill style={{objectFit: 'cover'}} />
+          <Image
+            src={'/subhero-background.jpg'}
+            alt="Hero Image"
+            fill
+            style={{ objectFit: 'cover' }}
+          />
         </div>
       </section>
       {/** Leaderboard */}
       <section className="flex flex-col md:flex-row md:h-80 overflow-hidden">
         <div className="flex items-center basis-4/7 overflow-hidden relative">
-          <Image src={'/leaderboard-background.jpg'} alt="Hero Image" fill style={{objectFit: 'cover'}} />
+          <Image
+            src={'/leaderboard-background.jpg'}
+            alt="Hero Image"
+            fill
+            style={{ objectFit: 'cover' }}
+          />
         </div>
         <div className="flex flex-col bg-primary justify-center items-left p-12 basis-3/7 space-y-10">
           <h2 className="text-xl lg:text-2xl xl:text-3xl text-primary-foreground">
@@ -139,8 +154,8 @@ export default async function App() {
           At Match4Good, we believe that everyone has the power to make a positive impact. Our
           mission is to connect passionate individuals with meaningful volunteer opportunities that
           address critical community needs and create lasting change. Whether you have just an hour,
-          a week, or waMission Statement nt to commit to a long-term project - we have opportunities that match your
-          skills, interests, and availability.
+          a week, or waMission Statement nt to commit to a long-term project - we have opportunities
+          that match your skills, interests, and availability.
         </p>
       </section>
       {/** Values*/}
