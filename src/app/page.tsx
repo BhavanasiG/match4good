@@ -17,7 +17,7 @@ async function SessionButton() {
     return (
       <Link href={'/listings/'}>
         <Button variant={'secondary'} className="cursor-pointer" size={'lg'}>
-          Join Us
+          Join us
           <IconArrowRight />
         </Button>
       </Link>
@@ -77,24 +77,24 @@ export default async function App() {
             Your gateway to meaningful volunteering opportunities and community impact.
           </h2>
           <div className="flex space-x-5">
-            <Link href={'/listings/'}>
-              <Button variant={'secondary'} className="cursor-pointer" size={'lg'}>
-                View Opportunities
-                <IconArrowRight />
-              </Button>
-            </Link>
             <SessionButton />
           </div>
         </div>
       </section>
       {/** Recent listings */}
-      <section className="flex flex-col p-12 md:p-24 xl:px-40">
+      <section className="flex flex-col p-12 md:p-24 xl:px-40 space-y-10">
         <h2 className="text-3xl text-primary font-semibold mb-10">Upcoming Opportunities</h2>
         <div className="grid grid-rows-4 sm:grid-rows-2 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-none gap-10">
           {recentListings.map((listing) => (
             <ListingInfo key={listing.id} listing={listing} />
           ))}
         </div>
+        <Link href={'/listings/'}>
+          <Button variant={'secondary'} className="cursor-pointer" size={'lg'}>
+            View all opportunities
+            <IconArrowRight />
+          </Button>
+        </Link>
       </section>
       {/** Organisation Subhero */}
       <section className="flex flex-col md:flex-row md:h-80 overflow-hidden">
@@ -143,7 +143,6 @@ export default async function App() {
                 <IconArrowRight />
               </Button>
             </Link>
-            <SessionButton />
           </div>
         </div>
       </section>
