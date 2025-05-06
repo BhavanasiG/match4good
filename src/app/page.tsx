@@ -89,7 +89,7 @@ export default async function App() {
             <ListingInfo key={listing.id} listing={listing} />
           ))}
         </div>
-        <Link href={'/listings/'}>
+        <Link href={'/listing/'}>
           <Button variant={'secondary'} className="cursor-pointer" size={'lg'}>
             View all opportunities
             <IconArrowRight />
@@ -104,7 +104,7 @@ export default async function App() {
             communities.
           </h2>
           <div className="flex space-x-5">
-            <Link href={'/listings/'}>
+            <Link href={'/org/'}>
               <Button variant={'secondary'} className="cursor-pointer" size={'lg'}>
                 Meet our partnering organizations
                 <IconArrowRight />
@@ -137,7 +137,7 @@ export default async function App() {
             thriving community by viewing and joining our leaderboard today!
           </h2>
           <div className="flex space-x-5">
-            <Link href={'/listings/'}>
+            <Link href={'/leaderboard/'}>
               <Button variant={'secondary'} className="cursor-pointer" size={'lg'}>
                 View community leaderboard
                 <IconArrowRight />
