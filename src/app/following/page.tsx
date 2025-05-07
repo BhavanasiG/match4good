@@ -1,5 +1,6 @@
-﻿import prisma, { GetUser } from '@/lib/prisma';
+﻿import prisma, { GetUser, SignupComplete } from '@/lib/prisma';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 export default async function FollowingPage() {
   const user = await GetUser(true);
@@ -17,6 +18,13 @@ export default async function FollowingPage() {
         </div>
       </div>
     );
+  }
+
+  if (user) {
+    const signupCompleted = await SignupComplete();
+    if (!signupCompleted) {
+      redirect('/user/sign-up');
+    }
   }
 
   const follows = await prisma.follow.findMany({

@@ -55,4 +55,17 @@ export async function GetUser(organizations: boolean = false): Promise<User | nu
 
   return user;
 }
+
+/**
+ * Checks if the user has completed the signup process
+ * by verifying if the user has selected at least 3 interests.
+ * @returns {boolean} True if the user has completed the signup process, otherwise false
+ */
+export async function SignupComplete() {
+  const user = await GetUser();
+  if (!user) {
+    return false;
+  }
+  return user.signupCompleted;
+}
 export default prisma;

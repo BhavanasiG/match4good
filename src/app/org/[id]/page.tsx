@@ -1,7 +1,7 @@
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import prisma from '@/lib/prisma';
-import { notFound } from 'next/navigation';
+import prisma, { SignupComplete } from '@/lib/prisma';
+import { notFound, redirect } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -24,6 +24,13 @@ export default async function App(props: { params: t_params }) {
 
   // Get the current user
   const user = await GetUser(true);
+
+  if (user) {
+    const signupCompleted = await SignupComplete();
+    if (!signupCompleted) {
+      redirect('/user/sign-up');
+    }
+  }
 
   // Include followers in the org query for the FollowButton logic
   const org = await prisma.organization.findUnique({

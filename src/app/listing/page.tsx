@@ -1,5 +1,6 @@
-﻿import prisma from '@/lib/prisma';
+﻿import prisma, { GetUser, SignupComplete } from '@/lib/prisma';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 // Fetch listings directly from the database
 export default async function ListingsPage() {
@@ -8,6 +9,15 @@ export default async function ListingsPage() {
       organization: true, // Fetch organization details
     },
   });
+
+  const user = await GetUser();
+
+  if (user) {
+    const signupCompleted = await SignupComplete();
+    if (!signupCompleted) {
+      redirect('/user/sign-up');
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#e8f5e9] to-[#f1f8e9] py-10 px-4">
