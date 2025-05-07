@@ -2,6 +2,7 @@ import type { Listing } from '../../generated/prisma_client';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
 import Link from 'next/link';
 import { Button } from './ui/button';
+import prisma from '@/lib/prisma';
 
 /**
  *
@@ -47,14 +48,24 @@ function getTimeString(startDate: Date, endDate: Date) {
  * @returns {Element} - Returns HTML component that displays the listing information
  * This component is used to display the listing information on the listing page
  */
-export default function ListingInfo({ listing }: { listing: Listing }) {
+export default async function ListingInfo({ listing }: { listing: Listing }) {
+  const listingOrg = await prisma.organization.findUnique({
+    where: {
+      id: listing.organizationId,
+    },
+  });
+
+  if (!listingOrg) {
+    return <></>;
+  }
+
   return (
     <div className="w-full">
       <Card className="hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out h-full flex flex-col justify-between">
         <CardHeader>
           <CardTitle>
             <p className="text-lg">{listing.name}</p>
-            <p className="text-sm text-muted-foreground mt-1">{listing.pointValue} Impact Points</p>
+            <p className="text-sm text-muted-foreground mt-1">{listingOrg.name}</p>
           </CardTitle>
           <CardDescription className="line-clamp-3">{listing.description}</CardDescription>
         </CardHeader>
@@ -63,7 +74,7 @@ export default function ListingInfo({ listing }: { listing: Listing }) {
         </CardContent>
         <CardFooter>
           <Link href={`/listing/${listing.id}`}>
-            <Button className="cursor-pointer">View Listing</Button>
+            <Button className="cursor-pointer">View Details</Button>
           </Link>
         </CardFooter>
       </Card>
