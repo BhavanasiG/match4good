@@ -12,13 +12,13 @@ import prisma from '@/lib/prisma';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 
+interface Props {
+  searchParams: Promise<{ page: string }>;
+}
+
 // Fetch listings directly from the database
-export default async function OrganizationsPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
-  let page = searchParams['page'] ?? '1';
+export default async function OrganizationsPage(props: Props) {
+  let page = (await props.searchParams).page ?? '1';
 
   const perPage = 8;
   const orgLength = Math.floor((await prisma.organization.findMany()).length / perPage);
