@@ -11,6 +11,7 @@ import ProfileForm from './profile';
 import OrganizationsForm from './organizations';
 import AppearanceForm from './appearance';
 import SecurityForm from './security';
+import ProfileImageUpload from './profileImageUpload';
 
 export default async function Settings() {
   const user = await GetUser(true);
@@ -48,6 +49,7 @@ export default async function Settings() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
+                  <ProfileImageUpload />
                   <ProfileForm user={user} />
                 </CardContent>
               </Card>
