@@ -22,11 +22,11 @@ export default async function Settings() {
 
   return (
     <div className="self-center flex justify-center p-12 md:p-24 w-screen max-w-8xl">
-      <div className="flex flex-col p-12 md:p-24 w-screen max-w-4xl">
+      <div className="flex flex-col md:p-12 lg:px-24 w-screen max-w-4xl">
         <h1 className="font-semibold text-3xl">Your Settings</h1>
         <div className="flex pt-6">
           <Tabs defaultValue="profile" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-2 grid-rows-2 h-20 md:h-auto md:grid-cols-4 md:grid-rows-none">
               <TabsTrigger value="profile" className="cursor-pointer">
                 Profile
               </TabsTrigger>

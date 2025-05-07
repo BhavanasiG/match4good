@@ -7,8 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { IconUser } from '@tabler/icons-react';
+import { CommonAvatar } from '@/app/settings/profileImageUpload';
 
 /**
  * This component has a link to the sign-up page and the log in page
@@ -39,12 +38,7 @@ export function LogoutButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="cursor-pointer">
-        <Avatar className="size-8">
-          <AvatarImage src="" alt="profile image" />
-          <AvatarFallback>
-            <IconUser />
-          </AvatarFallback>
-        </Avatar>
+        <CommonAvatar size={8} />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem asChild>
