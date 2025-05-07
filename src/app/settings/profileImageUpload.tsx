@@ -6,7 +6,9 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import Image from 'next/image';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { AvatarFallback } from '@radix-ui/react-avatar';
+import { IconUser } from '@tabler/icons-react';
 
 interface UploadAuthResponse {
   token: string;
@@ -19,8 +21,7 @@ interface ProfilePictureResponse {
   profilePictureUrl: string | null;
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-const ProfileImageUpload = () => {
+export default function ProfileImageUpload() {
   const [progress, setProgress] = useState(0);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -98,8 +99,9 @@ const ProfileImageUpload = () => {
 
   return (
     <div className="mb-6 space-y-4">
-      <div className="space-y-2">
-        <Label>Profile Picture</Label>
+      <div className="space-y-5">
+        <Label>Picture</Label>
+        <CommonAvatar size={30} src={previewUrl} />
         <div className="flex items-center gap-4">
           <input
             id="profile-picture"
@@ -122,27 +124,48 @@ const ProfileImageUpload = () => {
         </div>
       </div>
 
-      <Button onClick={handleUpload}>Save</Button>
-      {progress > 0 && <Progress value={progress} className="h-2" />}
-      {previewUrl && (
-        <div className="pt-4">
-          <p className="text-sm text-muted-foreground mb-2">Current:</p>
-          <div className="flex items-center gap-4">
-            <Image
-              src={previewUrl}
-              alt="Profile Preview"
-              width={128}
-              height={128}
-              className="w-32 h-32 rounded-full object-cover border shadow-sm"
-            />
-            <Button variant="destructive" onClick={handleRemove}>
-              Remove
-            </Button>
-          </div>
-        </div>
-      )}
+      <div className="space-x-5">
+        <Button variant="destructive" onClick={handleRemove} className="cursor-pointer">
+          Remove
+        </Button>
+        <Button onClick={handleUpload} className="cursor-pointer">
+          Save
+        </Button>
+      </div>
+
+      {progress > 0 && progress < 100 && <Progress value={progress} className="h-2" />}
     </div>
   );
-};
+}
 
-export default ProfileImageUpload;
+export function CommonAvatar({ size, src }: { size: number; src?: string | null }) {
+  const [pfp, setPfp] = useState<string | null>(null);
+
+  // Fetch current profile image
+  useEffect(() => {
+    const fetchProfilePicture = async () => {
+      try {
+        const res = await fetch('/api/user/profile-picture', { cache: 'no-store' });
+        if (!res.ok) throw new Error('Failed to fetch profile picture');
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const data: ProfilePictureResponse = await res.json();
+        if (data.profilePictureUrl) {
+          setPfp(data.profilePictureUrl);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    void fetchProfilePicture();
+  }, []);
+
+  return (
+    <Avatar className={`bg-accent size-${size} justify-center items-center`}>
+      <AvatarImage src={src ?? pfp ?? ''} className="object-cover" alt="profile picture" />
+      <AvatarFallback className="size-full flex justify-center items-center">
+        <IconUser className="size-3/4" />
+      </AvatarFallback>
+    </Avatar>
+  );
+}
