@@ -57,7 +57,7 @@ export default async function OrganizationsPage(props: Props) {
             Discover ways to make a difference in your community. Browse our latest volunteering
             opportunities and find your perfect match!
           </h3>
-          <div className="flex space-x-5 items-center mt-2">
+          <div className="flex flex-col space-y-2 md:space-x-5 md:space-y-0 md:flex-row items-center mt-2">
             <h2 className="text-primary-foreground">Explore top charities from around the UK</h2>
             <Link href={'/org/comission'}>
               <Button variant={'secondary'}>
