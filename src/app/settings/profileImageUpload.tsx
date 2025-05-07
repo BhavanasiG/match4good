@@ -5,7 +5,6 @@ import { upload } from '@imagekit/next';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import Image from 'next/image';
 
@@ -19,16 +18,6 @@ interface UploadAuthResponse {
 interface ProfilePictureResponse {
   profilePictureUrl: string | null;
 }
-
-// interface UploadResponse {
-//   url: string;
-//   fileId: string;
-//   name: string;
-//   size: number;
-//   type: string;
-//   height?: number;
-//   width?: number;
-// }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const ProfileImageUpload = () => {
