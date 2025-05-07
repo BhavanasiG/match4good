@@ -38,7 +38,7 @@ export function LogoutButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="cursor-pointer">
-        <CommonAvatar size={8} />
+        <CommonAvatar className="size-8" />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem asChild>

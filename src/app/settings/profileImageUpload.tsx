@@ -9,6 +9,7 @@ import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { AvatarFallback } from '@radix-ui/react-avatar';
 import { IconUser } from '@tabler/icons-react';
+import { Cn } from '@/lib/utils';
 
 interface UploadAuthResponse {
   token: string;
@@ -25,7 +26,6 @@ export default function ProfileImageUpload() {
   const [progress, setProgress] = useState(0);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const router = useRouter();
 
   // Fetch current profile image
   useEffect(() => {
@@ -77,7 +77,7 @@ export default function ProfileImageUpload() {
       console.error('Failed to update profile picture in DB');
     } else {
       setPreviewUrl(uploadResponse.url ?? null);
-      router.refresh(); // Refresh UI to show updated profile
+      location.reload(); // Refresh UI to show updated profile
     }
   };
 
@@ -91,7 +91,7 @@ export default function ProfileImageUpload() {
       if (!res.ok) throw new Error('Failed to remove profile picture');
 
       setPreviewUrl(null);
-      router.refresh();
+      location.reload();
     } catch (err) {
       console.error(err);
     }
@@ -101,7 +101,7 @@ export default function ProfileImageUpload() {
     <div className="mb-6 space-y-4">
       <div className="space-y-5">
         <Label>Picture</Label>
-        <CommonAvatar size={30} src={previewUrl} />
+        <CommonAvatar src={previewUrl} className="size-30" />
         <div className="flex items-center gap-4">
           <input
             id="profile-picture"
@@ -138,7 +138,7 @@ export default function ProfileImageUpload() {
   );
 }
 
-export function CommonAvatar({ size, src }: { size: number; src?: string | null }) {
+export function CommonAvatar({ className, src }: { className?: string; src?: string | null }) {
   const [pfp, setPfp] = useState<string | null>(null);
 
   // Fetch current profile image
@@ -161,7 +161,7 @@ export function CommonAvatar({ size, src }: { size: number; src?: string | null 
   }, []);
 
   return (
-    <Avatar className={`bg-accent size-${size} justify-center items-center`}>
+    <Avatar className={Cn('bg-accent justify-center items-center', className)}>
       <AvatarImage src={src ?? pfp ?? ''} className="object-cover" alt="profile picture" />
       <AvatarFallback className="size-full flex justify-center items-center">
         <IconUser className="size-3/4" />
