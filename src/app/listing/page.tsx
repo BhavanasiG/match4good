@@ -3,7 +3,6 @@ import ListingInfo from '@/components/listingInfo';
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -21,7 +20,7 @@ export default async function ListingsPage(props: Props) {
   let page = (await props.searchParams).page ?? '1';
 
   const perPage = 8;
-  const listingLength = Math.floor((await prisma.listing.findMany()).length / perPage);
+  const listingLength = Math.ceil((await prisma.listing.findMany()).length / perPage);
 
   if (Number(page) < 1) {
     page = '1';
@@ -88,24 +87,33 @@ export default async function ListingsPage(props: Props) {
               className={Number(page) <= 1 ? 'pointer-events-none opacity-50' : undefined}
             />
           </PaginationItem>
-          <div className="flex justify-center">
+          <div className="flex justify-center space-x-5">
+            {Number(page) > 1 && (
+              <PaginationItem>
+                <PaginationLink
+                  href={`/listing?page=${Number(page) - 1}`}
+                  className="cursor-pointer"
+                >
+                  {Number(page) - 1}
+                </PaginationLink>
+              </PaginationItem>
+            )}
             <PaginationItem>
-              <PaginationLink href={`/listing?page=${1}`}>1</PaginationLink>
+              <PaginationLink
+                aria-disabled={true}
+                tabIndex={1}
+                className="border bg-accent text-accent-foreground"
+              >
+                {Number(page)}
+              </PaginationLink>
             </PaginationItem>
-            {listingLength > 2 && (
+            {listingLength > Number(page) && (
               <PaginationItem>
-                <PaginationLink href={`/listing?page=${2}`}>2</PaginationLink>
-              </PaginationItem>
-            )}
-            {listingLength > 3 && (
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-            )}
-            {listingLength > 1 && (
-              <PaginationItem>
-                <PaginationLink href={`/listing?page=${listingLength}`}>
-                  {listingLength}
+                <PaginationLink
+                  href={`/listing?page=${Number(page) + 1}`}
+                  className="cursor-pointer"
+                >
+                  {Number(page) + 1}
                 </PaginationLink>
               </PaginationItem>
             )}

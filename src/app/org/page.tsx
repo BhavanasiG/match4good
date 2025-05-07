@@ -10,7 +10,7 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination';
 import prisma from '@/lib/prisma';
-import { IconArrowRight } from '@tabler/icons-react';
+import { IconArrowRight, IconChevronRight } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -24,7 +24,7 @@ export default async function OrganizationsPage(props: Props) {
   let page = (await props.searchParams).page ?? '1';
 
   const perPage = 8;
-  const orgLength = Math.floor((await prisma.organization.findMany()).length / perPage);
+  const orgLength = Math.ceil((await prisma.organization.findMany()).length / perPage);
 
   if (Number(page) < 1) {
     page = '1';
@@ -86,23 +86,28 @@ export default async function OrganizationsPage(props: Props) {
               className={Number(page) <= 1 ? 'pointer-events-none opacity-50' : undefined}
             />
           </PaginationItem>
-          <div className="flex justify-center">
+          <div className="flex justify-center space-x-5">
+            {Number(page) > 1 && (
+              <PaginationItem>
+                <PaginationLink href={`/org?page=${Number(page) - 1}`} className="cursor-pointer">
+                  {Number(page) - 1}
+                </PaginationLink>
+              </PaginationItem>
+            )}
             <PaginationItem>
-              <PaginationLink href={`/org?page=${1}`}>1</PaginationLink>
+              <PaginationLink
+                aria-disabled={true}
+                tabIndex={1}
+                className="border bg-accent text-accent-foreground"
+              >
+                {Number(page)}
+              </PaginationLink>
             </PaginationItem>
-            {orgLength > 2 && (
+            {orgLength > Number(page) && (
               <PaginationItem>
-                <PaginationLink href={`/org?page=${2}`}>2</PaginationLink>
-              </PaginationItem>
-            )}
-            {orgLength > 3 && (
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-            )}
-            {orgLength > 1 && (
-              <PaginationItem>
-                <PaginationLink href={`/org?page=${orgLength}`}>{orgLength}</PaginationLink>
+                <PaginationLink href={`/org?page=${Number(page) + 1}`} className="cursor-pointer">
+                  {Number(page) + 1}
+                </PaginationLink>
               </PaginationItem>
             )}
           </div>
