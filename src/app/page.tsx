@@ -185,7 +185,7 @@ export default async function App() {
             </p>
           </div>
         </div>
-        <Link href={'/about-us'}>
+        <Link href={'/about-us'} className="cursor-pointer">
           <Button size={'lg'}>
             Read more about us
             <IconExternalLink />

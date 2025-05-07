@@ -1,8 +1,9 @@
 'use client';
 
+/** @typedef {import('react').JSX} JSX */
+
 import { useEffect, useRef, useState } from 'react';
 import { upload } from '@imagekit/next';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
@@ -22,6 +23,14 @@ interface ProfilePictureResponse {
   profilePictureUrl: string | null;
 }
 
+/**
+ * @returns {JSX.Element} Returns a JSX element containing the profile image upload component
+ * @description This component allows users to upload, preview, and remove their profile images.
+ * It fetches the current profile image from the server and displays it.
+ * Users can select a new image, which will be uploaded to ImageKit and the URL will be saved in the database.
+ * The component also provides a progress bar to indicate the upload status.
+ * The component uses the `useRouter` hook from Next.js to refresh the page after a successful upload.
+ */
 export default function ProfileImageUpload() {
   const [progress, setProgress] = useState(0);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -138,6 +147,18 @@ export default function ProfileImageUpload() {
   );
 }
 
+/**
+ *
+ * @param {object} param0 - Props containing size and src
+ * @param {string} param0.className - Additional classnames of the avatar
+ * @param {string} param0.src - The source URL for the image
+ * @description This component renders an avatar image with a fallback icon.
+ * It uses the `Avatar`, `AvatarImage`, and `AvatarFallback` components from ShadCn UI.
+ * The avatar displays the user's profile picture if available, or a default user icon if not.
+ * The size of the avatar is determined by the `size` prop.
+ * The `src` prop is used to set the image source, and if it's not provided, it fetches the current profile picture from the server.
+ * @returns {JSX.Element} A user avatar image or a fallback icon if no image is available.
+ */
 export function CommonAvatar({ className, src }: { className?: string; src?: string | null }) {
   const [pfp, setPfp] = useState<string | null>(null);
 
