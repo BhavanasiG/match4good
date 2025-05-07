@@ -79,9 +79,7 @@ export default async function ListingInfo({ listing }: { listing: Listing }) {
         </CardContent>
         <CardFooter>
           <Link href={`/listing/${listing.id}`}>
-            <Button className="cursor-pointer">
-              View Details
-            </Button>
+            <Button className="cursor-pointer">View Details</Button>
           </Link>
         </CardFooter>
       </Card>

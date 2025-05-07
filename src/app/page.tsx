@@ -1,5 +1,6 @@
 ﻿import ListingInfo from '@/components/listingInfo';
 import { Button } from '@/components/ui/button';
+import { siteContent } from '@/config/siteConfig';
 import { auth0 } from '@/lib/auth0';
 import prisma, { GetUser } from '@/lib/prisma';
 import { IconArrowRight, IconBulb, IconGlobe, IconHeartHandshake } from '@tabler/icons-react';
@@ -73,9 +74,7 @@ export default async function App() {
             alt="Match4Good logo"
             className="hidden md:block"
           />
-          <h2 className="text-2xl text-primary-foreground">
-            Your gateway to meaningful volunteering opportunities and community impact.
-          </h2>
+          <h2 className="text-2xl text-primary-foreground">{siteContent.tagLine}</h2>
           <div className="flex space-x-5">
             <SessionButton />
           </div>
@@ -100,8 +99,7 @@ export default async function App() {
       <section className="flex flex-col md:flex-row md:h-80 overflow-hidden">
         <div className="flex flex-col bg-primary justify-center items-left p-12 basis-3/7 space-y-10">
           <h2 className="text-xl lg:text-2xl xl:text-3xl text-primary-foreground">
-            Discover the amazing organizations working alongside us to create positive change in our
-            communities.
+            {siteContent.orgDescription}
           </h2>
           <div className="flex space-x-5">
             <Link href={'/org/'}>
@@ -133,8 +131,7 @@ export default async function App() {
         </div>
         <div className="flex flex-col bg-primary justify-center items-left p-12 basis-3/7 space-y-10">
           <h2 className="text-xl lg:text-2xl xl:text-3xl text-primary-foreground">
-            Discover where you stand, challenge yourself to climb higher, and become part of our
-            thriving community by viewing and joining our leaderboard today!
+            {siteContent.leaderboardDescription}
           </h2>
           <div className="flex space-x-5">
             <Link href={'/leaderboard/'}>
@@ -149,41 +146,35 @@ export default async function App() {
       {/** Mission Statement */}
       <section className="flex flex-col bg-accent text-accent-foreground text-center justify-center p-12 md:p-16 lg:p-24 xl:px-80 space-y-10">
         <h2 className="text-primary text-2xl md:text-4xl font-semibold">Our Mission</h2>
-        <p className="text-base md:text-lg">
-          At Match4Good, we believe that everyone has the power to make a positive impact. Our
-          mission is to connect passionate individuals with meaningful volunteer opportunities that
-          address critical community needs and create lasting change. Whether you have just an hour,
-          a week, or waMission Statement nt to commit to a long-term project - we have opportunities
-          that match your skills, interests, and availability.
-        </p>
+        <p className="text-base md:text-lg">{siteContent.missionStatement}</p>
       </section>
       {/** Values*/}
       <section className="flex flex-col items-center space-y-5 md:space-y-10 justify-center p-5 md:p-16 lg:p-24 xl:px-80">
         <div className="grid grid-rows-3 md:grid-rows-none md:grid-cols-3 p-8 gap-10 md:gap-20">
           <div className="flex flex-col justify-start items-center space-y-3">
             <IconHeartHandshake size={50} className="text-primary" />
-            <h3 className="text-xl font-semibold text-primary">Connection</h3>
-            <p className="text-wrap text-center">
-              We bring together passionate volunteers and organizations making a difference.
-            </p>
+            <h3 className="text-xl font-semibold text-primary">
+              {siteContent.coreValues[0].value}
+            </h3>
+            <p className="text-wrap text-center">{siteContent.coreValues[0].description}</p>
           </div>
           <div className="flex flex-col justify-start items-center space-y-3">
             <IconGlobe size={50} className="text-primary" />
-            <h3 className="text-xl font-semibold text-primary">Impact</h3>
-            <p className="text-wrap text-center">
-              Every match creates positive change in communities across the UK.
-            </p>
+            <h3 className="text-xl font-semibold text-primary">
+              {siteContent.coreValues[1].value}
+            </h3>
+            <p className="text-wrap text-center">{siteContent.coreValues[1].description}</p>
           </div>
           <div className="flex flex-col justify-start items-center space-y-3">
             <IconBulb size={50} className="text-primary" />
-            <h3 className="text-xl font-semibold text-primary">Accessibility</h3>
-            <p className="text-wrap text-center">
-              We believe everyone should have the opportunity to give back, easily and meaningfully.
-            </p>
+            <h3 className="text-xl font-semibold text-primary">
+              {siteContent.coreValues[2].value}
+            </h3>
+            <p className="text-wrap text-center">{siteContent.coreValues[2].description}</p>
           </div>
         </div>
         <Link href={'/about-us'} className="cursor-pointer">
-          <Button size={'lg'}>
+          <Button size={'lg'} className="cursor-pointer">
             Read more about us
             <IconArrowRight />
           </Button>

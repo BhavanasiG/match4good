@@ -33,7 +33,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body
-        className={`${inter.className} antialiased flex flex-col min-h-screen bg-linear-to-b from-secondary/10 to-30% to-background`}
+        className={`${inter.className} antialiased flex flex-col min-h-screen bg-linear-to-b from-secondary/20 to-20% to-background`}
       >
         <ThemeProvider attribute={'class'}>
           <CookieBanner />

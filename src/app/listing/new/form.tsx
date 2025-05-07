@@ -27,6 +27,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { IconCalendarWeek, IconClock } from '@tabler/icons-react';
+import { siteContact } from '@/config/siteConfig';
 
 /* zod uses ISO 8601 format for date and time, but server only returns YYYY-MM-DDTHH:MM instead of YYYY-MM-DDTHH:MM:SS, so z.string().datetime() is ignored */
 const formSchema = z.object({
@@ -102,6 +103,9 @@ export default function CreateListingForm({ user }: { user: User }) {
       <Card className="mt-6">
         <CardHeader>
           <CardTitle>Create Volunteering Opportunity</CardTitle>
+          <p className="text-sm text-muted-foreground">
+            Or email us directly at {siteContact.email}
+          </p>
         </CardHeader>
         <CardContent>
           <Form {...form}>
