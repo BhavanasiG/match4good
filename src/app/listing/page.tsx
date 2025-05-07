@@ -1,5 +1,5 @@
-﻿﻿import prisma, { GetUser, SignupComplete } from '@/lib/prisma';
-﻿import ListingInfo from '@/components/listingInfo';
+﻿import prisma, { GetUser, SignupComplete } from '@/lib/prisma';
+import ListingInfo from '@/components/listingInfo';
 import {
   Pagination,
   PaginationContent,
@@ -36,7 +36,7 @@ export default async function ListingsPage(props: Props) {
       organization: true, // Fetch organization details
     },
     take: perPage,
-    skip: perPage * Number(page),
+    skip: perPage * (Number(page) - 1),
   });
 
   const user = await GetUser();

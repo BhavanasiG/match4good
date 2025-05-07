@@ -1,4 +1,5 @@
 ﻿import OrganizationInfo from '@/components/orgInfo';
+import { Button } from '@/components/ui/button';
 import {
   Pagination,
   PaginationContent,
@@ -9,7 +10,9 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination';
 import prisma from '@/lib/prisma';
+import { IconArrowRight } from '@tabler/icons-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 interface Props {
@@ -33,7 +36,7 @@ export default async function OrganizationsPage(props: Props) {
 
   const organizations = await prisma.organization.findMany({
     take: perPage,
-    skip: perPage * Number(page),
+    skip: perPage * (Number(page) - 1),
   });
 
   return (
@@ -54,6 +57,15 @@ export default async function OrganizationsPage(props: Props) {
             Discover ways to make a difference in your community. Browse our latest volunteering
             opportunities and find your perfect match!
           </h3>
+          <div className="flex space-x-5 items-center mt-2">
+            <h2 className="text-primary-foreground">Explore top charities from around the UK</h2>
+            <Link href={'/org/comission'}>
+              <Button variant={'secondary'}>
+                Charity Comission
+                <IconArrowRight />
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
       {/**  Organizations */}
