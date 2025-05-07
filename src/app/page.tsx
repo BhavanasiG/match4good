@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { auth0 } from '@/lib/auth0';
 import prisma, { GetUser } from '@/lib/prisma';
-import { IconArrowRight, IconExternalLink, IconHeartHandshake } from '@tabler/icons-react';
+import { IconArrowRight, IconBulb, IconGlobe, IconHeartHandshake } from '@tabler/icons-react';
 import { headers } from 'next/headers';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -162,33 +162,30 @@ export default async function App() {
         <div className="grid grid-rows-3 md:grid-rows-none md:grid-cols-3 p-8 gap-10 md:gap-20">
           <div className="flex flex-col justify-start items-center space-y-3">
             <IconHeartHandshake size={50} className="text-primary" />
-            <h3 className="text-xl font-semibold text-primary">Community</h3>
-            <p className="text-wrap text-center">
-              We harness individual contributions to strengthen communities and drive meaningful
-              change.
-            </p>
-          </div>
-          <div className="flex flex-col justify-start items-center space-y-3">
-            <IconHeartHandshake size={50} className="text-primary" />
-            <h3 className="text-xl font-semibold text-primary">Inclusivity</h3>
-            <p className="text-wrap text-center">
-              We create pathways for everyone to serve, recognizing that diversity of volunteers
-              enriches impact.
-            </p>
-          </div>
-          <div className="flex flex-col justify-start items-center space-y-3">
-            <IconHeartHandshake size={50} className="text-primary" />
             <h3 className="text-xl font-semibold text-primary">Connection</h3>
             <p className="text-wrap text-center">
-              We match volunteers' skills and passions with genuine community needs, creating
-              fulfilling experiences that matter.
+              We bring together passionate volunteers and organizations making a difference.
+            </p>
+          </div>
+          <div className="flex flex-col justify-start items-center space-y-3">
+            <IconGlobe size={50} className="text-primary" />
+            <h3 className="text-xl font-semibold text-primary">Impact</h3>
+            <p className="text-wrap text-center">
+              Every match creates positive change in communities across the UK.
+            </p>
+          </div>
+          <div className="flex flex-col justify-start items-center space-y-3">
+            <IconBulb size={50} className="text-primary" />
+            <h3 className="text-xl font-semibold text-primary">Accessibility</h3>
+            <p className="text-wrap text-center">
+              We believe everyone should have the opportunity to give back, easily and meaningfully.
             </p>
           </div>
         </div>
         <Link href={'/about-us'} className="cursor-pointer">
           <Button size={'lg'}>
             Read more about us
-            <IconExternalLink />
+            <IconArrowRight />
           </Button>
         </Link>
       </section>

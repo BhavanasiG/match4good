@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import Link from 'next/link';
 import { Button } from './ui/button';
 import prisma from '@/lib/prisma';
+import { IconBuilding, IconClock } from '@tabler/icons-react';
 
 /**
  *
@@ -65,16 +66,22 @@ export default async function ListingInfo({ listing }: { listing: Listing }) {
         <CardHeader>
           <CardTitle>
             <p className="text-lg">{listing.name}</p>
-            <p className="text-sm text-muted-foreground mt-1">{listingOrg.name}</p>
+            <div className="text-sm text-muted-foreground mt-1 flex items-center space-x-2">
+              <IconBuilding size={20} />
+              <p>{listingOrg.name}</p>
+            </div>
           </CardTitle>
           <CardDescription className="line-clamp-3">{listing.description}</CardDescription>
         </CardHeader>
-        <CardContent className="text-base">
+        <CardContent className="text-base flex items-center text-left space-x-2">
+          <IconClock size={30} />
           {getTimeString(listing.startDatetime, listing.endDatetime)}
         </CardContent>
         <CardFooter>
           <Link href={`/listing/${listing.id}`}>
-            <Button className="cursor-pointer">View Details</Button>
+            <Button className="cursor-pointer">
+              View Details
+            </Button>
           </Link>
         </CardFooter>
       </Card>
