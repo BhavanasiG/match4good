@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   experimental: {
     authInterrupts: true,
   },
+  images: {
+    domains: ['ik.imagekit.io'],
+  },
 };
 
 export default nextConfig;
