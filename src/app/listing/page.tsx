@@ -1,13 +1,42 @@
-﻿import prisma, { GetUser, SignupComplete } from '@/lib/prisma';
-import Link from 'next/link';
+﻿﻿import prisma, { GetUser, SignupComplete } from '@/lib/prisma';
+﻿import ListingInfo from '@/components/listingInfo';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
+import Image from 'next/image';
 import { redirect } from 'next/navigation';
 
 // Fetch listings directly from the database
-export default async function ListingsPage() {
+export default async function ListingsPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  let page = searchParams['page'] ?? '1';
+
+  const perPage = 8;
+  const listingLength = Math.floor((await prisma.listing.findMany()).length / perPage);
+
+  if (Number(page) < 1) {
+    page = '1';
+    redirect(`/listing`);
+  } else if (Number(page) > listingLength) {
+    page = '1';
+    redirect(`/listing`);
+  }
+
   const listings = await prisma.listing.findMany({
     include: {
       organization: true, // Fetch organization details
     },
+    take: perPage,
+    skip: perPage * Number(page),
   });
 
   const user = await GetUser();
@@ -20,73 +49,79 @@ export default async function ListingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#e8f5e9] to-[#f1f8e9] py-10 px-4">
-      <div className="max-w-5xl mx-auto">
-        <header className="text-center mb-10">
-          <div className="text-4xl mb-2">🌱</div>
-          <h1 className="text-4xl font-extrabold text-[#388e3c] mb-2">Volunteer Opportunities</h1>
-          <p className="text-lg text-[#388e3c] max-w-2xl mx-auto">
+    <div className="min-h-screen flex flex-col">
+      {/** Banner */}
+      <section className="flex flex-col">
+        <div className="flex items-center h-50 overflow-hidden relative">
+          <Image
+            src={'/subhero-background.jpg'}
+            alt="Banner Image"
+            fill
+            style={{ objectFit: 'cover' }}
+          />
+        </div>
+        <div className="flex flex-col bg-primary justify-center text-center items-center p-8 space-y-2">
+          <h2 className="text-3xl font-semibold text-primary-foreground">
+            Volunteering Opportunities
+          </h2>
+          <h3 className="text-xl text-primary-foreground">
             Discover ways to make a difference in your community. Browse our latest volunteering
             opportunities and find your perfect match!
-          </p>
-        </header>
-
-        {listings.length > 0 ? (
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {listings.map((listing) => (
-              <div
-                key={listing.id}
-                className="bg-white rounded-2xl shadow-lg p-6 flex flex-col justify-between hover:shadow-2xl transition-shadow border border-green-100"
-              >
-                <div>
-                  <h2 className="text-2xl font-bold text-[#4CAF50] mb-2 flex items-center gap-2">
-                    <span role="img" aria-label="Opportunity">
-                      🤝
-                    </span>
-                    {listing.name}
-                  </h2>
-                  <p className="text-gray-700 mb-3 line-clamp-3">{listing.description}</p>
-                  <div className="flex items-center text-sm text-gray-500 mb-2 gap-2">
-                    <span role="img" aria-label="calendar">
-                      📅
-                    </span>
-                    {listing.startDatetime
-                      ? new Date(listing.startDatetime).toLocaleDateString()
-                      : 'TBA'}
-                    {' – '}
-                    {listing.endDatetime
-                      ? new Date(listing.endDatetime).toLocaleDateString()
-                      : 'TBA'}
-                  </div>
-                  <div className="flex items-center text-sm text-gray-500 mb-4 gap-2">
-                    <span role="img" aria-label="organization">
-                      🏢
-                    </span>
-                    {listing.organization?.name || 'Unknown Organization'}
-                  </div>
-                </div>
-                <div className="mt-auto">
-                  <Link
-                    href={`/listing/${listing.id}`}
-                    className="inline-block bg-gradient-to-r from-[#4CAF50] to-[#81C784] text-white font-semibold px-5 py-2 rounded-full shadow hover:from-[#388e3c] hover:to-[#66bb6a] transition"
-                  >
-                    View Details
-                  </Link>
-                </div>
-              </div>
-            ))}
+          </h3>
+        </div>
+      </section>
+      {/**  listings */}
+      <section className="flex flex-col p-12 md:p-24 xl:px-40">
+        <div className="grid grid-rows-4 sm:grid-rows-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:grid-rows-none gap-10">
+          {listings.map((listing) => (
+            <ListingInfo key={listing.id} listing={listing} />
+          ))}
+        </div>
+      </section>
+      <Pagination className="pb-12">
+        <PaginationContent className="grid grid-cols-3 items-center">
+          <PaginationItem className="flex justify-center">
+            <PaginationPrevious
+              href={`/listing?page=${Number(page) - 1}`}
+              aria-disabled={Number(page) <= 1}
+              tabIndex={Number(page) <= 1 ? -1 : undefined}
+              className={Number(page) <= 1 ? 'pointer-events-none opacity-50' : undefined}
+            />
+          </PaginationItem>
+          <div className="flex justify-center">
+            <PaginationItem>
+              <PaginationLink href={`/listing?page=${1}`}>1</PaginationLink>
+            </PaginationItem>
+            {listingLength > 2 && (
+              <PaginationItem>
+                <PaginationLink href={`/listing?page=${2}`}>2</PaginationLink>
+              </PaginationItem>
+            )}
+            {listingLength > 3 && (
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+            )}
+            {listingLength > 1 && (
+              <PaginationItem>
+                <PaginationLink href={`/listing?page=${listingLength}`}>
+                  {listingLength}
+                </PaginationLink>
+              </PaginationItem>
+            )}
           </div>
-        ) : (
-          <div className="text-center text-gray-600 mt-12">
-            <div className="text-5xl mb-3">😔</div>
-            <p className="text-xl font-medium">
-              No opportunities available at the moment.
-              <br />
-              Check back soon!
-            </p>
-          </div>
-        )}
-      </div>
+          <PaginationItem className="flex justify-center">
+            <PaginationNext
+              href={`/listing?page=${Number(page) + 1}`}
+              aria-disabled={Number(page) >= listingLength}
+              tabIndex={Number(page) >= listingLength ? -1 : undefined}
+              className={
+                Number(page) >= listingLength ? 'pointer-events-none opacity-50' : undefined
+              }
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 }
