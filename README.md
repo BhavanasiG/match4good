@@ -28,7 +28,7 @@ To preview the generated documentation locally in your browser:
 
     npm run docs:serve
 
-This starts a local static server at http://localhost:3000 (or another port) and serves the docs/ folder so you can browse the documentation.
+This starts a local static server at http://localhost:5000 and serves the docs/ folder so you can browse the documentation.
 
 #### Launching the server
 
