@@ -1,0 +1,6 @@
+{
+  "watch": ["src"],
+  "ext": "ts,tsx",
+  "exec": "npm run docs",
+  "ignore": ["**/*.test.ts", "**/*.test.tsx"]
+}
