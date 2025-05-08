@@ -1,13 +1,17 @@
 {
-  "entryPoints": [
-    "src",
-    "src/components/MapWrapper.tsx",
-    "src/components/MapComponent.tsx",
-  ],
+  "entryPoints": ["src", "src/components/MapWrapper.tsx", "src/components/MapComponent.tsx"],
   "entryPointStrategy": "expand",
   "out": "docs",
-  "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/__tests__/**", "**/page.tsx", "**/components/ui/**", "**/src/hooks/**", "**/src/middleware.ts",
-  "**/src/lib/ws/**"],
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/__tests__/**",
+    "**/page.tsx",
+    "**/components/ui/**",
+    "**/src/hooks/**",
+    "**/src/middleware.ts",
+    "**/src/lib/ws/**"
+  ],
   "excludePrivate": true,
   "excludeExternals": true,
   "excludeProtected": true,
