@@ -10,6 +10,26 @@ Check if there are any updates available: `npm outdated`. Update packages using 
 
 **NOTE:** New package releases could potentially break functionality. It is recommended to initially run the application with existing packages. After confirming functionality, you can run the application with updated packages. If a new package release breaks functionality, please create a pull request or issue to report it.
 
+#### Generating documentation from TSDoc
+
+To manually generate HTML documentation from TSDoc comments:
+
+    npm run docs
+
+This will output static HTML files to the docs/ directory.
+
+To auto-regenerate docs every time you save a file (while working on the codebase), use:
+
+    npm run docs:watch
+
+This watches your source files and automatically updates the generated docs in docs/ on change.
+
+To preview the generated documentation locally in your browser:
+
+    npm run docs:serve
+
+This starts a local static server at http://localhost:5000 and serves the docs/ folder so you can browse the documentation.
+
 #### Launching the server
 
 You need a running Postgres instance: a connection at `localhost:5432` is expected.
