@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import Link from 'next/link';
 import { Button } from './ui/button';
 import prisma from '@/lib/prisma';
-import { IconBuilding, IconClock } from '@tabler/icons-react';
+import { IconBuilding } from '@tabler/icons-react';
 
 /**
  *
@@ -18,13 +18,13 @@ function getTimeString(startDate: Date, endDate: Date) {
 
   if (startDate.getDate() === endDate.getDate()) {
     return (
-      <>
+      <div className="flex flex-col">
         <p>{startDate.toLocaleDateString(undefined, { dateStyle: 'full' })}</p>
         <p>
           {startDate.toLocaleTimeString(undefined, { timeStyle: 'short' })} -&nbsp;
           {endDate.toLocaleTimeString(undefined, { timeStyle: 'short' })}
         </p>
-      </>
+      </div>
     );
   } else if (hours < 168) {
     return (
@@ -74,7 +74,6 @@ export default async function ListingInfo({ listing }: { listing: Listing }) {
           <CardDescription className="line-clamp-3">{listing.description}</CardDescription>
         </CardHeader>
         <CardContent className="text-base flex items-center text-left space-x-2">
-          <IconClock size={30} />
           {getTimeString(listing.startDatetime, listing.endDatetime)}
         </CardContent>
         <CardFooter>

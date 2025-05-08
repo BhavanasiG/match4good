@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import { useRouter } from 'next/navigation';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 interface SortDropdownProps {
   currentSort: string;
@@ -12,21 +13,26 @@ interface SortDropdownProps {
  * @param {SortDropdownProps} props - Component props
  * @param {string} props.currentSort - Currently active sort option
  * @param {number} props.currentPage - Current pagination page
- * @returns {React.ReactElement} Sorting dropdown UI
+ * @returns {Element} Sorting dropdown UI
  */
 export default function SortDropdown({ currentSort, currentPage }: SortDropdownProps) {
   const router = useRouter();
 
-  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    router.push(`/listing?page=${currentPage}&sort=${event.target.value}`);
+  const handleSortChange = (value: string) => {
+    router.push(`/listing?page=${currentPage}&sort=${value}`);
   };
 
   return (
-    <select value={currentSort} onChange={handleSortChange} className="border p-2 rounded">
-      <option value="newest">Newest</option>
-      <option value="oldest">Oldest</option>
-      <option value="closingSoonest">Closing Soonest</option>
-      <option value="closingLatest">Closing Latest</option>
-    </select>
+    <Select value={currentSort} onValueChange={handleSortChange}>
+      <SelectTrigger>
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="newest">Newest</SelectItem>
+        <SelectItem value="oldest">Oldest</SelectItem>
+        <SelectItem value="closingSoonest">Closing Soonest</SelectItem>
+        <SelectItem value="closingLatest">Closing Latest</SelectItem>
+      </SelectContent>
+    </Select>
   );
 }
