@@ -14,16 +14,14 @@ Check if there are any updates available: `npm outdated`. Update packages using 
 
 To manually generate HTML documentation from TSDoc comments:
 
-    ```
-    npm run docs
+    ```npm run docs
     ```
 
 This will output static HTML files to the docs/ directory.
 
 To auto-regenerate docs every time you save a file (while working on the codebase), use:
 
-    ```
-    npm run docs:watch
+    ```npm run docs:watch
     ```
 
 This watches your source files and automatically updates the generated docs in docs/ on change.
