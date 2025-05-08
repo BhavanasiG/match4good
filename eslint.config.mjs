@@ -117,6 +117,7 @@ export default defineConfig([
 
   globalIgnores([
     'src/hooks/',
+    'docs/**',
     'src/components/ui/',
     '**/page.tsx',
     'src/middleware.ts',

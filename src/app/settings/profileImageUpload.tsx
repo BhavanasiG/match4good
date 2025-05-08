@@ -25,7 +25,7 @@ interface ProfilePictureResponse {
 
 /**
  * @returns {JSX.Element} Returns a JSX element containing the profile image upload component
- * @description This component allows users to upload, preview, and remove their profile images.
+ * This component allows users to upload, preview, and remove their profile images.
  * It fetches the current profile image from the server and displays it.
  * Users can select a new image, which will be uploaded to ImageKit and the URL will be saved in the database.
  * The component also provides a progress bar to indicate the upload status.
@@ -152,7 +152,7 @@ export default function ProfileImageUpload() {
  * @param {object} param0 - Props containing size and src
  * @param {string} param0.className - Additional classnames of the avatar
  * @param {string} param0.src - The source URL for the image
- * @description This component renders an avatar image with a fallback icon.
+ * This component renders an avatar image with a fallback icon.
  * It uses the `Avatar`, `AvatarImage`, and `AvatarFallback` components from ShadCn UI.
  * The avatar displays the user's profile picture if available, or a default user icon if not.
  * The size of the avatar is determined by the `size` prop.

@@ -15,7 +15,8 @@
     "prepare": "husky",
     "dev:setup": "npm run db:deploy && npx prisma db seed && npm run dev",
     "docs": "typedoc",
-    "docs:watch": "nodemon"
+    "docs:watch": "nodemon",
+    "docs:serve": "serve docs -l 5000"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -89,6 +90,7 @@
     "postcss": "^8.5.3",
     "prettier": "^3.5.3",
     "prisma": "^6.7.0",
+    "serve": "^14.2.4",
     "tailwindcss": "^4.1.5",
     "ts-jest": "^29.3.2",
     "ts-node": "^10.9.2",

@@ -40,6 +40,12 @@ const FormField = <
   );
 };
 
+/**
+ * Custom hook that uses `useFormContext` from react-hook-form
+ * to access form field state and IDs for accessibility.
+ *
+ * @see https://react-hook-form.com/docs/useformcontext
+ */
 const useFormField = () => {
   const fieldContext = React.useContext(FormFieldContext);
   const itemContext = React.useContext(FormItemContext);
