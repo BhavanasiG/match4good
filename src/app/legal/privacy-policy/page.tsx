@@ -154,18 +154,6 @@ export default function PrivacyPolicy() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer
-        style={{
-          textAlign: 'center',
-          color: '#388e3c',
-          fontSize: '0.95rem',
-          padding: '2rem 0 0.5rem 0',
-        }}
-      >
-        &copy; {new Date().getFullYear()} Match4Good. All rights reserved.
-      </footer>
     </div>
   );
 }

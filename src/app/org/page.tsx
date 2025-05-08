@@ -9,6 +9,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
+import { siteContent } from '@/config/siteConfig';
 import prisma from '@/lib/prisma';
 import { IconArrowRight, IconChevronRight } from '@tabler/icons-react';
 import Image from 'next/image';
@@ -53,10 +54,7 @@ export default async function OrganizationsPage(props: Props) {
         </div>
         <div className="flex flex-col bg-primary justify-center text-center items-center p-8 space-y-2">
           <h2 className="text-3xl font-semibold text-primary-foreground">Organizations</h2>
-          <h3 className="text-xl text-primary-foreground">
-            Discover ways to make a difference in your community. Browse our latest volunteering
-            opportunities and find your perfect match!
-          </h3>
+          <h3 className="text-xl text-primary-foreground">{siteContent.orgDescription}</h3>
           <div className="flex flex-col space-y-2 md:space-x-5 md:space-y-0 md:flex-row items-center mt-2">
             <h2 className="text-primary-foreground">Explore top charities from around the UK</h2>
             <Link href={'/org/comission'}>

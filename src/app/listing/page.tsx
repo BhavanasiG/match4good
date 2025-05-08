@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/pagination';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
+import { siteContent } from '@/config/siteConfig';
 
 interface Props {
   searchParams: Promise<{ page: string }>;
@@ -63,10 +64,7 @@ export default async function ListingsPage(props: Props) {
           <h2 className="text-3xl font-semibold text-primary-foreground">
             Volunteering Opportunities
           </h2>
-          <h3 className="text-xl text-primary-foreground">
-            Discover ways to make a difference in your community. Browse our latest volunteering
-            opportunities and find your perfect match!
-          </h3>
+          <h3 className="text-xl text-primary-foreground">{siteContent.listingDescription}</h3>
         </div>
       </section>
       {/**  listings */}
