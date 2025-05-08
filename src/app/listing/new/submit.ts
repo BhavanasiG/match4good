@@ -1,7 +1,7 @@
 'use server';
 
 import prisma, { GetUser } from '@/lib/prisma';
-import { redirect } from 'next/navigation';
+import { forbidden, redirect } from 'next/navigation';
 import { Organization } from '@/../generated/prisma_client';
 
 export interface CreateListingData {
@@ -12,6 +12,44 @@ export interface CreateListingData {
     endDatetime: string;
   };
   organizationId: number;
+  categories: number[];
+}
+
+/**
+ * Fetches all categories and their subcategories from the database.
+ * Returns a structured format suitable for the sign-up form.
+ * @returns {Promise<Array<{
+ *   id: number;
+ *   name: string;
+ *   description: string | null;
+ *   subcategories: Array<{
+ *     id: number;
+ *     name: string;
+ *     description: string | null;
+ *   }>;
+ * }>>} An array of categories with their nested subcategories
+ * @throws {Error} If database query fails
+ */
+export async function GetCategories() {
+  const categories = await prisma.category.findMany({
+    include: {
+      subcategories: true,
+    },
+  });
+
+  const categoryList = categories.map((category) => {
+    return {
+      id: category.id,
+      name: category.name,
+      description: category.description,
+      subcategories: category.subcategories.map((subcategory) => ({
+        id: subcategory.id,
+        name: subcategory.name,
+        description: subcategory.description,
+      })),
+    };
+  });
+  return categoryList;
 }
 
 /**
@@ -44,6 +82,11 @@ async function getUserOrganizations(): Promise<Organization[] | null> {
  * @returns {redirect} redirection to new created listing (if valid data inputted),
  */
 export async function CreateListing(formData: CreateListingData) {
+  const user = await GetUser(true);
+  if (!user) {
+    return forbidden();
+  }
+
   if (!formData.name.trim()) {
     return 'Name is required';
   }
@@ -73,6 +116,11 @@ export async function CreateListing(formData: CreateListingData) {
 
   if (!userOrgs.some((org) => org.id === formData.organizationId)) {
     return 'Invalid organization selected.';
+  }
+
+  const categories = formData.categories;
+  if (!categories || categories.length === 0) {
+    return 'At least one category is required';
   }
 
   // Save the listing
