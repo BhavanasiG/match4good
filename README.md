@@ -14,7 +14,7 @@ Check if there are any updates available: `npm outdated`. Update packages using 
 
 To manually generate HTML documentation from TSDoc comments:
 
-    ```bash
+    ```
     npm run docs
     ```
 
