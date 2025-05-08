@@ -27,8 +27,8 @@ export default function AboutUsPage() {
       {/** Our Story */}
       <section className="flex flex-col text-center justify-between p-12 md:p-16 lg:p-24 xl:px-80 space-y-10">
         <h2 className="text-primary text-2xl md:text-4xl font-semibold">Our Story</h2>
-        {siteContent.story.map((paragraph) => (
-          <p className="text-base md:text-lg">
+        {siteContent.story.map((paragraph, index) => (
+          <p key={index} className="text-base md:text-lg">
             {paragraph}
             <br />
           </p>
@@ -101,77 +101,3 @@ export default function AboutUsPage() {
     </div>
   );
 }
-
-// {/* Mission and Contact */}
-// <section
-//   style={{
-//     maxWidth: '900px',
-//     margin: '0 auto',
-//     padding: '2rem',
-//     background: '#fff',
-//     borderRadius: '18px',
-//     boxShadow: '0 4px 24px rgba(56, 142, 60, 0.10)',
-//     marginBottom: '2.5rem',
-//   }}
-// >
-//   <h2
-//     style={{
-//       fontSize: '1.75rem',
-//       color: '#388e3c',
-//       fontWeight: 700,
-//       marginBottom: '1rem',
-//     }}
-//   >
-//     Our Mission
-//   </h2>
-//   <p
-//     style={{
-//       fontSize: '1.1rem',
-//       color: '#444',
-//       marginBottom: '2rem',
-//     }}
-//   >
-//     At <strong style={{ color: '#388e3c' }}>Match4Good</strong>, we believe that volunteering
-//     should be simple, rewarding, and impactful. Our mission is to bridge the gap between
-//     volunteers and organizations in need, making it easy for everyone to give back and create
-//     positive change-one match at a time.
-//   </p>
-
-//   <h2
-//     style={{
-//       fontSize: '1.75rem',
-//       color: '#388e3c',
-//       fontWeight: 700,
-//       marginBottom: '1rem',
-//     }}
-//   >
-//     Get Involved
-//   </h2>
-//   <p
-//     style={{
-//       fontSize: '1.1rem',
-//       color: '#444',
-//       marginBottom: '2rem',
-//     }}
-//   >
-//     Whether you’re an individual eager to volunteer or an organization seeking passionate
-//     helpers, Match4Good is here for you. Explore opportunities, connect, and start making a
-//     difference today!
-//   </p>
-
-//   <h2
-//     style={{
-//       fontSize: '1.75rem',
-//       color: '#388e3c',
-//       fontWeight: 700,
-//       marginBottom: '1rem',
-//     }}
-//   >
-//     Contact Us
-//   </h2>
-//   <p
-//     style={{
-//       fontSize: '1.1rem',
-//       color: '#444',
-//     }}
-//   >
