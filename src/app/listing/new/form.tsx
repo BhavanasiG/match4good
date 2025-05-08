@@ -335,9 +335,11 @@ export default function CreateListingForm({ user }: { user: User }) {
                 name="categories"
                 render={() => (
                   <FormItem>
-                    <FormLabel className="text-sm md:text-base">Select Interests</FormLabel>
+                    <FormLabel className="text-sm md:text-base">
+                      Select Category(s) of Listing
+                    </FormLabel>
                     <FormDescription className="text-sm">
-                      Select at least three interests.
+                      Select at least one category.
                     </FormDescription>
                     <div className="space-y-6 mt-4">
                       <ScrollArea className="h-[300px] md:h-[500px]">
