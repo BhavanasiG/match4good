@@ -2,6 +2,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import React from 'react';
 
 interface SortDropdownProps {
   currentSort: string;

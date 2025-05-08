@@ -45,6 +45,7 @@ const formSchema = z.object({
     .max(8, {
       message: 'Postcode cannot be longer than 8 characters.',
     })
+    .trim()
     .regex(/^([A-Z][A-HJ-Y]?\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0A{2})$/, {
       message: 'Invalid postcode format',
     }),
