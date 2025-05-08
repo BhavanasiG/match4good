@@ -60,7 +60,7 @@ export default function ContactUsPage() {
   }
 
   return (
-    <div className="self-center flex justify-center p-12 md:p-24 w-screen max-w-4xl">
+    <div className="self-center flex justify-center md:p-12 lg:md:p-24 w-screen max-w-4xl">
       <Card className="mt-8 w-2/3">
         <CardHeader>
           <CardTitle>Contact us</CardTitle>
