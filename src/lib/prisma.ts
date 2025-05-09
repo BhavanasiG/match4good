@@ -39,12 +39,14 @@ export async function GetUser(organizations: boolean = false): Promise<User | nu
       userName = session.user.name;
     }
     const username = userName ?? session.user.nickname ?? session.user.sub;
+    const initialProfilePictureUrl: string | null | undefined = session.user.picture;
 
     user = await prisma.user.create({
       data: {
         userId: session.user.sub,
         username: username,
         email: email,
+        profilePictureUrl: initialProfilePictureUrl,
       },
       include: {
         ownerOf: organizations,

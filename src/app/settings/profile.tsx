@@ -76,7 +76,7 @@ export default function ProfileForm({ user }: { user: User }) {
   function OnSubmit(values: z.infer<typeof formSchema>) {
     let error = false;
 
-    UpdateUser(values.username, values.bio || null).catch((e: Error) => {
+    UpdateUser(values.username, values.email, values.bio || null).catch((e: Error) => {
       console.error('Failed to update: ', e);
       toast.error('Failed to update: ' + e.message);
       error = true;
