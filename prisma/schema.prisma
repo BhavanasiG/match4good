@@ -73,7 +73,7 @@ model Listing {
   organization   Organization  @relation(fields: [organizationId], references: [id])
   organizationId Int
 
-  categorgies Subcategory[]
+  categories Subcategory[]
 
   applications Application[]
 }

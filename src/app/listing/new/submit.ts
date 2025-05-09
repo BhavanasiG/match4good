@@ -136,6 +136,11 @@ export async function CreateListing(formData: CreateListingData) {
       organizationId: formData.organizationId,
       // todo, have a config somewhere to not hard-code it here
       pointValue: hours * 1000,
+      categories: {
+        connect: categories.map((categoryId) => ({
+          id: categoryId,
+        })),
+      },
     },
   });
 
