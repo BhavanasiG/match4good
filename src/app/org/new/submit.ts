@@ -12,12 +12,19 @@
 
 import prisma, { GetUser } from '@/lib/prisma';
 import { forbidden } from 'next/navigation';
+import getRegionFromPostcode from '@/lib/postcodes-io';
 
 export type Props = {
   name: string;
   description: string;
   address: string;
   postcode: string;
+};
+
+type Region = {
+  id: number;
+  name: string;
+  points: number;
 };
 
 /**
@@ -38,19 +45,33 @@ export async function CreateOrganization({ name, description, address, postcode 
     },
   });
 
+  let orgRegion: Region | null = null;
+
+  if (postcode) {
+    orgRegion = await getRegionFromPostcode(postcode);
+  } else {
+    console.error(`Could not determine region for postcode "${postcode}".`);
+    orgRegion = null;
+  }
+
   if (exists) {
     return 0;
-  } else {
+  }
+  if (orgRegion === null) {
+    return 0;
+  }
+  if (!exists && orgRegion) {
     const org = await prisma.organization.create({
       data: {
         name: name,
         description: description,
         address: address,
-        postcode: postcode,
         ownerId: user.id,
+        postcode: postcode,
+        regionId: orgRegion.id,
       },
     });
-
+    console.log('Organization created:', org);
     return org.id;
   }
 }
