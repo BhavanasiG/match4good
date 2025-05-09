@@ -173,7 +173,7 @@ export default async function App() {
             <p className="text-wrap text-center">{siteContent.coreValues[2].description}</p>
           </div>
         </div>
-        <Link href={'/about-us'} className="cursor-pointer">
+        <Link href={'/help/about'} className="cursor-pointer">
           <Button size={'lg'} className="cursor-pointer">
             Read more about us
             <IconArrowRight />

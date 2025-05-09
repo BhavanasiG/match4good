@@ -54,7 +54,7 @@ export default function Header() {
     discover: [
       {
         name: 'About',
-        href: '/about-us',
+        href: '/help/about',
         description: 'Learn about our mission to connect volunteers with meaningful opportunities.',
       },
     ],

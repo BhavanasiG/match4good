@@ -89,7 +89,7 @@ export default function AboutUsPage() {
             {siteContent.contactDescription}
           </h2>
           <div className="flex space-x-5">
-            <Link href={'/contact-us/'}>
+            <Link href={'/help/contact-us/'}>
               <Button variant={'secondary'} className="cursor-pointer" size={'lg'}>
                 Contact us
                 <IconArrowRight />

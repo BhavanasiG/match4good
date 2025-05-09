@@ -35,10 +35,10 @@ export default function Footer() {
         <div className="flex justify-center items-center">
           <div className="flex flex-col space-y-2">
             <h2 className="font-semibold text-2xl">Resources</h2>
-            <Link href={'/about-us'} className="hover:text-muted-foreground">
+            <Link href={'/help/about'} className="hover:text-muted-foreground">
               About Us
             </Link>
-            <Link href={'/contact-us'} className="hover:text-muted-foreground">
+            <Link href={'/help/contact-us'} className="hover:text-muted-foreground">
               Contact Us
             </Link>
           </div>
