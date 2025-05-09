@@ -16,7 +16,7 @@ async function SessionButton() {
     return <></>;
   } else {
     return (
-      <Link href={'/listings/'}>
+      <Link href={'/auth/login'}>
         <Button variant={'secondary'} className="cursor-pointer" size={'lg'}>
           Join us
           <IconArrowRight />
