@@ -79,13 +79,12 @@ export default async function ListingsPage({ searchParams }: Props) {
         </div>
       </section>
 
-      {/* Filters Section - Positioned Directly Above Listings */}
-      <div className="flex justify-end px-12 md:px-24 xl:px-40 mt-8">
-        <SortDropdown currentSort={sortParam} currentPage={currentPage} />
-      </div>
-
       {/* Listings Section */}
-      <section className="flex flex-col p-12 md:p-24 xl:px-40">
+      <section className="flex flex-col p-12 md:px-24 xl:px-40">
+        {/* Filters Section - Positioned Directly Above Listings */}
+        <div className="flex justify-end mb-8 space-x-5">
+          <SortDropdown currentSort={sortParam} currentPage={currentPage} />
+        </div>
         <div className="grid grid-rows-4 sm:grid-rows-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:grid-rows-none gap-10">
           {listings.map((listing) => (
             <ListingInfo key={listing.id} listing={listing} />
