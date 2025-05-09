@@ -32,13 +32,14 @@ export default async function App(props: { params: t_params }) {
     }
   }
 
-  // Include followers in the org query for the FollowButton logic
+  // Include followers and owner in the org query for permissions & buttons
   const org = await prisma.organization.findUnique({
     where: {
       id: org_id,
     },
     include: {
-      followers: true, // <-- include followers
+      followers: true, // Include followers for FollowButton logic
+      owner: true, // Include owner for Edit button logic
     },
   });
 
@@ -70,15 +71,22 @@ export default async function App(props: { params: t_params }) {
             <p className="text-md md:text-lg text-muted-foreground">Category ⋅ {org?.address}</p>
           </CardTitle>
 
-          {/* ✅ Follow/Unfollow Button */}
-          {user && org?.followers && (
-            <div className="mt-2">
+          <div className="flex items-center space-x-2 mt-2">
+            {/* ✅ Follow/Unfollow Button */}
+            {user && org?.followers && (
               <FollowButton
                 organizationId={org.id}
                 isFollowing={org.followers.some((f) => f.userId === user.id)}
               />
-            </div>
-          )}
+            )}
+
+            {/* ✅ Edit Organization Button (Visible only to owners) */}
+            {user?.id === org?.ownerId && (
+              <Link href={`/org/${org.id}/edit`}>
+                <Button variant="secondary">Edit Organization</Button>
+              </Link>
+            )}
+          </div>
 
           <CardDescription>
             <p className="text-md md:text-lg font-medium line-clamp-3"> {org?.description} </p>
