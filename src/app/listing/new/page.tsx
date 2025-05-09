@@ -8,11 +8,17 @@ export default async function App() {
   if (!user) {
     return forbidden();
   }
-
   if (user) {
     const signupCompleted = await SignupComplete();
     if (!signupCompleted) {
       redirect('/user/sign-up');
+    }
+    const organizations = user?.ownerOf.map((organization) => organization.id) || [];
+
+    const num_of_orgs = organizations.length;
+
+    if (num_of_orgs === 0) {
+      return forbidden();
     }
   }
 
