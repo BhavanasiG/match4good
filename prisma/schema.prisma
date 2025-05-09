@@ -14,7 +14,7 @@ model User {
   username             String         @unique
   email                String?        @unique
   profilePictureUrl    String?
-  profilePictureFileId String?  
+  profilePictureFileId String?
   bio                  String?
   signupCompleted      Boolean        @default(false)
   ownerOf              Organization[] @relation("ownership")
@@ -37,6 +37,8 @@ model Organization {
   listings    Listing[]
   owner       User      @relation("ownership", fields: [ownerId], references: [id])
   members     User[]    @relation("membership")
+  Region      Region?   @relation(fields: [regionId], references: [id])
+  regionId    Int?
 }
 
 model Follow {
@@ -76,10 +78,11 @@ model Listing {
 
 model Region {
   id     Int    @id @default(autoincrement())
-  name   String
+  name   String @unique
   points Int    @default(0)
 
-  users User[]
+  users         User[]
+  organizations Organization[]
 }
 
 enum ApplicationStatus {
