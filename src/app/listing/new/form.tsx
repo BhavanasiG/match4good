@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { CreateListing } from './submit';
+import { CreateListing, GetCategories } from './submit';
 import { User } from '@/lib/prisma';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Cn } from '@/lib/utils';
@@ -28,6 +28,10 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { IconCalendarWeek, IconClock } from '@tabler/icons-react';
 import { siteContact } from '@/config/siteConfig';
+import { useEffect, useState } from 'react';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { Toggle } from '@/components/ui/toggle';
+import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 
 /* zod uses ISO 8601 format for date and time, but server only returns YYYY-MM-DDTHH:MM instead of YYYY-MM-DDTHH:MM:SS, so z.string().datetime() is ignored */
 const formSchema = z.object({
@@ -54,7 +58,21 @@ const formSchema = z.object({
     }),
   description: z.string().max(400).optional(),
   organization: z.number(),
+  categories: z.array(z.number()).refine((arr) => arr.length >= 1, {
+    message: 'You must select at least one category.',
+  }),
 });
+
+interface Category {
+  id: number;
+  name: string;
+  description: string | null;
+  subcategories: {
+    id: number;
+    name: string;
+    description: string | null;
+  }[];
+}
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -65,6 +83,25 @@ const formSchema = z.object({
  */
 export default function CreateListingForm({ user }: { user: User }) {
   const userOrgs = [...new Set([...user.ownerOf, ...user.memberOf])];
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await GetCategories();
+        setCategories(data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCategories().catch((e: Error) => {
+      console.log('Error fetching categories: ' + e.message);
+    });
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -75,6 +112,7 @@ export default function CreateListingForm({ user }: { user: User }) {
         startDatetime: '',
         endDatetime: '',
       },
+      categories: [],
     },
   });
 
@@ -91,11 +129,12 @@ export default function CreateListingForm({ user }: { user: User }) {
         endDatetime: values.dateRange.endDatetime,
       },
       organizationId: values.organization,
+      categories: values.categories,
     }).catch((e: Error) => {
       console.error(e);
     });
 
-    toast.success('Organization created successfully!');
+    toast.success('Listing created successfully!');
   }
 
   return (
@@ -288,6 +327,76 @@ export default function CreateListingForm({ user }: { user: User }) {
                         ))}
                       </DropdownMenuContent>
                     </DropdownMenu>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="categories"
+                render={() => (
+                  <FormItem>
+                    <FormLabel className="text-sm md:text-base">
+                      Select Category(s) of Listing
+                    </FormLabel>
+                    <FormDescription className="text-sm">
+                      Select at least one category.
+                    </FormDescription>
+                    <div className="space-y-6 mt-4">
+                      <ScrollArea className="h-[300px] md:h-[500px]">
+                        {isLoading ? (
+                          <div>Loading categories...</div>
+                        ) : (
+                          categories.map((category) => (
+                            <div key={category.name}>
+                              <h2 className="font-semibold text-base mb-4">{category.name}</h2>
+                              <div className="flex flex-wrap space-x-2 space-y-2 mb-8">
+                                {category.subcategories.map((subcategory) => (
+                                  <FormField
+                                    key={subcategory.name}
+                                    control={form.control}
+                                    name="categories"
+                                    render={({ field }) => (
+                                      <FormItem key={subcategory.name}>
+                                        <FormControl>
+                                          <Toggle
+                                            size={'sm'}
+                                            variant={'outline'}
+                                            className="w-fit hover:cursor-pointer"
+                                            pressed={field.value?.includes(subcategory.id)}
+                                            onPressedChange={(checked) => {
+                                              const currentValues = field.value || [];
+                                              const newValues = checked
+                                                ? [...currentValues, subcategory.id]
+                                                : currentValues.filter(
+                                                    (value) => value !== subcategory.id,
+                                                  );
+                                              field.onChange(newValues);
+                                            }}
+                                          >
+                                            <TooltipProvider>
+                                              <Tooltip delayDuration={700}>
+                                                <TooltipTrigger asChild>
+                                                  <span>{subcategory.name}</span>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                  <p>{subcategory.description}</p>
+                                                </TooltipContent>
+                                              </Tooltip>
+                                            </TooltipProvider>
+                                          </Toggle>
+                                        </FormControl>
+                                      </FormItem>
+                                    )}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                          ))
+                        )}
+                        <ScrollBar />
+                      </ScrollArea>
+                    </div>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
