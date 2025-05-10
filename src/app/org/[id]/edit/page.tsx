@@ -1,5 +1,3 @@
-'use client';
-
 import prisma, { GetUser, SignupComplete } from '@/lib/prisma';
 import EditOrganizationForm from './form';
 import { forbidden, notFound, redirect } from 'next/navigation';
