@@ -3,7 +3,7 @@ import EditOrganizationForm from './form';
 import { forbidden, notFound, redirect } from 'next/navigation';
 
 export default async function EditOrganization(props: { params: Promise<{ id: string }> }) {
-  const org_id = parseInt((await props.params).id);
+  const org_id = parseInt((await props.params).id, 10);
 
   if (isNaN(org_id)) {
     return notFound();
