@@ -1,4 +1,4 @@
-import prisma, { GetUser, SignupComplete } from '@/lib/prisma';
+import prisma, { GetUser, OrganizationWithSelectedRelations, SignupComplete } from '@/lib/prisma';
 import EditOrganizationForm from './form';
 import { forbidden, notFound, redirect } from 'next/navigation';
 
@@ -23,14 +23,28 @@ export default async function EditOrganization(props: { params: Promise<{ id: st
   }
 
   // Include followers and owner in the org query for permissions & buttons
-  const org = await prisma.organization.findUnique({
-    where: {
-      id: org_id,
-    },
+  const org: OrganizationWithSelectedRelations | null = await prisma.organization.findUnique({
+    where: { id: org_id },
     include: {
-      owner: true, // Include owner for Edit button logic
-      members: true, // Include members for Edit button logic
-      followers: true, // Include followers for FollowButton logic
+      owner: {
+        select: {
+          id: true,
+          userId: true,
+          username: true,
+          email: true,
+          profilePictureUrl: true,
+        },
+      },
+      members: {
+        select: {
+          id: true,
+          userId: true,
+          username: true,
+          email: true,
+          profilePictureUrl: true,
+        },
+      },
+      followers: true,
     },
   });
 
@@ -51,7 +65,7 @@ export default async function EditOrganization(props: { params: Promise<{ id: st
 
   return (
     <div className="self-center p-12 md:p-24 w-screen max-w-4xl">
-      <EditOrganizationForm organization={org} />
+      <EditOrganizationForm organization={org} currentUser={user} />
     </div>
   );
 }

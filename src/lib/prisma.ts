@@ -15,6 +15,31 @@ export type Organization = Prisma.OrganizationGetPayload<{
   include: { owner: true; members: true; followers: true };
 }>;
 
+// Define the type for the Organization payload with specific includes and selects
+export type OrganizationWithSelectedRelations = Prisma.OrganizationGetPayload<{
+  include: {
+    owner: {
+      select: {
+        id: true;
+        userId: true;
+        username: true;
+        email: true;
+        profilePictureUrl: true;
+      };
+    };
+    members: {
+      select: {
+        id: true;
+        userId: true;
+        username: true;
+        email: true;
+        profilePictureUrl: true;
+      };
+    };
+    followers: true;
+  };
+}>;
+
 /**
  * Helper function to get the currently logged in user from the auth0 session infomation.
  * If the user didn't exist in the database before, a new record is created.

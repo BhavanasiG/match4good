@@ -45,7 +45,13 @@ export async function UpdateOrganization(
 
   if (exists && exists.id !== organizationId && exists.name === name) {
     // Check if the name already exists and is not the same as the current organization
-    return { success: false, message: 'An organization with this name already exists.' };
+    console.warn(
+      `User ${user.id} attempted to rename organization ${organizationId} to "${name}", but that name is already taken by organization ${exists.id}.`,
+    );
+    return {
+      success: false,
+      message: `Organization name "${name}" is already taken. Please choose a different name.`,
+    };
   }
 
   try {
@@ -72,7 +78,7 @@ export async function UpdateOrganization(
     };
   } catch (error) {
     console.error('Error updating organization:', error);
-    return { success: false, message: 'Failed to update organization due to a server error.' };
+    throw new Error('Failed to update organization due to a server error.');
   }
 }
 
@@ -99,7 +105,7 @@ export async function AddMemberToOrganization(organizationId: number, memberIden
   }
 
   if (organizationToUpdate.owner.id !== user.id) {
-    return { success: false, message: 'Permission denied. Only the owner can edit.' };
+    return { success: false, message: 'Permission denied. Only the owner can add members.' };
   }
 
   const userToAdd = await prisma.user.findUnique({
@@ -154,6 +160,66 @@ export async function AddMemberToOrganization(organizationId: number, memberIden
     };
   } catch (error) {
     console.error('Error adding member to organization:', error);
-    return { success: false, message: 'Failed to add member due to a server error.' };
+    throw new Error('Failed to add member due to a server error.');
+  }
+}
+
+/**
+ * Remove a member from the organization. Only the owner can remove members.
+ * @param {number} organizationId organizationId to remove member from
+ * @param {number} memberIdToRemove memberId to remove
+ * @returns {Promise<{ success: boolean; message: string }>} - The result of the operation.
+ */
+export async function RemoveMemberFromOrganization(
+  organizationId: number,
+  memberIdToRemove: number,
+) {
+  const user = await GetUser(true);
+  if (!user) {
+    return { success: false, message: 'Authentication required.' };
+  }
+
+  // Check ownership based on the organization ID passed in
+  const organizationToUpdate = await prisma.organization.findUnique({
+    where: { id: organizationId },
+    include: { owner: true, members: true },
+  });
+
+  if (!organizationToUpdate) {
+    return { success: false, message: 'Organization not found.' };
+  }
+
+  if (organizationToUpdate.owner.id !== user.id) {
+    return { success: false, message: 'Permission denied. Only the owner can remove members.' };
+  }
+
+  // Prevent the owner from removing themselves
+  if (user.id === memberIdToRemove) {
+    return { success: false, message: 'You cannot remove yourself as the owner.' };
+  }
+
+  const isMember = organizationToUpdate.members.some((member) => member.id === memberIdToRemove);
+  if (!isMember) {
+    return { success: false, message: 'User is not a member of this organization.' };
+  }
+
+  try {
+    await prisma.organization.update({
+      where: { id: organizationId },
+      data: {
+        members: {
+          disconnect: { id: memberIdToRemove },
+        },
+      },
+    });
+
+    console.log(
+      `User ${memberIdToRemove} removed from organization ${organizationToUpdate.name} (ID: ${organizationId}) by owner ${user.id}.`,
+    );
+
+    return { success: true, message: 'Member removed successfully.' };
+  } catch (error) {
+    console.error('Error removing member from organization:', error);
+    throw new Error('Failed to remove member due to a server error.');
   }
 }
