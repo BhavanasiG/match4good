@@ -11,6 +11,10 @@ export type User = Prisma.UserGetPayload<{
   include: { ownerOf: true; memberOf: true };
 }>;
 
+export type Organization = Prisma.OrganizationGetPayload<{
+  include: { owner: true; members: true; followers: true };
+}>;
+
 /**
  * Helper function to get the currently logged in user from the auth0 session infomation.
  * If the user didn't exist in the database before, a new record is created.
