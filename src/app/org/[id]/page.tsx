@@ -69,7 +69,9 @@ export default async function App(props: { params: t_params }) {
         <CardHeader className="p-5 md:p-10 md:pt-20">
           <CardTitle className="mb-4">
             <p className="text-2xl md:text-3xl font-semibold">{org?.name}</p>
-            <p className="text-md md:text-base text-muted-foreground">Address : {org?.address}, {org?.postcode}</p>
+            <p className="text-md md:text-base text-muted-foreground">
+              Address : {org?.address}, {org?.postcode}
+            </p>
             <p className="text-md md:text-base text-muted-foreground">
               Region : {org?.Region?.name}
             </p>
