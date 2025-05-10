@@ -39,4 +39,15 @@ export const siteContent = {
   contactDescription: `Have questions or want to collaborate? Reach out at ${siteContact.email}!`,
   contactPage:
     "We'd love to hear from you! Fill out the form below and our team will get back to you as soon as possible.",
+  newsDescription:
+    'Latest news about volunteering, charity, and community initiatives across the UK!',
+};
+
+export const siteLegal = {
+  privacyPolicy: {
+    updated: `${new Date('2025-05-08').toLocaleDateString(undefined, { dateStyle: 'long' })}`,
+  },
+  termsOfService: {
+    updated: `${new Date('2025-05-08').toLocaleDateString(undefined, { dateStyle: 'long' })}`,
+  },
 };

@@ -2,6 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import Link from 'next/link';
+import { siteContent } from '@/config/siteConfig';
+import { Badge } from '@/components/ui/badge';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 type Article = {
   title: string;
@@ -36,16 +47,16 @@ weekAgo.setDate(today.getDate() - 7);
 const monthAgo = new Date();
 monthAgo.setMonth(today.getMonth() - 1);
 
-const DATES = [
-  { label: 'Any time', value: '' },
-  { label: 'Past week', value: weekAgo.toISOString().split('T')[0] },
-  { label: 'Past month', value: monthAgo.toISOString().split('T')[0] },
-];
-
 const SORTS = [
   { label: 'Latest', value: 'publishedAt' },
   { label: 'Relevancy', value: 'relevancy' },
   { label: 'Popularity', value: 'popularity' },
+];
+
+const DATES = [
+  { label: 'Any time', value: 'any' },
+  { label: 'Past week', value: weekAgo.toISOString().split('T')[0] },
+  { label: 'Past month', value: monthAgo.toISOString().split('T')[0] },
 ];
 
 export default function NewsPage() {
@@ -66,7 +77,7 @@ export default function NewsPage() {
       try {
         // Compose query
         let q = `${topic} ${region}`;
-        let from = date;
+        let from = date === 'any' ? '' : date;
         const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(
           q,
         )}&language=en&sortBy=${sortBy}&pageSize=18${from ? `&from=${from}` : ''}&apiKey=${NEWS_API_KEY}`;
@@ -85,18 +96,131 @@ export default function NewsPage() {
   }, [topic, region, date, sortBy, NEWS_API_KEY]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#e8f5e9] to-[#f1f8e9] py-10 px-4">
-      <div className="max-w-7xl mx-auto">
-        <header className="mb-10 text-center">
-          <div className="text-4xl mb-2">📰</div>
-          <h1 className="text-4xl font-extrabold text-[#388e3c] mb-2">
-            UK Volunteering & Charity News
-          </h1>
-          <p className="text-lg text-[#388e3c] max-w-2xl mx-auto">
-            Latest news about volunteering, charity, and community initiatives across the UK.
-          </p>
-        </header>
+    <div className="min-h-screen flex flex-col">
+      {/** Banner */}
+      <section className="flex flex-col">
+        <div className="flex items-center h-50 overflow-hidden relative">
+          <Image
+            src={'/news-background.jpg'}
+            alt="Banner Image"
+            fill
+            style={{ objectFit: 'cover' }}
+          />
+        </div>
+        <div className="flex flex-col bg-primary justify-center text-center items-center p-8 space-y-2">
+          <h2 className="text-3xl font-semibold text-primary-foreground">News Bulletin</h2>
+          <h3 className="text-xl text-primary-foreground">{siteContent.newsDescription}</h3>
+        </div>
+      </section>
+      {/**  listings */}
+      <section className="flex flex-col p-12 md:px-24 xl:px-40">
+        {/* Filters Section - Positioned Directly Above Listings */}
+        <div className="flex justify-end mb-8 space-x-5">
+          <Select value={topic} onValueChange={(value: string) => setTopic(value)}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {TOPICS.map((obj, index) => (
+                <SelectItem key={index} value={obj.query}>
+                  {obj.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select value={region} onValueChange={(value: string) => setRegion(value)}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {REGIONS.map((obj, index) => (
+                <SelectItem key={index} value={obj.query}>
+                  {obj.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select value={sortBy} onValueChange={(value: string) => setSortBy(value)}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {SORTS.map((obj, index) => (
+                <SelectItem key={index} value={obj.value}>
+                  {obj.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select value={date} onValueChange={(value: string) => setDate(value)}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {DATES.map((obj, index) => (
+                <SelectItem key={index} value={obj.value}>
+                  {obj.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="grid grid-rows-4 sm:grid-rows-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:grid-rows-none gap-10">
+          {loading && <p className="text-center self-center">Loading...</p>}
+          {error && (
+            <p className="text-center self-center text-destructive">An error occured: {error} </p>
+          )}
+          {!loading && !error && (
+            <>
+              {articles.map((article, index) => (
+                <NewsComponent key={index} article={article} topic={topic} />
+              ))}
+            </>
+          )}
+        </div>
+      </section>
+    </div>
+  );
+}
 
+function NewsComponent({ article, topic }: { article: Article; topic: string }) {
+  return (
+    <Link href={article.url} className="w-full">
+      <Card className="p-0 hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out h-full flex flex-col">
+        <CardHeader className="relative h-50">
+          {article.urlToImage ? (
+            <Image
+              src={article.urlToImage}
+              fill
+              alt={article.title}
+              unoptimized
+              className="object-cover"
+            />
+          ) : (
+            <div className="object-cover" />
+          )}
+        </CardHeader>
+        <CardContent className="space-y-5 px-5 pb-5 text-base flex flex-col items-left">
+          <Badge>{TOPICS.find((t) => t.query === topic)?.label}</Badge>
+          <CardTitle className="space-y-2 flex flex-col">
+            <p className="text-lg font-semibold">{article.title}</p>
+            <p className="text-accent-foreground">
+              {new Date(article.publishedAt).toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+              })}{' '}
+              – <em>{article.source.name}</em>
+            </p>
+          </CardTitle>
+          <CardDescription className="line-clamp-3">{article.description}</CardDescription>
+        </CardContent>
+      </Card>
+    </Link>
+  );
+}
+{
+  /* <div className="min-h-screen bg-gradient-to-br from-[#e8f5e9] to-[#f1f8e9] py-10 px-4">
         <div className="flex flex-wrap gap-4 justify-center mb-8">
           <select
             value={topic}
@@ -195,6 +319,5 @@ export default function NewsPage() {
           </div>
         )}
       </div>
-    </div>
-  );
+    </div> */
 }
