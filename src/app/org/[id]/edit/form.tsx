@@ -53,7 +53,6 @@ export default function EditOrganizationForm({ organization }: { organization: O
    * @param {z.infer<typeof formSchema>} values - The values from the form
    */
   function OnSubmit(values: z.infer<typeof formSchema>) {
-    toast.loading('Saving changes...');
     let error = false;
 
     UpdateOrganization(
@@ -67,7 +66,6 @@ export default function EditOrganizationForm({ organization }: { organization: O
       toast.error('Failed to update: ' + e.message);
       error = true;
     });
-    toast.dismiss();
 
     if (!error) {
       toast.success('Changes saved');
