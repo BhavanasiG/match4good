@@ -40,6 +40,7 @@ export default async function App(props: { params: t_params }) {
     include: {
       followers: true, // Include followers for FollowButton logic
       owner: true, // Include owner for Edit button logic
+      Region: true, // Include region for displaying region name
     },
   });
 
@@ -66,11 +67,15 @@ export default async function App(props: { params: t_params }) {
           </Avatar>
         </Card>
         <CardHeader className="p-5 md:p-10 md:pt-20">
-          <CardTitle className="mb-5">
+          <CardTitle className="mb-4">
             <p className="text-2xl md:text-3xl font-semibold">{org?.name}</p>
-            <p className="text-md md:text-lg text-muted-foreground">Category ⋅ {org?.address}</p>
+            <p className="text-md md:text-base text-muted-foreground">
+              Address : {org?.address}, {org?.postcode}
+            </p>
+            <p className="text-md md:text-base text-muted-foreground">
+              Region : {org?.Region?.name}
+            </p>
           </CardTitle>
-
           <div className="flex items-center space-x-2 mt-2">
             {/* ✅ Follow/Unfollow Button */}
             {user && org?.followers && (
@@ -89,7 +94,7 @@ export default async function App(props: { params: t_params }) {
           </div>
 
           <CardDescription>
-            <p className="text-md md:text-lg font-medium line-clamp-3"> {org?.description} </p>
+            <p className="text-md md:text-base font-medium line-clamp-3"> {org?.description} </p>
           </CardDescription>
         </CardHeader>
       </Card>

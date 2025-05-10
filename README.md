@@ -40,19 +40,19 @@ An easy way to get this running is with:
 
 Once your database is running, you can use one of the following **single commands** to perform the full setup (deploy schema, seed database, and start the development server):
 
-1. **Start Dev Server with Minimal Data Setup:** Deploys the latest schema, seeds only the essential data (Regions, Categories), and starts the development server. Use this for a clean database setup without example data.
+1. **Start Dev Server with Minimal Data Setup:** Resets your database (dropping all existing data), applies the latest schema migrations, seeds only the essential data (Regions, Categories), and starts the development server. Use this for a clean database setup without example data.
 
    ```bash
    npm run start:dev:minimal
    ```
 
-2. **Start Dev Server with Full Example Data Setup:** Deploys the latest schema, seeds essential data _plus a full set of example data_ (users, organizations, listings, applications, etc.), and starts the development server. Use this for a database setup with sample data for development and testing:
+2. **Start Dev Server with Full Example Data Setup:** Resets your database (dropping all existing data), applies the latest schema migrations, seeds essential data _plus a full set of example data_ (users, organizations, listings, applications, etc.), and starts the development server. Use this for a database setup with sample data for development and testing:
 
    ```bash
    npm run start:dev:full
    ```
 
-Alternatively, if your database schema is already deployed and seeded (using one of the start:dev: commands above, or by running npm run db:deploy and a npm run seed: command individually), you can just start the development server:
+Alternatively, if your database schema is already deployed and seeded (using one of the start:dev: commands above, or by running npm run db:deploy and a npm run seed: command individually), you can just start the development server _without resetting the database_:
 
     ```npm run dev```
 
