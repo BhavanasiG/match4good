@@ -6,5 +6,6 @@ FROM base AS deps
 WORKDIR /app
 COPY prisma prisma
 COPY .env .env
+COPY package.json package.json
 
-CMD ["npx", "prisma", "migrate", "deploy"]
+CMD ["npm", "run", "db:deploy"]
