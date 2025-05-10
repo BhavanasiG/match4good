@@ -42,7 +42,7 @@ export default function CookieBanner(): React.ReactElement | null {
     >
       <p>
         We use cookies to improve your experience. Read our{' '}
-        <Link href="/privacy-policy" className="underline text-primary hover:text-primary/70">
+        <Link href="/legal/privacy-policy" className="underline text-primary hover:text-primary/70">
           privacy policy
         </Link>
       </p>
