@@ -48,10 +48,10 @@ export default function Footer() {
       <div className="grid grid-cols-2 items-center text-sm text-muted-foreground">
         <p className="flex justify-start"> © 2025 Match4Good </p>
         <div className="flex justify-end space-x-4">
-          <Link href={'/'} className="flex justify-center">
+          <Link href={'/legal/terms'} className="flex justify-center">
             <p>Terms and Conditions</p>
           </Link>
-          <Link href={'/privacy-policy'} className="flex justify-center">
+          <Link href={'/legal/privacy-policy'} className="flex justify-center">
             <p>Privacy Policy</p>
           </Link>
         </div>
