@@ -38,21 +38,23 @@ An easy way to get this running is with:
 
     docker run -p 5432:5432 -e POSTGRES_PASSWORD=prisma -d postgres
 
-Once your database is running, you have two options to start the development server:
+Once your database is running, you can use one of the following **single commands** to perform the full setup (deploy schema, seed database, and start the development server):
 
-1.  **Full Setup (Deploy, Seed, Start Server):** Run this command for the initial setup, after a database reset, or whenever you need to refresh your database with sample data.
+1. **Start Dev Server with Minimal Data Setup:** Deploys the latest schema, seeds only the essential data (Regions, Categories), and starts the development server. Use this for a clean database setup without example data.
 
-    ```bash
-    npm run dev:setup
-    ```
+   ```bash
+   npm run start:dev:minimal
+   ```
 
-    This command will first ensure your database schema is up-to-date (`npm run db:deploy`), then populate it with sample data using the seed script (`npx prisma db seed`), and finally start the Next.js development server (`npm run dev`).
+2. **Start Dev Server with Full Example Data Setup:** Deploys the latest schema, seeds essential data _plus a full set of example data_ (users, organizations, listings, applications, etc.), and starts the development server. Use this for a database setup with sample data for development and testing:
 
-2.  **Server Only (Start Server):** Run this command if your database is already deployed and seeded, and you just need to start or restart the web server process.
+   ```bash
+   npm run start:dev:full
+   ```
 
-    ```bash
-    npm run dev
-    ```
+Alternatively, if your database schema is already deployed and seeded (using one of the start:dev: commands above, or by running npm run db:deploy and a npm run seed: command individually), you can just start the development server:
+
+    ```npm run dev```
 
 ### Making a production build
 
