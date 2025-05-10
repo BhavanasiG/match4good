@@ -2,14 +2,25 @@
 
 import prisma, { GetUser, User } from '@/lib/prisma';
 import { forbidden } from 'next/navigation';
-
-/**
- *
- * @param {string} username - Accepts a username string
- * @returns {Promise<void>} - Returns a promise that resolves when the user is updated
- */
-
 /* eslint-disable @typescript-eslint/naming-convention */
+
+type Auth0ErrorResponse = {
+  statusCode?: number;
+  error?: string;
+  message?: string;
+  errorCode?: string;
+  // Include other known properties Auth0 might return or allow any extra properties
+  [key: string]: unknown;
+};
+
+type Auth0UpdateOtherFieldsBody = {
+  name?: string; // Conditional update for Auth0 'name'
+  picture?: string; // Conditional update for Auth0 'picture'
+};
+
+type Auth0UpdateEmailBody = {
+  email?: string; // Update for Auth0 'email'
+};
 
 /**
  * Helper function to check if a string is likely an email address (basic check).
@@ -29,8 +40,8 @@ function looksLikeEmail(str: string | null | undefined): boolean {
  * Updates the user's profile
  * Does NOT attempt to update the username field in Auth0.
  * @param {string} username - The new username
- * @param {string | null} bio - The new bio
  * @param {string} email - The new email
+ * @param {string | null} bio - The new bio
  * @returns {Promise<void>} - Returns a promise that resolves when the user is updated
  */
 export async function UpdateUser(username: string, email: string, bio: string | null) {
@@ -39,7 +50,7 @@ export async function UpdateUser(username: string, email: string, bio: string | 
   if (!user) {
     return;
   }
-  const response = await fetch(`https://${process.env.AUTH0_DOMAIN}/oauth/token`, {
+  const tokenResponse = await fetch(`https://${process.env.AUTH0_DOMAIN}/oauth/token`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
@@ -49,12 +60,22 @@ export async function UpdateUser(username: string, email: string, bio: string | 
       grant_type: 'client_credentials',
     }),
   });
-  const data = (await response.json()) as { access_token: string };
+  const tokenData = (await tokenResponse.json()) as {
+    access_token?: string;
+    error?: string;
+    error_description?: string;
+  };
 
-  if (!data.access_token) {
-    console.error('Error getting access token:', data);
-    throw new Error('Failed to get access token');
+  if (!tokenData.access_token) {
+    console.error(
+      'Error getting Auth0 Management API access token:',
+      tokenData.error_description || tokenData.error || 'Unknown error',
+    );
+    throw new Error('Failed to get Auth0 Management API access token.');
   }
+
+  const accessToken = tokenData.access_token;
+  //console.log('Successfully obtained Auth0 Management API access token.');
 
   // --- Fetch user profile from Auth0 to get current 'name' ---
   // This is necessary to check if the current Auth0 'name' looks like an email.
@@ -64,7 +85,7 @@ export async function UpdateUser(username: string, email: string, bio: string | 
     {
       method: 'GET', // Use GET method
       headers: {
-        Authorization: `Bearer ${data.access_token}`, // Use the access token
+        Authorization: `Bearer ${accessToken}`, // Use the access token
       },
     },
   );
@@ -74,13 +95,13 @@ export async function UpdateUser(username: string, email: string, bio: string | 
     const errorBody = await auth0UserResponse.text();
     let errorDetails = `Auth0 API returned status ${auth0UserResponse.status} when fetching user profile.`;
     try {
-      const jsonError = JSON.parse(errorBody);
+      const jsonError = JSON.parse(errorBody) as Auth0ErrorResponse;
       errorDetails += ` Message: ${jsonError.message || 'N/A'}. Error: ${jsonError.error || 'N/A'}.`;
       if (jsonError.errorCode) {
         errorDetails += ` Error Code: ${jsonError.errorCode}.`;
       }
       console.error('Full Auth0 Error Response Body (GET User):', jsonError);
-    } catch (parseError) {
+    } catch {
       errorDetails += ` Raw Body: ${errorBody}`;
       console.error('Could not parse Auth0 error body (GET User) as JSON. Raw body:', errorBody);
     }
@@ -89,7 +110,7 @@ export async function UpdateUser(username: string, email: string, bio: string | 
   }
 
   // Parse the full Auth0 user profile object
-  const auth0User = (await auth0UserResponse.json()) as { name?: string; [key: string]: any };
+  const auth0User = (await auth0UserResponse.json()) as { name?: string };
   console.log(
     `Successfully fetched user profile from Auth0. Current Auth0 name: ${auth0User.name}`,
   );
@@ -98,11 +119,11 @@ export async function UpdateUser(username: string, email: string, bio: string | 
   // We are NOT including the 'username' field in the Auth0 update bodies.
 
   // Body for fields other than email (username, picture)
-  let updateOtherFieldsBody: { [key: string]: any } = {};
+  const updateOtherFieldsBody: Auth0UpdateOtherFieldsBody = {};
   let needsOtherFieldsUpdate = false; // Flag to track if we need to send a body to Auth0
 
   // Body specifically for email update
-  let updateEmailBody: { [key: string]: any } = {};
+  const updateEmailBody: Auth0UpdateEmailBody = {};
   let needsEmailUpdate = false;
 
   const currentAuth0Name = auth0User.name;
@@ -112,7 +133,7 @@ export async function UpdateUser(username: string, email: string, bio: string | 
     console.log(
       `Current Auth0 name '${currentAuth0Name}' looks like an email and differs from local username '${localAppUsername}'. Including 'name' update in Auth0 body.`,
     );
-    updateOtherFieldsBody.name = localAppUsername; // Set Auth0 'name' to the local username
+    updateOtherFieldsBody.name = localAppUsername;
     needsOtherFieldsUpdate = true;
   } else {
     console.log(
@@ -120,9 +141,9 @@ export async function UpdateUser(username: string, email: string, bio: string | 
     );
   }
 
-  // Check if the user has a profilePictureUrl set in our local database.
-  // If they do, include it in the Auth0 update body under the 'picture' field (root level).
-  // We are only syncing the URL IF it exists in our DB. We don't explicitly unset it here
+  // Add picture to update body if it exists locally (syncing local URL to Auth0)
+  // Only include the 'picture' field if user.profilePictureUrl has a value in our DB.
+  // We don't explicitly unset it here
   // if user.profilePictureUrl becomes null in our DB (that might require sending { picture: null }).
   if (user.profilePictureUrl) {
     // Add the 'picture' field to the root of the update body object
@@ -151,7 +172,7 @@ export async function UpdateUser(username: string, email: string, bio: string | 
       {
         method: 'PATCH',
         headers: {
-          Authorization: `Bearer ${data.access_token}`,
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(updateOtherFieldsBody),
@@ -162,13 +183,13 @@ export async function UpdateUser(username: string, email: string, bio: string | 
       const errorBody = await updateOtherResponse.text();
       let errorDetails = `Auth0 API returned status ${updateOtherResponse.status} when updating other fields.`;
       try {
-        const jsonError = JSON.parse(errorBody);
+        const jsonError = JSON.parse(errorBody) as Auth0ErrorResponse;
         errorDetails += ` Message: ${jsonError.message || 'N/A'}. Error: ${jsonError.error || 'N/A'}.`;
         if (jsonError.errorCode) {
           errorDetails += ` Error Code: ${jsonError.errorCode}.`;
         }
         console.error('Full Auth0 Error Response Body (Other Fields):', jsonError);
-      } catch (parseError) {
+      } catch {
         errorDetails += ` Raw Body: ${errorBody}`;
         console.error(
           'Could not parse Auth0 error body (Other Fields) as JSON. Raw body:',
@@ -193,7 +214,7 @@ export async function UpdateUser(username: string, email: string, bio: string | 
       {
         method: 'PATCH',
         headers: {
-          Authorization: `Bearer ${data.access_token}`,
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(updateEmailBody),
@@ -204,13 +225,13 @@ export async function UpdateUser(username: string, email: string, bio: string | 
       const errorBody = await updateEmailResponse.text();
       let errorDetails = `Auth0 API returned status ${updateEmailResponse.status} when updating email.`;
       try {
-        const jsonError = JSON.parse(errorBody);
+        const jsonError = JSON.parse(errorBody) as Auth0ErrorResponse;
         errorDetails += ` Message: ${jsonError.message || 'N/A'}. Error: ${jsonError.error || 'N/A'}.`;
         if (jsonError.errorCode) {
           errorDetails += ` Error Code: ${jsonError.errorCode}.`;
         }
         console.error('Full Auth0 Error Response Body (Email):', jsonError);
-      } catch (parseError) {
+      } catch {
         errorDetails += ` Raw Body: ${errorBody}`;
         console.error('Could not parse Auth0 error body (Email) as JSON. Raw body:', errorBody);
       }
