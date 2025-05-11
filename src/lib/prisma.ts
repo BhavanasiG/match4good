@@ -15,6 +15,8 @@ export type Organization = Prisma.OrganizationGetPayload<{
   include: { owner: true; members: true; followers: true };
 }>;
 
+export type Region = Prisma.RegionGetPayload<{ include: { users: true; organizations: true } }>;
+
 // Define the type for the Organization payload with specific includes and selects
 export type OrganizationWithSelectedRelations = Prisma.OrganizationGetPayload<{
   include: {

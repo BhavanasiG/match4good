@@ -130,6 +130,11 @@ export async function DistributePointsFor(listingId: number): Promise<boolean> {
       where: { id: user.regionId },
       data: { points: { increment: listing.pointValue } },
     });
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { totalPoints: { increment: listing.pointValue } },
+    });
   }
 
   return true;

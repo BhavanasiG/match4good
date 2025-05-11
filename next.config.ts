@@ -18,6 +18,14 @@ const nextConfig: NextConfig = {
         hostname: 'ik.imagekit.io', // For ImageKit hosted images
         pathname: '/match4good/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com', // For Faker user avatars from GitHub
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.jsdelivr.net', // Added for Faker user avatars from jsDelivr
+      },
     ],
   },
 };

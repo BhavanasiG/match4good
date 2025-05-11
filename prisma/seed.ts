@@ -380,8 +380,7 @@ async function main() {
     for (let i = 0; i < usersToCreate; i++) {
       const firstName = faker.person.firstName();
       const lastName = faker.person.lastName();
-      const username =
-        faker.internet.username({ firstName, lastName }) + faker.string.alphanumeric(4);
+      const username = faker.internet.username({ firstName, lastName });
       const email = faker.internet
         .email({ firstName, lastName, allowSpecialCharacters: false })
         .toLowerCase();
@@ -399,6 +398,8 @@ async function main() {
         );
       }
 
+      const totalPoints = faker.number.int({ min: 0, max: 20000 });
+
       try {
         const user = await prisma.user.create({
           data: {
@@ -413,6 +414,7 @@ async function main() {
             interests: {
               connect: selectedInterests.map((interest) => ({ id: interest.id })),
             },
+            totalPoints: totalPoints,
           },
         });
         createdUsers.push(user);
@@ -431,7 +433,37 @@ async function main() {
         }
       }
     }
-    console.log(`Total users seeded: ${createdUsers.length}. Each user seeded with interests.`);
+    console.log(
+      `Total users seeded: ${createdUsers.length}. Each user seeded with random totalPoints and interests.`,
+    );
+
+    // --- Calculate and Update Region Points based on User Points ---
+    console.log('\n--- Calculating and Updating Region Points ---');
+
+    const regionPointsMap = new Map<number, number>();
+
+    for (const user of createdUsers) {
+      if (user.regionId !== null && user.totalPoints !== undefined && user.totalPoints !== null) {
+        const currentRegionPoints = regionPointsMap.get(user.regionId) || 0;
+        regionPointsMap.set(user.regionId, currentRegionPoints + user.totalPoints);
+      }
+    }
+
+    // Update Region records in the database with calculated points
+    for (const [regionId, totalPoints] of regionPointsMap.entries()) {
+      try {
+        await prisma.region.update({
+          where: { id: regionId },
+          data: { points: totalPoints },
+        });
+
+        const regionName = createdRegions.find((r) => r.id === regionId)?.name || `ID ${regionId}`;
+        console.log(`Updated Region "${regionName}" points: ${totalPoints}`);
+      } catch (error) {
+        console.error(`Error updating points for region ID ${regionId}:`, error);
+      }
+    }
+    console.log('Finished calculating and updating Region points.');
 
     // --- Seed Organizations ---
     console.log('\n--- Seeding Organizations ---');
