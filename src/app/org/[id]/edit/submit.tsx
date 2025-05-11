@@ -132,7 +132,7 @@ export async function RemoveOrgProfilePicture(organizationId: number) {
 
   const organization = await prisma.organization.findUnique({
     where: { id: organizationId },
-    select: { id: true, name: true, owner: { select: { id: true } }, profilePictureFileId: true }, // Select fields needed
+    select: { id: true, name: true, owner: { select: { id: true } }, orgPictureFileId: true }, // Select fields needed
   });
 
   if (!organization) {
@@ -146,7 +146,7 @@ export async function RemoveOrgProfilePicture(organizationId: number) {
     };
   }
 
-  const fileIdToRemove = organization.profilePictureFileId;
+  const fileIdToRemove = organization.orgPictureFileId;
 
   if (fileIdToRemove) {
     try {
@@ -175,8 +175,8 @@ export async function RemoveOrgProfilePicture(organizationId: number) {
     await prisma.organization.update({
       where: { id: organizationId },
       data: {
-        profilePictureUrl: null,
-        profilePictureFileId: null,
+        orgPictureUrl: null,
+        orgPictureFileId: null,
       },
     });
     console.log(`Profile picture fields cleared in DB for organization ${organizationId}.`);
@@ -202,7 +202,7 @@ export async function RemoveOrgBannerPicture(organizationId: number) {
 
   const organization = await prisma.organization.findUnique({
     where: { id: organizationId },
-    select: { id: true, name: true, owner: { select: { id: true } }, backgroundPictureFileId: true }, // Select fields needed
+    select: { id: true, name: true, owner: { select: { id: true } }, bannerPictureFileId: true }, // Select fields needed
   });
 
   if (!organization) {
@@ -216,7 +216,7 @@ export async function RemoveOrgBannerPicture(organizationId: number) {
     };
   }
 
-  const fileIdToRemove = organization.backgroundPictureFileId;
+  const fileIdToRemove = organization.bannerPictureFileId;
 
   if (fileIdToRemove) {
     try {
@@ -242,8 +242,8 @@ export async function RemoveOrgBannerPicture(organizationId: number) {
     await prisma.organization.update({
       where: { id: organizationId },
       data: {
-        backgroundPictureUrl: null,
-        backgroundPictureFileId: null,
+        bannerPictureUrl: null,
+        bannerPictureFileId: null,
       },
     });
     console.log(`Banner picture fields cleared in DB for organization ${organizationId}.`);
@@ -290,8 +290,8 @@ export async function UpdateOrgProfilePicture(
     await prisma.organization.update({
       where: { id: organizationId },
       data: {
-        profilePictureUrl: orgPictureUrl,
-        profilePictureFileId: orgPictureFileId,
+        orgPictureUrl: orgPictureUrl,
+        orgPictureFileId: orgPictureFileId,
       },
     });
     console.log(
@@ -340,8 +340,8 @@ export async function UpdateOrgBannerPicture(
     await prisma.organization.update({
       where: { id: organizationId },
       data: {
-        backgroundPictureUrl: bannerPictureUrl,
-        backgroundPictureFileId: bannerPictureFileId,
+        bannerPictureUrl: bannerPictureUrl,
+        bannerPictureFileId: bannerPictureFileId,
       },
     });
     console.log(

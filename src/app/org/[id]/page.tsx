@@ -68,9 +68,9 @@ export default async function App(props: { params: t_params }) {
     <div className="p-5 md:p-24 space-y-5 w-screen max-w-5xl flex flex-col justify-center self-center">
       <Card className="p-0 w-full max-w-5xl self-center">
         <div className="flex items-center relative h-44">
-          {org.backgroundPictureUrl ? (
+          {org.bannerPictureUrl ? (
             <Image
-              src={org.backgroundPictureUrl}
+              src={org.bannerPictureUrl}
               alt={`${org.name} background image`}
               fill
               style={{ objectFit: 'cover' }}
@@ -82,7 +82,7 @@ export default async function App(props: { params: t_params }) {
           )}
 
           <CommonAvatar
-            src={org.profilePictureUrl || ''}
+            src={org.orgPictureUrl || ''}
             className="size-28 absolute top-28 left-10 md:top-30 md:left-20 border-4 border-card"
           />
         </div>
