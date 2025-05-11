@@ -1,6 +1,4 @@
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import Image from 'next/image';
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import prisma, { SignupComplete } from '@/lib/prisma';
 import { notFound, redirect } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
@@ -11,6 +9,9 @@ import { ListingStatus } from '../../../../generated/prisma_client';
 import { GetUser } from '@/lib/prisma';
 import FollowButton from '@/components/FollowButton';
 import ListingInfo from '@/components/listingInfo';
+import { CommonAvatar } from '@/app/settings/profileImageUpload';
+import Image from 'next/image';
+import { IconEdit } from '@tabler/icons-react';
 
 import { OrganizationWithSelectedRelations } from '@/lib/prisma';
 import { UserIcon } from 'lucide-react';
@@ -58,82 +59,39 @@ export default async function App(props: { params: t_params }) {
     notFound();
   }
 
-  const isFollowing = user && org.followers.some((f) => f.userId === user.id);
-  const isOwner = user && org.ownerId === user.id; // Check if the user is the owner
+  const region = await prisma.region.findUnique({
+    where: {
+      id: org.regionId || undefined,
+    },
+  });
 
   return (
-    <div className="p-5 sm:p-10 md:p-20 lg:px-40 xl:px-80 space-y-10">
-      {/* --- Organization Header Section --- */}
-      <Card className="p-0 overflow-hidden relative">
-        {/* Banner Picture Area */}
-        <div className="w-full h-32 md:h-54 bg-gray-200 relative">
-          {' '}
-          {/* Placeholder background */}
-          {org.bannerPictureUrl ? (
+    <div className="p-5 md:p-24 space-y-5 w-screen max-w-5xl flex flex-col justify-center self-center">
+      <Card className="p-0 w-full max-w-5xl self-center">
+        <div className="flex items-center relative h-44">
+          {org.backgroundPictureUrl ? (
             <Image
-              src={org.bannerPictureUrl}
-              alt={`${org.name} banner`}
+              src={org.backgroundPictureUrl}
+              alt={`${org.name} background image`}
               fill
-              className="object-cover"
+              style={{ objectFit: 'cover' }}
             />
           ) : (
-            // Fallback if no banner picture
-            <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-              No Banner Image
+            <div className="size-full bg-accent p-10 items-center self-center flex justify-center">
+              <Image src={'/logo_extended.svg'} width={393} height={73} alt="default image" />
             </div>
           )}
+
+          <CommonAvatar
+            src={org.profilePictureUrl || ''}
+            className="size-28 absolute top-28 left-10 md:top-30 md:left-20 border-4 border-card"
+          />
         </div>
-
-        {/* Profile Picture Avatar */}
-        <Avatar className="size-22 md:size-44 absolute top-20 left-10 md:top-30 md:left-20 border-8 border-card z-10">
-          {' '}
-          {/* z-10 ensures it's above other content */}
-          {org.orgPictureUrl ? (
-            // Use next/image for optimized profile picture inside Avatar
-            <Image
-              src={org.orgPictureUrl}
-              alt={`${org.name} profile`}
-              width={176}
-              height={176}
-              className="object-cover rounded-full"
-            />
-          ) : (
-            // Fallback if no profile picture
-            <AvatarFallback className="size-full flex justify-center items-center bg-gray-200 text-gray-500">
-              <UserIcon className="size-1/2" /> {/* Placeholder icon */}
-            </AvatarFallback>
-          )}
-        </Avatar>
-
-        {/* Organization Info Area */}
-        <CardHeader className="p-5 md:p-10 pt-12 md:pt-20 lg:pt-24 xl:pt-32">
-          {' '}
-          <CardTitle className="mb-4">
-            <p className="text-2xl md:text-3xl font-semibold">{org?.name}</p>{' '}
-            <p className="text-md md:text-base text-muted-foreground">
-              Address : {org?.address}, {org?.postcode}{' '}
-            </p>
-            <p className="text-md md:text-base text-muted-foreground">
-              Region : {org?.Region?.name}
-            </p>
+        <CardHeader className="mt-10">
+          <CardTitle className="mb-2">
+            <p className="text-2xl md:text-3xl font-semibold">{org?.name}</p>
+            <p className="text-md md:text-lg text-muted-foreground">{region?.name}</p>
           </CardTitle>
-          <div className="flex items-center space-x-2 mt-2">
-            {/* Follow/Unfollow Button */}
-            {user &&
-              org && ( // Ensure user and org exist before rendering
-                <FollowButton
-                  organizationId={org.id}
-                  isFollowing={isFollowing ?? false} // Use the derived isFollowing state with a fallback
-                />
-              )}
-
-            {/* Edit Organization Button (Visible only to owners) */}
-            {isOwner && ( // Use the derived isOwner state
-              <Link href={`/org/${org.id}/edit`}>
-                <Button variant="secondary">Edit Organization</Button>
-              </Link>
-            )}
-          </div>
           <CardDescription>
             <p className="text-md md:text-base font-medium line-clamp-3">
               {' '}
@@ -141,11 +99,28 @@ export default async function App(props: { params: t_params }) {
             </p>{' '}
           </CardDescription>
         </CardHeader>
+        <CardFooter className="flex items-center space-x-2 mb-5">
+          {/* ✅ Follow/Unfollow Button */}
+          {user && org?.followers && (
+            <FollowButton
+              organizationId={org.id}
+              isFollowing={org.followers.some((f) => f.userId === user.id)}
+            />
+          )}
+
+          {/* ✅ Edit Organization Button (Visible only to owners) */}
+          {user?.id === org?.ownerId && (
+            <Link href={`/org/${org.id}/edit`} className="cursor-pointer">
+              <Button className="cursor-pointer">
+                Edit Organization
+                <IconEdit />
+              </Button>
+            </Link>
+          )}
+        </CardFooter>
       </Card>
-
-      <Separator className="my-10 md:my-20" />
-
-      <h2 className="text-3xl font-semibold">Listings</h2>
+      <Separator className="my-10" />
+      <h2 className="text-2xl font-semibold">Listings</h2>
       <Tabs defaultValue="active" className="w-full">
         <TabsList className="grid grid-cols-2 mb-5 size-fit w-full">
           <TabsTrigger value="active" className="cursor-pointer text-md">
