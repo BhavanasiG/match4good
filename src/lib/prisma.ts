@@ -1,9 +1,15 @@
 import { PrismaClient, Prisma } from '../../generated/prisma_client/index.js';
 import { auth0 } from './auth0.ts';
 
-const prisma = new PrismaClient();
+const globalForPrisma = global as unknown as { prisma: PrismaClient | undefined };
 
-const globalForPrisma = global as unknown as { prisma: typeof prisma };
+const prisma =
+  globalForPrisma.prisma ??
+  new PrismaClient({
+    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+  });
+
+export default prisma;
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
@@ -113,4 +119,3 @@ export async function SignupComplete() {
   }
   return user.signupCompleted;
 }
-export default prisma;
