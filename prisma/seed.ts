@@ -168,6 +168,26 @@ const applicationDescriptionSnippets = [
   'I have skills in [mention a potential skill if known, otherwise keep general] that I believe would be useful.',
 ];
 
+// --- Static Placeholder Image URLs for Organizations ---
+const orgProfilePicturePlaceholders = [
+  'https://picsum.photos/id/200/400/400', // Example square image URLs from Lorempicsum
+  'https://picsum.photos/id/201/400/400',
+  'https://picsum.photos/id/202/400/400',
+  'https://picsum.photos/id/203/400/400',
+  'https://picsum.photos/id/204/400/400',
+  'https://picsum.photos/id/205/400/400',
+];
+
+const orgBannerPicturePlaceholders = [
+  'https://picsum.photos/id/100/1200/400', // Example landscape image URLs from Lorempicsum
+  'https://picsum.photos/id/101/1200/400',
+  'https://picsum.photos/id/102/1200/400',
+  'https://picsum.photos/id/103/1200/400',
+  'https://picsum.photos/id/104/1200/400',
+  'https://picsum.photos/id/105/1200/400',
+  'https://picsum.photos/id/106/1200/400',
+];
+
 const prisma = new PrismaClient();
 
 async function main() {
@@ -497,6 +517,14 @@ async function main() {
       }
       // --- End of Logic to determine regionId ---
 
+      // --- Select random placeholder pictures for Organization ---
+      const orgPictureUrl = faker.helpers.arrayElement(orgProfilePicturePlaceholders);
+      const orgPictureFileId = `org_profile_file_${uuidv4()}`; // Dummy file ID for org profile
+
+      const bannerPictureUrl = faker.helpers.arrayElement(orgBannerPicturePlaceholders);
+      const bannerPictureFileId = `org_banner_file_${uuidv4()}`; // Dummy file ID for org banner
+      // --- End of Picture Selection ---
+
       try {
         const organization = await prisma.organization.create({
           data: {
@@ -506,6 +534,10 @@ async function main() {
             address: address,
             postcode: postcode,
             regionId: organizationRegionId,
+            orgPictureUrl: orgPictureUrl,
+            orgPictureFileId: orgPictureFileId,
+            bannerPictureUrl: bannerPictureUrl,
+            bannerPictureFileId: bannerPictureFileId,
           },
         });
         createdOrgs.push(organization);
