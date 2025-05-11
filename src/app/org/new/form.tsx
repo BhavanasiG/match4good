@@ -18,6 +18,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { CreateOrganization } from './submit';
 import { useRouter } from 'next/navigation';
+import { Textarea } from '@/components/ui/textarea';
 
 const formSchema = z.object({
   name: z
@@ -142,7 +143,7 @@ export default function CreateOrganizationForm() {
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Textarea {...field} />
                     </FormControl>
                     <FormDescription>Tell us a bit about your organization.</FormDescription>
                     <FormMessage />

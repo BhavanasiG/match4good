@@ -37,6 +37,7 @@ import {
   UpdateOrgBannerPicture,
   RemoveOrgBannerPicture,
 } from './submit';
+import { Textarea } from '@/components/ui/textarea';
 
 interface ImageKitUploadResponse {
   url: string;
@@ -418,7 +419,7 @@ export default function EditOrganizationForm({
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Input placeholder={organization.description || undefined} {...field} />
+                      <Textarea placeholder={organization.description || undefined} {...field} />
                     </FormControl>
                     <FormDescription>Tell us about your organization.</FormDescription>
                     <FormMessage />

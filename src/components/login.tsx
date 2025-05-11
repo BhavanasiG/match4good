@@ -9,7 +9,7 @@ import {
 } from './ui/dropdown-menu';
 import { CommonAvatar } from '@/app/settings/profileImageUpload';
 import { IconPlus } from '@tabler/icons-react';
-import { GetUser } from '@/lib/prisma';
+import prisma, { GetUser } from '@/lib/prisma';
 
 /**
  * This component has a link to the sign-up page and the log in page
@@ -38,8 +38,13 @@ export function LoginButton() {
  */
 export async function LogoutButton() {
   const user = await GetUser();
-  const orgs = user?.ownerOf?.length;
-  const hasOrgs = orgs === 0;
+  const orgs = await prisma.organization.findMany({
+    where: {
+      ownerId: user?.id,
+    },
+  });
+
+  const hasOrgs: boolean = orgs.length > 0;
 
   return (
     <div className="space-x-3 sm:space-x-5 flex">
