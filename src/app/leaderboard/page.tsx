@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { IconTrophy } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
@@ -207,6 +207,7 @@ export default function LeaderboardPage() {
                                 width={32}
                                 height={32}
                                 className="object-cover rounded-full"
+                                unoptimized
                               />
                             ) : (
                               <AvatarFallback>{user.name?.[0] || 'U'}</AvatarFallback>
