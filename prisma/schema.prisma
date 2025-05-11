@@ -9,36 +9,42 @@ datasource db {
 }
 
 model User {
-  id                   Int            @id @default(autoincrement())
-  userId               String         @unique
-  username             String         @unique
-  email                String?        @unique
-  profilePictureUrl    String?
-  profilePictureFileId String?
-  bio                  String?
-  signupCompleted      Boolean        @default(false)
-  ownerOf              Organization[] @relation("ownership")
-  memberOf             Organization[] @relation("membership")
-  application          Application[]
-  region               Region?        @relation(fields: [regionId], references: [id])
-  regionId             Int?
-  follows              Follow[]
-  interests            Subcategory[]
+  id                      Int            @id @default(autoincrement())
+  userId                  String         @unique
+  username                String         @unique
+  email                   String?        @unique
+  profilePictureUrl       String?
+  profilePictureFileId    String?
+  backgroundPictureUrl    String?
+  backgroundPictureFileId String?
+  bio                     String?
+  signupCompleted         Boolean        @default(false)
+  ownerOf                 Organization[] @relation("ownership")
+  memberOf                Organization[] @relation("membership")
+  application             Application[]
+  region                  Region?        @relation(fields: [regionId], references: [id])
+  regionId                Int?
+  follows                 Follow[]
+  interests               Subcategory[]
 }
 
 model Organization {
-  id          Int       @id @default(autoincrement())
-  name        String    @unique
-  description String?
-  ownerId     Int
-  address     String?
-  postcode    String?
-  followers   Follow[] // <-- this is your addition
-  listings    Listing[]
-  owner       User      @relation("ownership", fields: [ownerId], references: [id])
-  members     User[]    @relation("membership")
-  Region      Region?   @relation(fields: [regionId], references: [id])
-  regionId    Int?
+  id                      Int       @id @default(autoincrement())
+  name                    String    @unique
+  description             String?
+  profilePictureUrl       String?
+  profilePictureFileId    String?
+  backgroundPictureUrl    String?
+  backgroundPictureFileId String?
+  ownerId                 Int
+  address                 String?
+  postcode                String?
+  followers               Follow[] // <-- this is your addition
+  listings                Listing[]
+  owner                   User      @relation("ownership", fields: [ownerId], references: [id])
+  members                 User[]    @relation("membership")
+  Region                  Region?   @relation(fields: [regionId], references: [id])
+  regionId                Int?
 }
 
 model Follow {
