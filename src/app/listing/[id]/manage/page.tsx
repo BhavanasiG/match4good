@@ -2,7 +2,6 @@
 import { forbidden, notFound, redirect } from 'next/navigation';
 import { ListingManagement } from './client';
 import ListingInfo from '@/components/listingInfo';
-<<<<<<< HEAD
 import {
   Card,
   CardContent,
@@ -14,10 +13,6 @@ import {
 import { IconArrowRight, IconBuilding } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-=======
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { IconBuilding } from '@tabler/icons-react';
->>>>>>> ee312f1 (Listing manage)
 
 export default async function App({ params }: { params: Promise<{ id: string }> }) {
   const user = await GetUser(true);
