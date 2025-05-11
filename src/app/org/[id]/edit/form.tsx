@@ -566,7 +566,7 @@ export default function EditOrganizationForm({
             {' '}
             {bannerPreviewUrl || organization.bannerPictureUrl ? (
               <Image
-                src={bannerPreviewUrl || organization.bannerPictureUrl} // Use preview if available, otherwise DB URL
+                src={bannerPreviewUrl || organization.bannerPictureUrl!} // Use preview if available, otherwise DB URL
                 alt={`${organization.name}'s banner picture`}
                 fill // *** Use fill to cover the parent AspectRatio container ***
                 className="object-cover" // Cover the container
