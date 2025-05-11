@@ -147,6 +147,16 @@ export default function LeaderboardPage() {
 
   return (
     <div className="p-5 md:p-24 space-y-10 w-screen max-w-4xl flex flex-col justify-center self-center">
+      <div className="text-center justify-center flex flex-col">
+        <IconTrophy className="text-primary self-center" size={60} />
+        <h1 className="text-3xl md:text-4xl font-extrabold text-primary mb-2">
+          Volunteer Leaderboard
+        </h1>
+        <p className="text-secondary-foreground text-lg">
+          See who’s making the biggest impact in the community!
+        </p>
+      </div>
+
       {/* --- Tabs Container for Leaderboards --- */}
       <Tabs defaultValue="regions" className="w-full">
         {/* Tabs List for selecting between Leaderboards */}
