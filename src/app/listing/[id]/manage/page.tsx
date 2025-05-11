@@ -2,8 +2,17 @@
 import { forbidden, notFound, redirect } from 'next/navigation';
 import { ListingManagement } from './client';
 import ListingInfo from '@/components/listingInfo';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { IconBuilding } from '@tabler/icons-react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { IconArrowRight, IconBuilding } from '@tabler/icons-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default async function App({ params }: { params: Promise<{ id: string }> }) {
   const user = await GetUser(true);
@@ -70,6 +79,14 @@ export default async function App({ params }: { params: Promise<{ id: string }> 
               })}
             </p>
           </CardContent>
+          <CardFooter>
+            <Link href={`/listing/${listing.id}`}>
+              <Button className="cursor-pointer">
+                View listing
+                <IconArrowRight />
+              </Button>
+            </Link>
+          </CardFooter>
         </Card>
         <ListingManagement listing={listing} />
       </div>
