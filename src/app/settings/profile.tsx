@@ -25,6 +25,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { UpdateUser } from './submit';
+import { Textarea } from '@/components/ui/textarea';
 
 /** Profile form schema */
 
@@ -125,7 +126,7 @@ export default function ProfileForm({ user }: { user: User }) {
             <FormItem>
               <FormLabel>Biography</FormLabel>
               <FormControl>
-                <Input placeholder={'Tell us a little bit more about yourself.'} {...field} />
+                <Textarea placeholder={'Tell us a little bit more about yourself.'} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

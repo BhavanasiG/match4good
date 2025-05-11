@@ -27,11 +27,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { IconCalendarWeek, IconClock } from '@tabler/icons-react';
-import { siteContact } from '@/config/siteConfig';
 import { useEffect, useState } from 'react';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Toggle } from '@/components/ui/toggle';
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
+import { Textarea } from '@/components/ui/textarea';
 
 /* zod uses ISO 8601 format for date and time, but server only returns YYYY-MM-DDTHH:MM instead of YYYY-MM-DDTHH:MM:SS, so z.string().datetime() is ignored */
 const formSchema = z.object({
@@ -56,7 +56,7 @@ const formSchema = z.object({
       message: 'End date and time cannot be before start date and time',
       path: ['endDatetime'],
     }),
-  description: z.string().max(400).optional(),
+  description: z.string().max(500).optional(),
   organization: z.number(),
   categories: z.array(z.number()).refine((arr) => arr.length >= 1, {
     message: 'You must select at least one category.',
@@ -142,9 +142,6 @@ export default function CreateListingForm({ user }: { user: User }) {
       <Card className="mt-6">
         <CardHeader>
           <CardTitle>Create Volunteering Opportunity</CardTitle>
-          <p className="text-sm text-muted-foreground">
-            Or email us directly at {siteContact.email}
-          </p>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -169,7 +166,7 @@ export default function CreateListingForm({ user }: { user: User }) {
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Textarea {...field} />
                     </FormControl>
                     <FormDescription>Describe your volunteering opportunity.</FormDescription>
                     <FormMessage />
