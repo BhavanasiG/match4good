@@ -9,7 +9,7 @@ const inter = Inter({
   display: 'swap',
 });
 
-export default async function PrivacyPolicy() {
+export default function PrivacyPolicy() {
   return (
     <div className="min-h-screen flex flex-col max-w-5xl self-center">
       {/** Policy */}
