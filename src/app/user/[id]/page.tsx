@@ -132,14 +132,14 @@ export default async function App(props: { params: t_params }) {
   );
 }
 
-function OrgInfo({ org }: { org: Organization }) {
+export function OrgInfo({ org }: { org: Organization }) {
   return (
     <div className="w-full">
       <Card className="hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out h-full flex flex-col justify-between">
         <CardHeader>
           <CardTitle>
-            <div className="text-sm text-muted-foreground mt-1 flex items-center space-x-2">
-              <IconBuilding size={20} />
+            <div className="text-base text-muted-foreground mt-1 flex items-center space-x-2">
+              <IconBuilding size={25} />
               <p>{org.name}</p>
             </div>
           </CardTitle>
