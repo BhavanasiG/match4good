@@ -27,18 +27,27 @@ model User {
 }
 
 model Organization {
-  id          Int       @id @default(autoincrement())
-  name        String    @unique
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
   description String?
   ownerId     Int
   address     String?
   postcode    String?
-  followers   Follow[] // <-- this is your addition
-  listings    Listing[]
-  owner       User      @relation("ownership", fields: [ownerId], references: [id])
-  members     User[]    @relation("membership")
-  Region      Region?   @relation(fields: [regionId], references: [id])
-  regionId    Int?
+
+  orgPictureUrl    String?
+  orgPictureFileId String?
+  bannerPictureUrl     String?
+  bannerPictureFileId  String?
+
+  followers Follow[]
+  listings  Listing[]
+  owner     User      @relation("ownership", fields: [ownerId], references: [id])
+  members   User[]    @relation("membership")
+  Region    Region?   @relation(fields: [regionId], references: [id])
+  regionId  Int?
+
+  @@index([ownerId])
+  @@index([regionId])
 }
 
 model Follow {

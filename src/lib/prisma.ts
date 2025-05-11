@@ -38,6 +38,20 @@ export type OrganizationWithSelectedRelations = Prisma.OrganizationGetPayload<{
     };
     followers: true;
   };
+  select: {
+    // top-level scalar fields and picture fields
+    id: true;
+    name: true;
+    description: true;
+    address: true;
+    postcode: true;
+    regionId: true;
+    ownerId: true;
+    orgPictureUrl: true;
+    orgPictureFileId: true;
+    bannerPictureUrl: true;
+    bannerPictureFileId: true;
+  };
 }>;
 
 /**
