@@ -2,6 +2,10 @@
 
 import { ApplicationStatus, ListingStatus, Prisma } from '@/../generated/prisma_client';
 import { DistributePointsFor, SetApplicationStatus, SetListingStatus } from './actions';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { IconBan, IconCheck } from '@tabler/icons-react';
+import { Separator } from '@/components/ui/separator';
 
 export type ListingWithApplications = Prisma.ListingGetPayload<{
   include: { applications: { include: { user: true } } };
@@ -19,65 +23,70 @@ export type ApplicationWithUsers = Prisma.ApplicationGetPayload<{
  */
 export function ListingManagement({ listing }: { listing: ListingWithApplications }) {
   return (
-    <div>
-      {listing.status === ListingStatus.acceptingApplications ? (
-        <>
-          <h2>This listing is accepting applications</h2>
+    <Card className="p-6 bg-accent text-accent-foreground">
+      <h1 className="font-semibold text-2xl">Listing Details</h1>
+      <h2>
+        <span className="font-semibold">Status: </span>
+        {(listing.status === 'acceptingApplications' && 'Accepting applications') ||
+          (listing.status === 'applicationsClosed' && 'Closed') ||
+          (listing.status === 'cancelled' && 'Cancelled') ||
+          (listing.status === 'completed' && 'Completed')}
+      </h2>
+      <Card>
+        <CardHeader>
+          <CardTitle>Applications</CardTitle>
+        </CardHeader>
+        <CardContent>
           <ApplicationList listing={listing} />
-          <button
+        </CardContent>
+      </Card>
+
+      <CardFooter className="p-0 gap-5 flex flex-col sm:flex-row self-start items-start">
+        {listing.status === 'acceptingApplications' ? (
+          <Button
+            variant={'destructive'}
+            className="w-fit cursor-pointer"
             onClick={async () => {
               await SetListingStatus(listing.id, ListingStatus.applicationsClosed);
             }}
           >
             Close applications
-          </button>
-          <br />
-        </>
-      ) : (
-        <>
-          <h2>This listing is not accepting applications</h2>
-          <button
+            <IconBan />
+          </Button>
+        ) : (
+          <Button
+            className="w-fit cursor-pointer"
             onClick={async () => {
-              await SetListingStatus(listing.id, ListingStatus.acceptingApplications);
+              await SetListingStatus(listing.id, ListingStatus.applicationsClosed);
             }}
           >
-            Reopen applications
-          </button>
-          <br />
-        </>
-      )}
+            Re-open applications
+          </Button>
+        )}
 
-      {listing.status === ListingStatus.cancelled ? (
-        <h2>This listing has been cancelled</h2>
-      ) : (
-        <>
-          <button
-            onClick={async () => {
-              await SetListingStatus(listing.id, ListingStatus.cancelled);
-            }}
-          >
-            Cancel listing
-          </button>
-          <br />
-        </>
-      )}
-
-      {listing.status === ListingStatus.completed ? (
-        <h2>This listing has been completed</h2>
-      ) : (
-        <>
-          <button
-            onClick={async () => {
-              await SetListingStatus(listing.id, ListingStatus.completed);
-              await DistributePointsFor(listing.id);
-            }}
-          >
-            Mark listing as complete
-          </button>
-          <br />
-        </>
-      )}
-    </div>
+        <Button
+          variant={'destructive'}
+          className="w-fit cursor-pointer"
+          onClick={async () => {
+            await SetListingStatus(listing.id, ListingStatus.cancelled);
+          }}
+          disabled={listing.status === 'cancelled'}
+        >
+          Cancel Listing
+        </Button>
+        <Button
+          className="w-fit cursor-pointer"
+          onClick={async () => {
+            await SetListingStatus(listing.id, ListingStatus.completed);
+            await DistributePointsFor(listing.id);
+          }}
+          disabled={listing.status === 'cancelled'}
+        >
+          Mark as complete
+          <IconCheck />
+        </Button>
+      </CardFooter>
+    </Card>
   );
 }
 
@@ -89,10 +98,11 @@ export function ListingManagement({ listing }: { listing: ListingWithApplication
  */
 export function ApplicationList({ listing }: { listing: ListingWithApplications }) {
   return (
-    <ul>
+    <ul className="flex flex-col space-y-5">
       {listing.applications.map((application, key) => (
         <li key={key}>
           <PresentApplication application={application} />
+          <Separator className="mt-5" />
         </li>
       ))}
     </ul>
@@ -106,29 +116,50 @@ export function ApplicationList({ listing }: { listing: ListingWithApplications 
  */
 export function PresentApplication({ application }: { application: ApplicationWithUsers }) {
   return (
-    <div>
+    <div className="flex flex-col space-y-2">
       <div>
-        <h3>{application.user.username}</h3>
-        <p>{application.description ?? 'This user did not provide a comment'}</p>
+        <h3>
+          <span className="font-medium">Username: </span>
+          {application.user.username}
+        </h3>
+        <h3>
+          <span className="font-medium">Status: </span>
+          {application.status}
+        </h3>
+        <p>
+          <span className="font-medium">Message: </span>
+          <br />
+          {application.description ?? 'No comment'}
+        </p>
       </div>
-      <div>
+      <div className="flex space-x-5">
         {application.status === ApplicationStatus.PENDING ? (
           <>
-            <button
+            <Button
+              size={'sm'}
+              className="cursor-pointer"
               onClick={() => SetApplicationStatus(application.id, ApplicationStatus.ACCEPTED)}
             >
               Accept
-            </button>
-            <button
+            </Button>
+            <Button
+              variant={'destructive'}
+              size={'sm'}
+              className="cursor-pointer"
               onClick={() => SetApplicationStatus(application.id, ApplicationStatus.REJECTED)}
             >
               Reject
-            </button>
+            </Button>
           </>
         ) : (
-          <button onClick={() => SetApplicationStatus(application.id, ApplicationStatus.PENDING)}>
+          <Button
+            className="cursor-pointer"
+            size={'sm'}
+            variant={'secondary'}
+            onClick={() => SetApplicationStatus(application.id, ApplicationStatus.PENDING)}
+          >
             Undo
-          </button>
+          </Button>
         )}
       </div>
     </div>

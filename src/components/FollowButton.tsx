@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { useState } from 'react';
+import { Button } from './ui/button';
+import { IconMinus, IconPlus } from '@tabler/icons-react';
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -43,14 +45,20 @@ export default function FollowButton({
   };
 
   return (
-    <button
-      onClick={handleClick}
-      disabled={loading}
-      className={`px-4 py-2 rounded ${
-        following ? 'bg-gray-300 text-black' : 'bg-blue-600 text-white'
-      }`}
-    >
-      {loading ? 'Loading...' : following ? 'Unfollow' : 'Follow'}
-    </button>
+    <Button onClick={handleClick} disabled={loading} className="cursor-pointer">
+      {loading ? (
+        'Loading...'
+      ) : following ? (
+        <>
+          Unfollow
+          <IconMinus />
+        </>
+      ) : (
+        <>
+          Follow
+          <IconPlus />
+        </>
+      )}
+    </Button>
   );
 }

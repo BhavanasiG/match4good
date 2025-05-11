@@ -187,7 +187,7 @@ function NewsComponent({ article, topic }: { article: Article; topic: string }) 
   return (
     <Link href={article.url} className="w-full">
       <Card className="p-0 hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out h-full flex flex-col">
-        <CardHeader className="relative h-50">
+        <CardHeader className="p-0 relative h-50 flex">
           {article.urlToImage ? (
             <Image
               src={article.urlToImage}
@@ -197,7 +197,9 @@ function NewsComponent({ article, topic }: { article: Article; topic: string }) 
               className="object-cover"
             />
           ) : (
-            <div className="object-cover" />
+            <div className="size-full bg-accent p-10 items-center self-center flex justify-center">
+              <Image src={'/logo_extended.svg'} width={393} height={73} alt="default image" />
+            </div>
           )}
         </CardHeader>
         <CardContent className="space-y-5 px-5 pb-5 text-base flex flex-col items-left">
@@ -218,106 +220,4 @@ function NewsComponent({ article, topic }: { article: Article; topic: string }) 
       </Card>
     </Link>
   );
-}
-{
-  /* <div className="min-h-screen bg-gradient-to-br from-[#e8f5e9] to-[#f1f8e9] py-10 px-4">
-        <div className="flex flex-wrap gap-4 justify-center mb-8">
-          <select
-            value={topic}
-            onChange={(e) => setTopic(e.target.value)}
-            className="border border-green-200 p-2 rounded-lg bg-green-50 text-green-900 font-semibold"
-          >
-            {TOPICS.map((t) => (
-              <option key={t.query} value={t.query}>
-                {t.label}
-              </option>
-            ))}
-          </select>
-          <select
-            value={region}
-            onChange={(e) => setRegion(e.target.value)}
-            className="border border-green-200 p-2 rounded-lg bg-green-50 text-green-900 font-semibold"
-          >
-            {REGIONS.map((r) => (
-              <option key={r.query} value={r.query}>
-                {r.label}
-              </option>
-            ))}
-          </select>
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="border border-green-200 p-2 rounded-lg bg-green-50 text-green-900 font-semibold"
-          >
-            {SORTS.map((s) => (
-              <option key={s.value} value={s.value}>
-                {s.label}
-              </option>
-            ))}
-          </select>
-          <select
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="border border-green-200 p-2 rounded-lg bg-green-50 text-green-900 font-semibold"
-          >
-            {DATES.map((d) => (
-              <option key={d.label} value={d.value}>
-                {d.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {loading && (
-          <div className="text-center text-green-600 py-8 font-semibold">Loading news...</div>
-        )}
-        {error && <div className="text-center text-red-600 py-8 font-semibold">Error: {error}</div>}
-
-        {!loading && !error && (
-          <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {articles.map((article, idx) => (
-              <a
-                key={idx}
-                href={article.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-white border border-green-100 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow flex flex-col"
-              >
-                {article.urlToImage ? (
-                  <Image
-                    src={article.urlToImage}
-                    alt="Article Image"
-                    width={400}
-                    height={200}
-                    unoptimized
-                    className="w-full h-48 object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-48 bg-green-50 flex items-center justify-center text-green-400 text-sm">
-                    No Image Available
-                  </div>
-                )}
-                <div className="p-5 flex flex-col flex-grow">
-                  <span className="inline-block bg-green-100 text-green-800 text-xs font-semibold rounded-full px-3 py-1 mb-2">
-                    {TOPICS.find((t) => t.query === topic)?.label}
-                  </span>
-                  <h2 className="text-lg font-bold mb-1 line-clamp-2 text-[#388e3c]">
-                    {article.title}
-                  </h2>
-                  <p className="text-sm text-gray-500 mb-2">
-                    {new Date(article.publishedAt).toLocaleDateString('en-GB', {
-                      day: 'numeric',
-                      month: 'short',
-                      year: 'numeric',
-                    })}{' '}
-                    – {article.source.name}
-                  </p>
-                  <p className="text-gray-700 mt-2 text-sm line-clamp-3">{article.description}</p>
-                </div>
-              </a>
-            ))}
-          </div>
-        )}
-      </div>
-    </div> */
 }
