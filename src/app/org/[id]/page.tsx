@@ -16,7 +16,6 @@ import { IconEdit } from '@tabler/icons-react';
 import { OrganizationWithSelectedRelations } from '@/lib/prisma';
 import { UserIcon } from 'lucide-react';
 /* eslint-disable @typescript-eslint/naming-convention */
-
 type t_params = Promise<{ id: string }>;
 
 export default async function App(props: { params: t_params }) {
