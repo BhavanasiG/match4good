@@ -187,7 +187,7 @@ function NewsComponent({ article, topic }: { article: Article; topic: string }) 
   return (
     <Link href={article.url} className="w-full">
       <Card className="p-0 hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out h-full flex flex-col">
-        <CardHeader className="relative h-50">
+        <CardHeader className="p-0 relative h-50 flex">
           {article.urlToImage ? (
             <Image
               src={article.urlToImage}
@@ -197,7 +197,9 @@ function NewsComponent({ article, topic }: { article: Article; topic: string }) 
               className="object-cover"
             />
           ) : (
-            <div className="object-cover" />
+            <div className="size-full bg-accent p-10 items-center self-center flex justify-center">
+              <Image src={'/logo_extended.svg'} width={393} height={73} alt="default image" />
+            </div>
           )}
         </CardHeader>
         <CardContent className="space-y-5 px-5 pb-5 text-base flex flex-col items-left">
