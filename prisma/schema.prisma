@@ -16,6 +16,7 @@ model User {
   profilePictureUrl    String?
   profilePictureFileId String?
   bio                  String?
+  totalPoints          Int            @default(0)
   signupCompleted      Boolean        @default(false)
   ownerOf              Organization[] @relation("ownership")
   memberOf             Organization[] @relation("membership")
@@ -34,10 +35,10 @@ model Organization {
   address     String?
   postcode    String?
 
-  orgPictureUrl    String?
-  orgPictureFileId String?
-  bannerPictureUrl     String?
-  bannerPictureFileId  String?
+  orgPictureUrl       String?
+  orgPictureFileId    String?
+  bannerPictureUrl    String?
+  bannerPictureFileId String?
 
   followers Follow[]
   listings  Listing[]

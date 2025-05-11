@@ -14,10 +14,18 @@ import {
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Toggle } from '@/components/ui/toggle';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { CreateInterests, GetCategories } from './submit';
+import { GetRegions, CompleteSignup, GetCategories } from './submit';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
@@ -26,6 +34,13 @@ const formSchema = z.object({
   categories: z.array(z.number()).refine((arr) => arr.length >= 3, {
     message: `You must select at least three interests.`,
   }),
+  regionId: z.preprocess(
+    (val) => (typeof val === 'string' ? parseInt(val, 10) : val),
+    z.number({
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      required_error: 'Please select a region.',
+    }),
+  ),
 });
 
 interface Category {
@@ -39,16 +54,22 @@ interface Category {
   }[];
 }
 
+interface Region {
+  id: number;
+  name: string;
+}
+
 /**
- * A form component for user sign-up that allows selection of interests from various categories.
- * The form fetches categories and their subcategories from the server, displays them in a scrollable area,
- * and allows users to select at least three interests before submission.
+ * A form component for user sign-up that allows selection of interests and region.
+ * Fetches categories and regions from the server.
  * @returns {Element} - SignUpForm component
  */
 export default function SignUpForm() {
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [regions, setRegions] = useState<Region[]>([]);
+  const [isRegionsLoading, setIsRegionsLoading] = useState(true);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -62,40 +83,73 @@ export default function SignUpForm() {
       }
     };
 
+    const fetchRegions = async () => {
+      try {
+        const data = await GetRegions();
+
+        if ('success' in data && data.success === false) {
+          console.error('Error fetching regions:', data.message);
+          toast.error(data.message);
+          setRegions([]);
+        } else {
+          setRegions(data as Region[]);
+        }
+      } catch (error) {
+        console.error('Error fetching regions:', error);
+        toast.error('Failed to load regions.');
+        setRegions([]);
+      } finally {
+        setIsRegionsLoading(false);
+      }
+    };
+
     fetchCategories().catch((e: Error) => {
       console.log('Error fetching categories: ' + e.message);
     });
+
+    fetchRegions().catch((e: Error) => {
+      console.log('Error fetching regions: ' + e.message);
+    });
   }, []);
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<z.input<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       categories: [],
+      regionId: '',
     },
   });
 
   /**
-   * Handles form submission by creating user interests and redirecting to home page on success.
+   * Handles form submission by completing user signup.
+   * Saves selected interests and region, and redirects on success.
    * Shows toast notifications for success/error states.
-   * @param {z.infer<typeof formSchema>} values - The form data containing selected subcategory IDs
+   * @param {z.infer<typeof formSchema>} values - The form data containing selected subcategory IDs and regionId
    */
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    CreateInterests({
-      interests: values.categories,
-    })
-      .then((status) => {
-        if (status === 0) {
-          toast.error('An unexpected error occured (status: 0)');
-        } else {
-          toast.success('Interests saved');
-          router.push(`/`);
-        }
-      })
-      .catch((e: Error) => {
-        console.error(e.message);
-        toast.error('An unexpected error occured');
+  const onSubmit: SubmitHandler<z.input<typeof formSchema>> = async (values) => {
+    const toastId = toast.loading('Completing signup...');
+    try {
+      const validatedValues = values as z.infer<typeof formSchema>;
+      const result = await CompleteSignup({
+        interests: validatedValues.categories,
+        regionId: validatedValues.regionId,
       });
-  }
+
+      if (result.success) {
+        toast.success(result.message, { id: toastId });
+        router.push(`/`);
+      } else {
+        toast.error(result.message, { id: toastId });
+      }
+    } catch (error: unknown) {
+      console.error('Failed to complete signup:', error);
+      if (error instanceof Error) {
+        toast.error(error.message, { id: toastId });
+      } else {
+        toast.error('An unexpected error occurred.', { id: toastId });
+      }
+    }
+  };
 
   return (
     <div className="self-center md:p-12 w-screen max-w-4xl">
@@ -106,6 +160,57 @@ export default function SignUpForm() {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="regionId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Select Region</FormLabel>
+
+                    <Select
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                      }}
+                      value={
+                        field.value === null ||
+                        field.value === undefined ||
+                        typeof field.value === 'object'
+                          ? ''
+                          : // eslint-disable-next-line @typescript-eslint/no-base-to-string
+                            String(field.value)
+                      }
+                      disabled={isRegionsLoading || regions.length === 0}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue
+                            placeholder={
+                              isRegionsLoading
+                                ? 'Loading regions...'
+                                : regions.length > 0
+                                  ? 'Select a region'
+                                  : 'No regions available'
+                            }
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {regions.map((region) => (
+                          <SelectItem key={region.id} value={String(region.id)}>
+                            {' '}
+                            {region.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      Select the region you are primarily interested in or located in.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="categories"
