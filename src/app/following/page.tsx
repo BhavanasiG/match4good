@@ -11,7 +11,6 @@ import {
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { OrgInfo } from '../user/[id]/page';
 import FollowButton from '@/components/FollowButton';
 
 export default async function FollowingPage() {
