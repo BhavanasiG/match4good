@@ -2,6 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { IconMapPin, IconSearch } from '@tabler/icons-react';
 
 interface Charity {
   id: string;
@@ -34,7 +45,7 @@ export default function CharityList() {
   const [charities, setCharities] = useState<Charity[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [region, setRegion] = useState('');
+  const [region, setRegion] = useState('all');
   const [fadeIn, setFadeIn] = useState(false);
 
   const fetchCharities = async () => {
@@ -42,7 +53,7 @@ export default function CharityList() {
     setError(null);
 
     try {
-      const queryParams = new URLSearchParams(region ? { region } : {});
+      const queryParams = new URLSearchParams(region !== 'all' ? { region } : {});
       console.log('Query URL:', `/api/charity_api?${queryParams.toString()}`); // Debugging
 
       const res = await fetch(`/api/charity_api?${queryParams}`);
@@ -74,81 +85,89 @@ export default function CharityList() {
   }, [charities]);
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      {/* Filters Section */}
-      <section className="bg-white p-6 rounded-2xl shadow mb-10 border border-green-100">
-        <form
-          className="flex flex-col sm:flex-row items-stretch gap-4"
-          onSubmit={(e) => {
-            e.preventDefault();
-            fetchCharities();
-          }}
-        >
-          <div className="flex-1">
-            <label htmlFor="region" className="block text-sm font-semibold text-gray-700 mb-1">
-              Filter by City
-            </label>
-            <select
-              id="region"
-              value={region}
-              onChange={(e) => setRegion(e.target.value)}
-              className="border border-green-200 p-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-300"
-            >
-              <option value="">All Cities</option>
-              {validCities.map((city) => (
-                <option key={city} value={city}>
-                  {city}
-                </option>
-              ))}
-            </select>
-          </div>
-          <button
-            type="submit"
-            className="sm:w-auto w-full px-7 py-2 bg-gradient-to-r from-green-400 to-green-600 text-white font-bold rounded-lg shadow hover:from-green-500 hover:to-green-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-200 flex items-center justify-center"
-          >
-            <span className="inline-block transition-transform group-hover:rotate-6">🔎</span> Apply
-            Filter
-          </button>
-        </form>
+    <div className="min-h-screen flex flex-col">
+      {/** Banner */}
+      <section className="flex flex-col">
+        <div className="flex items-center h-50 overflow-hidden relative">
+          <Image
+            src={'/org-background.jpg'}
+            alt="Banner Image"
+            fill
+            style={{ objectFit: 'cover' }}
+          />
+        </div>
+        <div className="flex flex-col bg-primary justify-center text-center items-center p-8 space-y-2">
+          <h2 className="text-3xl font-semibold text-primary-foreground">Charity Comission</h2>
+          <h3 className="text-xl text-primary-foreground">
+            Explore top charities from around the UK
+          </h3>
+        </div>
       </section>
-
-      {/* Charity List */}
-      <h2 className="text-2xl font-extrabold text-[#388e3c] mb-6 text-center tracking-tight">
-        Top 5 Charities
-      </h2>
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 p-3 rounded mb-4 text-center">
-          {error}
-        </div>
-      )}
-      {loading && (
-        <div className="text-center text-green-700 font-medium mb-4 animate-pulse">
-          Loading charities...
-        </div>
-      )}
-
-      <div
-        className={`grid grid-cols-1 sm:grid-cols-2 gap-8 transition-opacity duration-700 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}
-      >
-        {charities.map((charity) => (
-          <Link
-            key={charity.id}
-            href={charity.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block bg-white border-2 border-green-100 rounded-2xl p-6 shadow-md hover:shadow-2xl hover:border-green-400 transition-all duration-300 group hover:-translate-y-1"
+      {/**  listings */}
+      <section className="flex flex-col p-12 md:px-24 xl:px-40">
+        {/* Filters Section - Positioned Directly Above Listings */}
+        <div className="flex justify-end mb-8 space-x-5">
+          <Select
+            value={region}
+            defaultValue="all"
+            onValueChange={(value: string) => setRegion(value)}
           >
-            <h3 className="text-lg font-bold text-green-700 mb-1 group-hover:underline">
-              {charity.name}
-            </h3>
-            <p className="text-sm text-gray-700 mb-2 line-clamp-2">{charity.activities}</p>
-            <div className="flex items-center text-xs text-gray-500">
-              <span className="mr-2">📍</span>
-              {charity.region}
-            </div>
-          </Link>
-        ))}
-      </div>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Cities</SelectItem>
+              {validCities.map((obj, index) => (
+                <SelectItem key={index} value={obj}>
+                  {obj}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button
+            onClick={(e) => {
+              e.preventDefault();
+              fetchCharities();
+            }}
+            className="cursor-pointer"
+          >
+            Apply filter
+            <IconSearch />
+          </Button>
+        </div>
+        <div className="grid grid-rows-4 sm:grid-rows-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:grid-rows-none gap-10">
+          {loading && <p className="text-center self-center">Loading...</p>}
+          {error && (
+            <p className="text-center self-center text-destructive">An error occured: {error} </p>
+          )}
+          {!loading && !error && (
+            <>
+              {charities.map((charity, index) => (
+                <CharityComponent key={index} charity={charity} />
+              ))}
+            </>
+          )}
+        </div>
+      </section>
     </div>
+  );
+}
+
+function CharityComponent({ charity }: { charity: Charity }) {
+  return (
+    <Link href={charity.url} className="w-full">
+      <Card className="hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out h-full flex flex-col justify-between">
+        <CardHeader>
+          <CardTitle>
+            <p className="text-lg">{charity.name}</p>
+          </CardTitle>
+          <CardDescription className="flex space-x-2">
+            <IconMapPin size={20} />
+            <p>{charity.region}</p>
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="text-base line-clamp-3">{charity.activities}</CardContent>
+      </Card>
+    </Link>
   );
 }
