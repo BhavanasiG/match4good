@@ -1,5 +1,16 @@
 ﻿'use client';
 
+import { Card } from '@/components/ui/card';
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { IconTrophy } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 
 type LeaderboardEntry = {
@@ -23,50 +34,52 @@ export default function LeaderboardPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#e8f5e9] to-[#f1f8e9] py-10 px-4">
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-8">
-          <div className="text-4xl mb-2">🏆</div>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-[#388e3c] mb-2">
+    <div className="p-5 md:p-24 space-y-10 w-screen max-w-4xl flex flex-col justify-center self-center">
+      <div className="max-w-4xl space-y-10">
+        <div className="text-center justify-center flex flex-col">
+          <IconTrophy className="text-primary self-center" size={60} />
+          <h1 className="text-3xl md:text-4xl font-extrabold text-primary mb-2">
             Volunteer Leaderboard
           </h1>
-          <p className="text-[#388e3c] text-lg">
+          <p className="text-secondary-foreground text-lg">
             See who’s making the biggest impact in the community!
           </p>
         </div>
-        <div className="bg-white rounded-2xl shadow-lg p-6">
-          <table className="w-full table-auto">
-            <thead>
-              <tr className="bg-green-50 text-[#388e3c]">
-                <th className="p-3 text-left text-base font-semibold rounded-tl-2xl">#</th>
-                <th className="p-3 text-left text-base font-semibold">Username</th>
-                <th className="p-3 text-left text-base font-semibold rounded-tr-2xl">Points</th>
-              </tr>
-            </thead>
-            <tbody>
+        <Card className="p-3 sm:p-6">
+          <Table className="text-sm sm:text-base">
+            <TableHeader>
+              <TableRow>
+                <TableHead className="text-center">Rank</TableHead>
+                <TableHead>Username</TableHead>
+                <TableHead>Points</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {leaderboard.length === 0 ? (
-                <tr>
-                  <td colSpan={3} className="text-center py-8 text-gray-400 text-lg">
-                    No leaderboard data yet.
-                  </td>
-                </tr>
+                <TableRow>
+                  <TableCell colSpan={3}>No leaderboard data</TableCell>
+                </TableRow>
               ) : (
-                leaderboard.map((user, i) => (
-                  <tr
-                    key={i}
-                    className={`border-t transition ${
-                      i < 3 ? 'bg-green-50 font-bold text-[#388e3c]' : 'hover:bg-green-100'
-                    }`}
+                leaderboard.map((user, index) => (
+                  <TableRow
+                    key={index}
+                    className={
+                      index < 3
+                        ? 'bg-secondary hover:bg-secondary/50 text-secondary-foreground font-semibold'
+                        : ''
+                    }
                   >
-                    <td className="p-3 text-lg">{trophyEmojis[i] || i + 1}</td>
-                    <td className="p-3">{user.name}</td>
-                    <td className="p-3">{user.totalPoints}</td>
-                  </tr>
+                    <TableCell className="text-center font-semibold">
+                      {trophyEmojis[index] || index + 1}
+                    </TableCell>
+                    <TableCell>{user.name}</TableCell>
+                    <TableCell>{user.totalPoints}</TableCell>
+                  </TableRow>
                 ))
               )}
-            </tbody>
-          </table>
-        </div>
+            </TableBody>
+          </Table>
+        </Card>
       </div>
     </div>
   );
