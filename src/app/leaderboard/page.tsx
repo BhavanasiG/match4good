@@ -1,5 +1,6 @@
 ﻿'use client';
 
+import { IconTrophy } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import {
@@ -145,24 +146,8 @@ export default function LeaderboardPage() {
   };
 
   return (
-    <div className="p-5 sm:p-10 md:p-20 lg:px-40 xl:px-80 space-y-10">
-      <div className="text-center mb-8 space-y-2">
-        {/* <div className="text-4xl">🏆</div> */}
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-200">
-          Volunteer Leaderboards
-        </h1>
-        <p className="text-muted-foreground text-lg">
-          See who and which regions are creating the greatest positive impact!
-        </p>
-        <p
-          className={`text-sm ${isConnected ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}
-        >
-          Connection Status: {isConnected ? 'Live' : 'Disconnected'}
-        </p>
-      </div>
-
+    <div className="p-5 md:p-24 space-y-10 w-screen max-w-4xl flex flex-col justify-center self-center">
       {/* --- Tabs Container for Leaderboards --- */}
-
       <Tabs defaultValue="regions" className="w-full">
         {/* Tabs List for selecting between Leaderboards */}
         <TabsList className="grid w-full grid-cols-2 mb-4 md:w-[400px] mx-auto">
