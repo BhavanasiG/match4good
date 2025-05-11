@@ -63,8 +63,8 @@ const fetchCombinedLeaderboardData = async (): Promise<CombinedLeaderboardData> 
     const userLeaderboardData: UserLeaderboardEntry[] = topUsers.map((user) => ({
       userId: user.id,
       name: user.username,
-      totalPoints: user.totalPoints,
-      regionName: user.region?.name || null,
+      totalPoints: user?.totalPoints,
+      regionName: user?.region?.name || null,
       profilePictureUrl: user.profilePictureUrl || null,
     }));
 
