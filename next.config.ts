@@ -8,7 +8,17 @@ const nextConfig: NextConfig = {
     authInterrupts: true,
   },
   images: {
-    domains: ['ik.imagekit.io'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos', // For the seed data placeholders
+      },
+      {
+        protocol: 'https',
+        hostname: 'ik.imagekit.io', // For ImageKit hosted images
+        pathname: '/match4good/**',
+      },
+    ],
   },
 };
 
