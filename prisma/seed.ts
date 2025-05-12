@@ -647,6 +647,9 @@ async function main() {
       }
     }
 
+    const startDate = faker.date.soon({ days: 60 });
+    const endDate = faker.date.future({ years: 0.1, refDate: startDate });
+
     const testListing = await prisma.listing.create({
       data: {
         name: 'Test Listing',
