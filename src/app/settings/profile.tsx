@@ -29,6 +29,13 @@ import { Textarea } from '@/components/ui/textarea';
 
 /** Profile form schema */
 
+/**
+ * Zod schema for the User Profile form data.
+ * Validates username, email, and optional biography.
+ * @property {string} username - User's username (min 4, max 20 characters).
+ * @property {string} email - User's email address (required, valid email format).
+ * @property {string | undefined} bio - Optional user biography (max 160 characters).
+ */
 const formSchema = z.object({
   username: z
     .string()
@@ -48,9 +55,10 @@ const formSchema = z.object({
 });
 
 /**
- *
- * @param {User} param0 - user: The user object to display
- * @returns {Element} - Returns a form for updating the user's profile
+ * Client component providing a form to update the user's profile information (username, email, biography).
+ * @param {object} props - Component props.
+ * @param {User} props.user - The user object whose profile is being edited.
+ * @returns {Element} The Profile Settings form component UI.
  */
 export default function ProfileForm({ user }: { user: User }) {
   /**
@@ -70,9 +78,9 @@ export default function ProfileForm({ user }: { user: User }) {
   });
 
   /**
-   *
-   * @param {z.infer<typeof formSchema>} values Form values
-   * Handles form submission and updates the user profile
+   * Handles the submission of the profile form.
+   * Calls the server action to update the user profile and provides toast feedback.
+   * @param {z.infer<typeof formSchema>} values - The validated form values.
    */
   function OnSubmit(values: z.infer<typeof formSchema>) {
     let error = false;

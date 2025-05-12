@@ -4,6 +4,14 @@ import prisma, { GetUser } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { Organization } from '@/../generated/prisma_client';
 
+/**
+ * Interface for the data expected when creating a new listing.
+ * @property {string} name - The name of the listing.
+ * @property {string} description - The description of the listing.
+ * @property {string} startDatetime - The start date and time string.
+ * @property {string} endDatetime - The end date and time string.
+ * @property {number} organizationId - The ID of the organization hosting the listing.
+ */
 export interface CreateListingData {
   name: string;
   description: string;
@@ -13,9 +21,9 @@ export interface CreateListingData {
 }
 
 /**
- * This method returns an array containing the organizations a user is linked
- * with or null
- * @returns {Promise<Organization[] | null>} Array of organizations linked with user or null if no user logged in
+ * Fetches the organizations that the currently authenticated user owns or is a member of.
+ * Requires user authentication via GetUser.
+ * @returns {Promise<Organization[] | null>} A promise resolving to an array of organizations, or null if no user is logged in.
  */
 async function getUserOrganizations(): Promise<Organization[] | null> {
   const user = await GetUser(true);
@@ -29,20 +37,10 @@ async function getUserOrganizations(): Promise<Organization[] | null> {
 }
 
 /**
- * Handles form submission for creating volunteer oppportunity
- * by validating the input fields
- *
- * Completes/Ensures these **server-side** actions:
- * - Ensures the name field is not empty.
- * - Checks that both start and end dates and times are provided.
- * - Validates that the end date and time is the same as or
- * after the start date and time.
- * - Displays an appropriate error message if validation fails.
- * and passes to the server to create new record in database
- * - Listing is linked to one of the user's organisation
- * @param {CreateListingData} formData Form data inputted/submitted by user.
- * @returns {redirect} redirection to new created listing (if valid data inputted),
- * else returns an error message.
+ * Server Action to create a new volunteer listing.
+ * Performs basic validation and creates the listing linked to a user's organization.
+ * @param {CreateListingData} formData - The data submitted from the new listing form.
+ * @returns {Promise<string | void>} Returns a string error message on validation failure, or triggers a redirect on success.
  */
 export async function CreateListing(formData: CreateListingData) {
   if (!formData.name.trim()) {

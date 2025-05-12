@@ -18,14 +18,19 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Textarea } from '@/components/ui/textarea';
 
+/**
+ * Zod schema for the application form data.
+ * @property {string | undefined} comment - Optional comment field, max 500 characters.
+ */
 const formSchema = z.object({
   comment: z.string().max(500).optional(),
 });
 
 /**
- * Creates form and handles form submission for creating an application
- * @param {number} param0 - listingId: The id of the listing to which the application is being made
- * @returns {Element} - A form for creating an application for a listing
+ * Application form component for users to apply for a listing.
+ * @param {object} props - Component props.
+ * @param {number} props.listingId - The ID of the listing to which the application is being made.
+ * @returns {Element} A React form component.
  */
 export default function ApplicationForm({ listingId }: { listingId: number }) {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -36,8 +41,9 @@ export default function ApplicationForm({ listingId }: { listingId: number }) {
   });
 
   /**
-   * Submits the application form
-   * @param {z.infer<typeof formSchema>} values Contains the values from the form
+   * Handles the submission of the application form.
+   * Calls the server action to create the application.
+   * @param {z.infer<typeof formSchema>} values - The validated form values.
    */
   async function onSubmit(values: z.infer<typeof formSchema>) {
     await createApplication(listingId, values.comment || null);

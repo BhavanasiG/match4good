@@ -4,10 +4,10 @@ import { GetUser } from '@/lib/prisma';
 import { imagekit } from '@/lib/imagekit';
 
 /**
- * This function handles the PUT request to update the user's profile picture.
- * It checks if the user is authenticated, and if so, updates the profile picture URL in the database.
- * @param {NextRequest} req - The incoming request object
- * @returns {Promise<Response>} - The response object
+ * Handles PUT requests to update the authenticated user's profile picture.
+ * Requires a JSON body with `imageUrl` and optional `fileId`.
+ * @param {NextRequest} req - The incoming request containing the new picture data.
+ * @returns {Promise<NextResponse>} A JSON response indicating successful update or an error (unauthorized, invalid input).
  */
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export async function PUT(req: NextRequest) {
@@ -37,10 +37,9 @@ export async function PUT(req: NextRequest) {
 }
 
 /**
- *
- * @returns {Promise<Response>} - The response object indicating success
- * @throws {Response} - Throws a 401 Unauthorized response if the user is not authenticated
- * This function handles the DELETE request to remove the user's profile picture.
+ * Handles DELETE requests to remove the authenticated user's profile picture.
+ * Deletes the image from ImageKit (if fileId exists) and clears DB references.
+ * @returns {Promise<NextResponse>} A JSON response indicating success or an unauthorized error.
  */
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export async function DELETE() {
@@ -76,10 +75,8 @@ export async function DELETE() {
 }
 
 /**
- * This function handles the GET request to fetch the user's profile picture.
- * It checks if the user is authenticated, and if so, retrieves the profile picture URL from the database.
- * @returns {Promise<Response>} - The response object containing the profile picture URL
- * @throws {Response} - Throws a 401 Unauthorized response if the user is not authenticated
+ * Handles GET requests to fetch the authenticated user's profile picture URL.
+ * @returns {Promise<NextResponse>} A JSON response containing the profile picture URL or an unauthorized error.
  */
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export async function GET() {

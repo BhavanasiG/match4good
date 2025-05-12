@@ -20,6 +20,14 @@ import { CreateOrganization } from './submit';
 import { useRouter } from 'next/navigation';
 import { Textarea } from '@/components/ui/textarea';
 
+/**
+ * Zod schema for the Create Organization form data.
+ * Validates organization details including name, description, address, and postcode format.
+ * @property {string} name - Organization name (min 4, max 32 characters).
+ * @property {string | undefined} description - Optional description (max 400 characters).
+ * @property {string} address - Organization address (min 4, max 64 characters).
+ * @property {string} postcode - UK postcode format (min 6, max 8 characters, trimmed).
+ */
 const formSchema = z.object({
   name: z
     .string()
@@ -52,6 +60,12 @@ const formSchema = z.object({
     }),
 });
 
+/**
+ * Validates an address and postcode using the OpenStreetMap Nominatim API.
+ * @param {string} address - The address string.
+ * @param {string} postcode - The postcode string.
+ * @returns {Promise<boolean>} A promise resolving to true if the address is found, false otherwise.
+ */
 const validateAddress = async (address: string, postcode: string): Promise<boolean> => {
   const query = encodeURIComponent(`${address}, ${postcode}, UK`);
   const url = `https://nominatim.openstreetmap.org/search?q=${query}&format=json`;
@@ -67,8 +81,9 @@ const validateAddress = async (address: string, postcode: string): Promise<boole
 /* eslint-disable @typescript-eslint/naming-convention */
 
 /**
- * Form component for creating new organizations.
- * @returns {Element} A form with fields for creating a new organization
+ * Client component providing a form to create a new organization.
+ * Includes client-side validation and calls the server action on submission.
+ * @returns {Element} The Create Organization form component UI.
  */
 export default function CreateOrganizationForm() {
   const router = useRouter();
@@ -83,8 +98,10 @@ export default function CreateOrganizationForm() {
   });
 
   /**
-   * Handles the submission of the form.
-   * @param {z.infer<typeof formSchema>} values - The values of the form
+   * Handles the submission of the create organization form.
+   * Performs client-side address validation and calls the server action.
+   * Shows toast feedback and redirects on success.
+   * @param {z.infer<typeof formSchema>} values - The validated form values.
    */
   async function OnSubmit(values: z.infer<typeof formSchema>) {
     const isValid = await validateAddress(values.address, values.postcode);

@@ -14,6 +14,13 @@ import prisma, { GetUser } from '@/lib/prisma';
 import { forbidden } from 'next/navigation';
 import getRegionFromPostcode from '@/lib/postcodes-io';
 
+/**
+ * Interface for the data structure expected by the CreateOrganization Server Action.
+ * @property {string} name - The organization's name.
+ * @property {string} description - The organization's description.
+ * @property {string} address - The organization's address.
+ * @property {string} postcode - The organization's postcode.
+ */
 export type Props = {
   name: string;
   description: string;
@@ -21,6 +28,12 @@ export type Props = {
   postcode: string;
 };
 
+/**
+ * Type alias for a simplified Region object used internally.
+ * @property {number} id - The region's unique ID.
+ * @property {string} name - The region's name.
+ * @property {number} points - The region's points.
+ */
 type Region = {
   id: number;
   name: string;
@@ -28,9 +41,10 @@ type Region = {
 };
 
 /**
- *
- * @param {string} param0 - Accepts an object with a username string
- * @returns {Promise<void>} - Returns a promise that resolves when the user is updated
+ * Server Action to create a new organization.
+ * Checks user authentication, prevents duplicate names, determines region from postcode, and links the organization to the user and region.
+ * @param {Props} formData - The data submitted from the new organization form.
+ * @returns {Promise<number | void>} Returns the ID of the created organization on success, 0 if the name exists or region is not found, or triggers forbidden() if the user is not authenticated.
  */
 export async function CreateOrganization({ name, description, address, postcode }: Props) {
   const user = await GetUser();

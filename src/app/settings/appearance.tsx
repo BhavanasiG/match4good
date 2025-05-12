@@ -10,8 +10,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 /**
- * AppearanceForm component displays a dropdown menu for selecting the theme.
- * @returns {Element} Returns a component with a dropdown menu for selecting the theme
+ * Client component providing a dropdown menu to select the application theme (light, dark, system).
+ * @returns {Element} The Appearance Settings component UI.
  */
 export default function AppearanceForm() {
   const { setTheme } = useTheme();

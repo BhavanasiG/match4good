@@ -3,11 +3,12 @@ import prisma from '@/lib/prisma';
 import { GetUser } from '@/lib/prisma';
 
 /**
- * Handles the GET request for retrieving organization details.
+ * Handles GET requests for specific organization details.
+ * Fetches and returns organization data by ID.
  * @param {NextRequest} req - The incoming request object.
- * @param {object} context - Context object containing params.
- * @param {Promise<{ id: string }>} context.params - The dynamic route params.
- * @returns {Promise<NextResponse>} - The response object containing organization data.
+ * @param {object} context - Object containing route parameters.
+ * @param {Promise<{ id: string }>} context.params - Dynamic route parameters, specifically the organization ID.
+ * @returns {Promise<NextResponse>} A JSON response with organization data or an error.
  */
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
@@ -30,11 +31,13 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
 }
 
 /**
- * Handles the PUT request to update an organization's details.
- * @param {NextRequest} req - The incoming request object.
- * @param {object} context - Context object containing params.
- * @param {Promise<{ id: string }>} context.params - The dynamic route params.
- * @returns {Promise<NextResponse>} - The response object containing success or error message.
+ * Handles PUT requests to update organization details.
+ * Requires user authentication and ownership verification.
+ * Expects a JSON body with name, description (optional), address, and postcode.
+ * @param {NextRequest} req - The incoming request object with update data in the body.
+ * @param {object} context - Object containing route parameters.
+ * @param {Promise<{ id: string }>} context.params - Dynamic route parameters, specifically the organization ID.
+ * @returns {Promise<NextResponse>} A JSON response indicating success or an error (auth, not found, forbidden, invalid input).
  */
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export async function PUT(req: NextRequest, context: { params: Promise<{ id: string }> }) {
