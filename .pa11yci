@@ -1,0 +1,30 @@
+{
+    "urls": [
+        "http://localhost:3000",
+        "http://localhost:3000/help/about",
+        "http://localhost:3000/help/contact-us",
+        "http://localhost:3000/legal/terms",
+        "http://localhost:3000/legal/privacy-policy",
+        "http://localhost:3000/leaderboard",
+        "http://localhost:3000/listing",
+        "http://localhost:3000/org",
+        "http://localhost:3000/org/comission",
+        "http://localhost:3000/following",
+        "http://localhost:3000/news",
+        "http://localhost:3000/listing/new",
+        "http://localhost:3000/listing/5",
+        "http://localhost:3000/listing/5/apply",
+        "http://localhost:3000/listing/5/manage",
+        "http://localhost:3000/org/new",
+        "http://localhost:3000/org/5",
+        "http://localhost:3000/org/5/edit",
+        "http://localhost:3000/settings",
+        "http://localhost:3000/user/5",
+        "http://localhost:3000/user/sign-up"
+    ],
+    "defaults": {
+        "chromeLaunchConfig": {
+            "executablePath": "/snap/bin/chromium"
+        }
+    }
+}

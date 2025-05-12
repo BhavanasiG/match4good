@@ -13,6 +13,12 @@ import AppearanceForm from './appearance';
 import SecurityForm from './security';
 import ProfileImageUpload from './profileImageUpload';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: `Settings - Match4Good`,
+};
+
 export default async function Settings() {
   const user = await GetUser(true);
 

@@ -3,6 +3,12 @@ import prisma, { GetUser } from '@/lib/prisma';
 import { forbidden } from 'next/navigation';
 import SignUpForm from './form';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: `Sign Up - Match4Good`,
+};
+
 export default async function App() {
   const user = await GetUser(true);
   const minimum_interests = 3;

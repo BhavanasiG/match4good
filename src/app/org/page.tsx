@@ -16,6 +16,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: `Organizations - Match4Good`,
+};
+
 interface Props {
   searchParams: Promise<{ page: string }>;
 }

@@ -2,6 +2,12 @@
 import CreateListingForm from './form';
 import { forbidden, redirect } from 'next/navigation';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: `Create Listing - Match4Good`,
+};
+
 export default async function App() {
   const user = await GetUser(true);
 

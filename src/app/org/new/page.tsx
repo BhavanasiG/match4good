@@ -2,6 +2,12 @@ import { GetUser, SignupComplete } from '@/lib/prisma';
 import CreateOrganizationForm from './form';
 import { forbidden, redirect } from 'next/navigation';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: `Create Organization - Match4Good`,
+};
+
 export default async function App() {
   const user = await GetUser(true);
 

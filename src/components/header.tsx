@@ -64,7 +64,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 grid grid-cols-10 p-3 px-6 md:px-12 lg:px-24 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <div className="col-span-3 flex justify-start sm:hidden">
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger aria-label="Dropdown Button">
             <IconMenu2 />
           </DropdownMenuTrigger>
           <DropdownMenuContent>

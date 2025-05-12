@@ -16,6 +16,12 @@ import { use } from 'react';
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: `User - Match4Good`,
+};
+
 type t_params = Promise<{ id: string }>;
 
 export default async function App(props: { params: t_params }) {
