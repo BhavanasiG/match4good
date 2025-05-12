@@ -20,6 +20,12 @@ import {
 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: `Jobs - Match4Good`,
+};
+
 interface PageProps {
   params: Promise<{ id: string }>;
 }

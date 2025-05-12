@@ -13,22 +13,17 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import FollowButton from '@/components/FollowButton';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Following - Match4Good',
+};
+
 export default async function FollowingPage() {
   const user = await GetUser(true);
 
   if (!user) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-[#e8f5e9] to-[#f1f8e9] p-6">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold text-[#388e3c] mb-4">Organizations You Follow</h1>
-          <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-            <p className="text-lg text-gray-600">
-              Please log in to view your followed organizations.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
+    return redirect('/auth/login');
   }
 
   if (user) {

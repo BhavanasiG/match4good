@@ -15,6 +15,12 @@ import { siteContent } from '@/config/siteConfig';
 import { ListingStatus, ApplicationStatus } from '../../../generated/prisma_client';
 import type { Listing, Organization, Subcategory, Region } from '../../../generated/prisma_client';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Jobs - Match4Good',
+};
+
 type ListingForRecommendation = Listing & {
   organization: { id: number; regionId: number | null } | null;
   categories: { id: number; primaryCategoryId: number }[];

@@ -1,10 +1,17 @@
-'use client';
 import { Button } from '@/components/ui/button';
 import { siteContent } from '@/config/siteConfig';
 import { IconArrowRight, IconBulb, IconGlobe, IconHeartHandshake } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'About - Match4Good',
+};
+
+// Output: <title>Acme</title>
 
 export default function AboutUsPage() {
   return (

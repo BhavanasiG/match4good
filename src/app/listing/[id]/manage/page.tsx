@@ -14,6 +14,12 @@ import { IconArrowRight, IconBuilding } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: `Manage Listing - Match4Good`,
+};
+
 export default async function App({ params }: { params: Promise<{ id: string }> }) {
   const user = await GetUser(true);
 
