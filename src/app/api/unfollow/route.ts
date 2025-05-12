@@ -7,9 +7,10 @@ import prisma from '@/lib/prisma';
 /* eslint-disable @typescript-eslint/naming-convention */
 
 /**
- * POST handler for following an organization.
- * @param {Request} req - HTTP request object containing JSON body with organizationId.
- * @returns {Promise<Response>} JSON response with success or error message.
+ * Handles POST requests to unfollow an organization.
+ * Deletes the follow relationship between the user and the organization.
+ * @param {NextRequest} req - The incoming request object with organizationId in JSON body.
+ * @returns {Promise<NextResponse>} A JSON response indicating success or unauthorized error.
  */
 export async function POST(req: NextRequest) {
   const user = await GetUser();

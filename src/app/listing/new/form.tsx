@@ -34,6 +34,17 @@ import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/comp
 import { Textarea } from '@/components/ui/textarea';
 
 /* zod uses ISO 8601 format for date and time, but server only returns YYYY-MM-DDTHH:MM instead of YYYY-MM-DDTHH:MM:SS, so z.string().datetime() is ignored */
+/**
+ * Zod schema for the Create Listing form data.
+ * Validates listing details including name, date range, description, organization, and categories.
+ * @property {string} name - Listing title (min 4, max 32 characters).
+ * @property {object} dateRange - Start and end datetime strings.
+ * @property {string} dateRange.startDatetime - Start date and time (must be in the future).
+ * @property {string} dateRange.endDatetime - End date and time (must be in the future and after start time).
+ * @property {string | undefined} description - Optional listing description (max 500 characters).
+ * @property {number} organization - The ID of the selected organization.
+ * @property {number[]} categories - Array of selected category IDs (at least one).
+ */
 const formSchema = z.object({
   name: z
     .string()
@@ -63,6 +74,16 @@ const formSchema = z.object({
   }),
 });
 
+/**
+ * Interface for the structure of a Category object.
+ * @property {number} id - The category's unique ID.
+ * @property {string} name - The category's name.
+ * @property {string | null} description - Optional description of the category.
+ * @property {object[]} subcategories - Array of related subcategory objects.
+ * @property {number} subcategories[].id - The subcategory's unique ID.
+ * @property {string} subcategories[].name - The subcategory's name.
+ * @property {string | null} subcategories[].description - Optional description of the subcategory.
+ */
 interface Category {
   id: number;
   name: string;
@@ -77,9 +98,11 @@ interface Category {
 /* eslint-disable @typescript-eslint/naming-convention */
 
 /**
- * Form component for creating new volunteering opportunities.
- * @param {User} user - The current user object containing organization memberships
- * @returns {Element} A form with fields for creating a new volunteering listing
+ * Client component for creating new volunteering listings.
+ * Provides a form for users associated with organizations to create opportunities.
+ * @param {object} props - Component props.
+ * @param {User} props.user - The current user object, including 'ownerOf' and 'memberOf' organization relations.
+ * @returns {Element} The Create Listing form component UI.
  */
 export default function CreateListingForm({ user }: { user: User }) {
   const userOrgs = [...new Set([...user.ownerOf, ...user.memberOf])];
@@ -117,8 +140,9 @@ export default function CreateListingForm({ user }: { user: User }) {
   });
 
   /**
-   * Handles the submission of the form.
-   * @param {z.infer<typeof formSchema>} values - The values of the form
+   * Handles the submission of the create listing form.
+   * Calls the server action to create the listing.
+   * @param {z.infer<typeof formSchema>} values - The validated form values.
    */
   function OnSubmit(values: z.infer<typeof formSchema>) {
     CreateListing({

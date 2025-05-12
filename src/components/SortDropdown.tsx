@@ -28,6 +28,7 @@ export default function SortDropdown({ currentSort, currentPage }: SortDropdownP
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
+        <SelectItem value="recommended">Recommended</SelectItem>
         <SelectItem value="newest">Newest</SelectItem>
         <SelectItem value="oldest">Oldest</SelectItem>
         <SelectItem value="closingSoonest">Closing Soonest</SelectItem>

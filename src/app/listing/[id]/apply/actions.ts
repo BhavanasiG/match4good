@@ -4,11 +4,12 @@ import prisma, { GetUser } from '@/lib/prisma';
 import { forbidden, notFound, redirect } from 'next/navigation';
 
 /**
- *
- * @param {number} listingId - The ID of the listing to apply for
- * @param {(string | null)} description - The description of the application
- * @returns {Promise<redirect>} Redirect to the listing page if successful, otherwise an error message
- * This function creates a new application for a listing by the current user.
+ * Creates a new application for a listing by the currently authenticated user.
+ * Checks user authentication, listing existence, and prevents duplicate applications.
+ * Triggers navigation or an error response based on the outcome.
+ * @param {number} listingId - The ID of the listing the user is applying for.
+ * @param {string | null} description - The user's description for the application.
+ * @returns {Promise<void>} This Server Action triggers a redirect on success or calls `forbidden()`/`notFound()` on failure. It does not return a value directly to the client.
  */
 export default async function CreateApplication(listingId: number, description: string | null) {
   const user = await GetUser();

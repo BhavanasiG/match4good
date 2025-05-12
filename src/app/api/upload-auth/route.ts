@@ -1,17 +1,19 @@
 import { getUploadAuthParams } from '@imagekit/next/server';
+import { NextResponse } from 'next/server';
 
 /**
- * This function handles the GET request to retrieve upload authentication parameters for ImageKit.
- * @returns {Promise<Response>} - Returns a promise that resolves to a response object containing the upload authentication parameters.
+ * Handles GET requests to retrieve authentication parameters for ImageKit direct uploads.
+ * Provides necessary token, expire time, signature, and public key for client-side uploads.
+ * @returns {Promise<NextResponse>} A JSON response with ImageKit upload authentication parameters.
  */
 // eslint-disable-next-line @typescript-eslint/require-await, @typescript-eslint/naming-convention
-export async function GET() {
+export async function GET(): Promise<NextResponse> {
   const { token, expire, signature } = getUploadAuthParams({
     privateKey: process.env.IMAGEKIT_PRIVATE_KEY as string,
     publicKey: process.env.IMAGEKIT_PUBLIC_KEY as string,
   });
 
-  return Response.json({
+  return NextResponse.json({
     token,
     expire,
     signature,

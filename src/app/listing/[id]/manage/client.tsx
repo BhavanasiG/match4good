@@ -7,19 +7,29 @@ import { Button } from '@/components/ui/button';
 import { IconBan, IconCheck } from '@tabler/icons-react';
 import { Separator } from '@/components/ui/separator';
 
+/**
+ * @typedef {object} ListingWithApplications - Prisma payload type for a Listing including its Applications and the related User.
+ * @property {object[]} applications - The list of applications for this listing.
+ * @property {object} applications[].user - The user associated with the application.
+ */
 export type ListingWithApplications = Prisma.ListingGetPayload<{
   include: { applications: { include: { user: true } } };
 }>;
 
+/**
+ * @typedef {object} ApplicationWithUsers - Prisma payload type for an Application including the related User.
+ * @property {object} user - The user associated with this application.
+ */
 export type ApplicationWithUsers = Prisma.ApplicationGetPayload<{
   include: { user: true };
 }>;
 
 /**
- * This component delivers functions to manage listings
- * @param {{listing: ListingWithApplications}} param0  Object containing listing
- * @param {ListingWithApplications} param0.listing The listing to manage
- * @returns {Element} The component
+ * Client component providing UI and actions for managing a specific listing.
+ * Includes controls for changing listing status and displaying applications.
+ * @param {object} props - Component props.
+ * @param {ListingWithApplications} props.listing - The listing data to manage, including its applications and users.
+ * @returns {Element} The Listing Management component UI.
  */
 export function ListingManagement({ listing }: { listing: ListingWithApplications }) {
   return (
@@ -91,10 +101,11 @@ export function ListingManagement({ listing }: { listing: ListingWithApplication
 }
 
 /**
- * This component shows a list of applications and methods to interact with them
- * @param {{listing: ListingWithApplications}} param0  Object containing listing
- * @param {ListingWithApplications} param0.listing The listing to manage
- * @returns {Element} The component
+ * Client component displaying a list of applications for a listing.
+ * Renders individual application components.
+ * @param {object} props - Component props.
+ * @param {ListingWithApplications} props.listing - The listing data, including applications and users.
+ * @returns {Element} A React list component.
  */
 export function ApplicationList({ listing }: { listing: ListingWithApplications }) {
   return (
@@ -110,9 +121,11 @@ export function ApplicationList({ listing }: { listing: ListingWithApplications 
 }
 
 /**
- * This component is used to display the listing information on the listing page
- * @param {ApplicationWithUsers} param0 - Accepts an object with a listing object
- * @returns {Element} - Returns HTML component that displays the listing information
+ * Client component displaying details of a single application.
+ * Includes user info and actions to accept/reject/undo application status.
+ * @param {object} props - Component props.
+ * @param {ApplicationWithUsers} props.application - The application data, including the user.
+ * @returns {Element} A React component displaying application details.
  */
 export function PresentApplication({ application }: { application: ApplicationWithUsers }) {
   return (

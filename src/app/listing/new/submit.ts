@@ -4,6 +4,16 @@ import prisma, { GetUser } from '@/lib/prisma';
 import { forbidden, redirect } from 'next/navigation';
 import { Organization } from '@/../generated/prisma_client';
 
+/**
+ * Interface for the data structure expected by the CreateListing Server Action.
+ * @property {string} name - The listing's title.
+ * @property {string} description - The listing's description.
+ * @property {object} dateRange - The date and time range for the listing.
+ * @property {string} dateRange.startDatetime - The start datetime string.
+ * @property {string} dateRange.endDatetime - The end datetime string.
+ * @property {number} organizationId - The ID of the hosting organization.
+ * @property {number[]} categories - An array of selected subcategory IDs.
+ */
 export interface CreateListingData {
   name: string;
   description: string;
@@ -17,18 +27,8 @@ export interface CreateListingData {
 
 /**
  * Fetches all categories and their subcategories from the database.
- * Returns a structured format suitable for the sign-up form.
- * @returns {Promise<Array<{
- *   id: number;
- *   name: string;
- *   description: string | null;
- *   subcategories: Array<{
- *     id: number;
- *     name: string;
- *     description: string | null;
- *   }>;
- * }>>} An array of categories with their nested subcategories
- * @throws {Error} If database query fails
+ * Suitable for populating forms like the sign-up or listing creation.
+ * @returns {Promise<Array<{ id: number; name: string; description: string | null; subcategories: Array<{ id: number; name: string; description: string | null; }> }>>} An array of categories with their nested subcategories.
  */
 export async function GetCategories() {
   const categories = await prisma.category.findMany({
@@ -53,9 +53,9 @@ export async function GetCategories() {
 }
 
 /**
- * This method returns an array containing the organizations a user is linked
- * with or null
- * @returns {Promise<Organization[] | null>} Array of organizations linked with user or null if no user logged in
+ * Fetches the organizations that the currently authenticated user owns or is a member of.
+ * Requires user authentication via GetUser.
+ * @returns {Promise<Organization[] | null>} A promise resolving to an array of organizations, or null if no user is logged in.
  */
 async function getUserOrganizations(): Promise<Organization[] | null> {
   const user = await GetUser(true);
@@ -69,17 +69,11 @@ async function getUserOrganizations(): Promise<Organization[] | null> {
 }
 
 /**
- * Creates form and handles form submission for creating volunteer oppportunity
- * by validating the input fields
- *
- * Completes/Ensures these **server-side** actions:
- * - Ensures the name field is not empty.
- * - Checks that both start and end dates and times are provided.
- * - Validates that the end date and time is the same as or
- * - Displays an appropriate error message if validation fails.
- * - Listing is linked to one of the user's organisation
- * @param {CreateListingData} formData Form data inputted/submitted by user.
- * @returns {redirect} redirection to new created listing (if valid data inputted),
+ * Server Action to create a new volunteer listing based on form data.
+ * Performs validation checks and creates the listing linked to a user's organization and selected categories.
+ * Calculates point value based on duration.
+ * @param {CreateListingData} formData - The validated data submitted from the new listing form.
+ * @returns {Promise<string | void>} Returns a string error message on validation failure, or triggers a redirect on success or forbidden.
  */
 export async function CreateListing(formData: CreateListingData) {
   const user = await GetUser(true);

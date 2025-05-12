@@ -16,11 +16,18 @@ import { User } from '@/lib/prisma';
 import Link from 'next/link';
 import { DeleteOrganization } from './submit';
 
-export type Props = { user: User };
 /**
- * Displays organizations the user owns and is a part of
- * @param {User} user accepts a prisma user object to display
- * @returns {Element} - Returns a component that displays the user information
+ * @typedef {object} Props - Component props for OrganizationsForm.
+ * @property {User} user - The Prisma User object with 'ownerOf' and 'memberOf' relations included.
+ */
+export type Props = { user: User };
+
+/**
+ * Client component displaying the organizations the authenticated user owns and is a member of.
+ * Provides options to view organizations and delete owned ones.
+ * @param {Props} props - Component props.
+ * @param {User} props.user - The user object containing their owned and joined organizations.
+ * @returns {Element} A component displaying the user's organization memberships.
  */
 export default function OrganizationsForm({ user }: Props) {
   return (

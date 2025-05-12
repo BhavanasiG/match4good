@@ -4,10 +4,11 @@ import prisma, { GetUser } from '@/lib/prisma';
 import { ApplicationStatus, ListingStatus } from '@/../generated/prisma_client';
 
 /**
- * Tries to set the application status, checking permissions
- * @param {number} applicationId The application to set status
- * @param {ApplicationStatus} status The status to set
- * @returns {Promise<boolean>} `true` if the status was successfully set, otherwise false
+ * Sets the status of a specific application.
+ * Checks if the authenticated user is authorized (organization owner/member).
+ * @param {number} applicationId - The ID of the application to update.
+ * @param {ApplicationStatus} status - The new status to set for the application.
+ * @returns {Promise<boolean>} True if the status was updated successfully, false otherwise (e.g., unauthorized, not found).
  */
 export async function SetApplicationStatus(
   applicationId: number,
@@ -51,10 +52,11 @@ export async function SetApplicationStatus(
 }
 
 /**
- * Tries to set the listing status, checking permissions
- * @param {number} listingId The listing to set status
- * @param {ListingStatus} status The status to set
- * @returns {boolean} `true` if the status was successfully set, otherwise false
+ * Sets the status of a specific listing.
+ * Checks if the authenticated user is authorized (organization owner/member).
+ * @param {number} listingId - The ID of the listing to update.
+ * @param {ListingStatus} status - The new status to set for the listing.
+ * @returns {Promise<boolean>} True if the status was updated successfully, false otherwise (e.g., unauthorized, not found).
  */
 export async function SetListingStatus(listingId: number, status: ListingStatus): Promise<boolean> {
   const user = await GetUser(true);
@@ -87,9 +89,10 @@ export async function SetListingStatus(listingId: number, status: ListingStatus)
 }
 
 /**
- * Tries to distribute points for a listing
- * @param {number} listingId The listing update points for
- * @returns {boolean} `true` if the points were correctly applied
+ * Distributes points for a completed listing to accepted applicants and their regions.
+ * Ensures points are only distributed once per listing using the 'scored' flag.
+ * @param {number} listingId - The ID of the listing to distribute points for.
+ * @returns {Promise<boolean>} True if points were distributed, false otherwise (e.g., unauthorized, not found, already scored).
  */
 export async function DistributePointsFor(listingId: number): Promise<boolean> {
   // todo, have all the initial checks be refactored into a separate thing.

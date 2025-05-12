@@ -39,11 +39,23 @@ import {
 } from './submit';
 import { Textarea } from '@/components/ui/textarea';
 
+/**
+ * Interface for the response structure from a successful ImageKit direct upload.
+ * @property {string} url - The URL of the uploaded image.
+ * @property {string} fileId - The file ID assigned by ImageKit.
+ */
 interface ImageKitUploadResponse {
   url: string;
   fileId: string;
 }
 
+/**
+ * Zod schema for validating the main organization details form.
+ * @property {string} name - Organization name (min 4, max 32).
+ * @property {string | undefined} description - Optional description (max 400).
+ * @property {string} address - Organization address (min 4, max 64).
+ * @property {string} postcode - Organization postcode (UK format, min 6, max 8, trimmed).
+ */
 const organizationFormSchema = z.object({
   name: z.string().min(4).max(32),
   description: z.string().max(400).optional(),
@@ -58,14 +70,21 @@ const organizationFormSchema = z.object({
     }),
 });
 
+/**
+ * Zod schema for validating the add member form.
+ * @property {string} memberIdentifier - The username of the member to add (min 1 character).
+ */
 const addMemberFormSchema = z.object({
   memberIdentifier: z.string().min(1, { message: 'Please enter a username.' }),
 });
 
 /**
- *
- * @param {OrganizationWithSelectedRelations} param0 - organization: The organization object to display
- * @returns {Element} - Returns a form for updating the organization's information
+ * Client component for editing organization details, managing members, and updating profile/banner pictures.
+ * Only allows the organization owner to perform updates and manage members/pictures.
+ * @param {object} props - Component props.
+ * @param {OrganizationWithSelectedRelations} props.organization - The organization data to edit, including owner and members.
+ * @param {User} props.currentUser - The currently authenticated user's data.
+ * @returns {Element} The organization edit form component UI.
  */
 export default function EditOrganizationForm({
   organization,
@@ -89,8 +108,10 @@ export default function EditOrganizationForm({
   });
 
   /**
-   * Handles the form submission
-   * @param {z.infer<typeof updateForm>} values - The values from the form
+   * Handles submission of the main organization details update form.
+   * Calls the Server Action to update organization data.
+   * Shows toast feedback and refreshes the page on success.
+   * @param {z.infer<typeof organizationFormSchema>} values - Validated form values.
    */
   async function OnSubmitUpdate(values: z.infer<typeof organizationFormSchema>) {
     const toastId = toast.loading('Saving organization changes...');
@@ -128,8 +149,10 @@ export default function EditOrganizationForm({
   });
 
   /**
-   * Handles the add member form submission.
-   * @param {z.infer<typeof addMemberFormSchema>} values - The values from the add member form.
+   * Handles submission of the add member form.
+   * Calls the Server Action to add a member by username.
+   * Shows toast feedback, resets form, and refreshes page on success.
+   * @param {z.infer<typeof addMemberFormSchema>} values - Validated form values.
    */
   async function OnSubmitAddMember(values: z.infer<typeof addMemberFormSchema>) {
     const toastId = toast.loading(`Adding member ${values.memberIdentifier}...`);
@@ -155,9 +178,11 @@ export default function EditOrganizationForm({
   }
 
   /**
-   * Handles the removal of a member from the organization.
-   * @param {number} memberId - The ID of the member to be removed.
-   * @param {string} memberName - The name of the member to be removed.
+   * Handles removal of a member from the organization.
+   * Calls the Server Action to remove the member.
+   * Shows toast feedback and refreshes the page on success.
+   * @param {number} memberId - The ID of the member to remove.
+   * @param {string} memberName - The name of the member (for toast messages).
    */
   async function handleRemoveMember(memberId: number, memberName: string) {
     const toastId = toast.loading(`Removing ${memberName}...`);
@@ -220,6 +245,14 @@ export default function EditOrganizationForm({
   }, [bannerFile, organization.bannerPictureUrl]);
 
   // --- Helper function to handle image uploads (reusable logic) ---
+  /**
+   * Handles the process of uploading an image to ImageKit and updating the database.
+   * Fetches auth params, performs upload with progress, and calls relevant DB update Server Action.
+   * @param {File} file - The image file to upload.
+   * @param {'profile' | 'banner'} imageType - The type of image ('profile' or 'banner').
+   * @param {(progress: number) => void} setProgress - State setter for upload progress.
+   * @returns {Promise<ImageKitUploadResponse | { success: false; message: string } | null>} Upload response, error object, or null.
+   */
   const handleImageUploadProcess = async (
     file: File,
     imageType: 'profile' | 'banner',
@@ -298,6 +331,10 @@ export default function EditOrganizationForm({
   };
 
   // --- Handler for Profile Picture Upload Button ---
+  /**
+   * Handles the click event for the profile picture upload button.
+   * Triggers the image upload process for the selected profile file.
+   */
   const handleProfileUpload = async () => {
     if (!profileFile) {
       toast.info('Please select a file first.');
@@ -315,6 +352,10 @@ export default function EditOrganizationForm({
   };
 
   // --- Handler for Banner Picture Upload Button ---
+  /**
+   * Handles the click event for the banner picture upload button.
+   * Triggers the image upload process for the selected banner file.
+   */
   const handleBannerUpload = async () => {
     if (!bannerFile) {
       toast.info('Please select a file first.');
@@ -329,6 +370,10 @@ export default function EditOrganizationForm({
   };
 
   // --- Handler for Profile Picture Remove Button ---
+  /**
+   * Handles the click event for the profile picture remove button.
+   * Calls the Server Action to remove the profile picture from ImageKit and DB.
+   */
   const handleProfileRemove = async () => {
     if (!organization.orgPictureUrl) {
       toast.info('No profile picture to remove.');
@@ -358,6 +403,10 @@ export default function EditOrganizationForm({
   };
 
   // --- Handler for Banner Picture Remove Button ---
+  /**
+   * Handles the click event for the banner picture remove button.
+   * Calls the Server Action to remove the banner picture from ImageKit and DB.
+   */
   const handleBannerRemove = async () => {
     if (!organization.bannerPictureUrl) {
       toast.info('No banner picture to remove.');

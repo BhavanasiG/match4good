@@ -5,13 +5,15 @@ import { getUploadAuthParams } from '@imagekit/next/server';
 //import { forbidden } from 'next/navigation';
 
 /**
- * Update the organization with the given values
- * @param {number} organizationId the id of the organization
- * @param {string} name the name of the organization
- * @param {string | null} description the description of the organization
- * @param {string} address the address of the organization
- * @param {string} postcode the postcode of the organization
- * @returns {Promise<{ success: boolean; message: string; organization?: Organization }>} - The updated organization.
+ * Server Action to update an organization's core details.
+ * Requires authentication and checks if the user is the organization owner.
+ * @param {number} organizationId - The ID of the organization to update.
+ * @param {string} name - The new name for the organization.
+ * @param {string | null} description - The new description for the organization.
+ * @param {string} address - The new address for the organization.
+ * @param {string} postcode - The new postcode for the organization.
+ * @returns {Promise<{ success: boolean; message: string; organization?: Organization }>} A result object indicating success or failure, including the updated organization on success.
+ * @throws {Error} If a database error occurs during the update.
  */
 export async function UpdateOrganization(
   organizationId: number,
@@ -83,10 +85,12 @@ export async function UpdateOrganization(
     throw new Error('Failed to update organization due to a server error.');
   }
 }
+
 /**
  * Server Action to generate authentication parameters for ImageKit client-side direct upload for organization images.
  * Requires the user to be logged in.
- * @returns {Promise<{ success: boolean; message?: string; auth?: { token: string; expire: number; signature: string; publicKey: string } }>} - Authentication parameters or error result.
+ * @returns {Promise<{ success: boolean; message?: string; auth?: { token: string; expire: number; signature: string; publicKey: string } }>} Authentication parameters or error result.
+ * @throws {Error} If a server error occurs during auth parameter generation.
  */
 export async function GetOrgImageUploadAuth() {
   // Basic check if user is logged in. Owner check happens in update/delete actions.
@@ -119,10 +123,11 @@ export async function GetOrgImageUploadAuth() {
 
 /**
  * Server Action to remove an organization's profile picture.
- * Deletes the file from ImageKit and clears the database fields.
+ * Attempts to delete the file from ImageKit and clears the database fields.
  * Requires the user to be the organization owner.
  * @param {number} organizationId - The ID of the organization.
- * @returns {Promise<{ success: boolean; message: string }>} - Result of the operation.
+ * @returns {Promise<{ success: boolean; message: string }>} Result indicating success or failure.
+ * @throws {Error} If a database error occurs after the ImageKit deletion attempt.
  */
 export async function RemoveOrgProfilePicture(organizationId: number) {
   const user = await GetUser();
@@ -189,10 +194,11 @@ export async function RemoveOrgProfilePicture(organizationId: number) {
 
 /**
  * Server Action to remove an organization's banner picture.
- * Deletes the file from ImageKit and clears the database fields.
+ * Attempts to delete the file from ImageKit and clears the database fields.
  * Requires the user to be the organization owner.
  * @param {number} organizationId - The ID of the organization.
- * @returns {Promise<{ success: boolean; message: string }>} - Result of the operation.
+ * @returns {Promise<{ success: boolean; message: string }>} Result indicating success or failure.
+ * @throws {Error} If a database error occurs after the ImageKit deletion attempt.
  */
 export async function RemoveOrgBannerPicture(organizationId: number) {
   const user = await GetUser();
@@ -256,12 +262,13 @@ export async function RemoveOrgBannerPicture(organizationId: number) {
 
 /**
  * Server Action to update an organization's profile picture URL and file ID in the database.
- * This action is called after a successful ImageKit upload.
+ * This action is intended to be called after a successful ImageKit upload.
  * Requires the user to be the organization owner.
  * @param {number} organizationId - The ID of the organization.
  * @param {string} orgPictureUrl - The new ImageKit URL for the profile picture.
  * @param {string} orgPictureFileId - The new ImageKit File ID for the profile picture.
- * @returns {Promise<{ success: boolean; message: string }>} - Result of the operation.
+ * @returns {Promise<{ success: boolean; message: string }>} Result indicating success or failure.
+ * @throws {Error} If a database error occurs during the update.
  */
 export async function UpdateOrgProfilePicture(
   organizationId: number,
@@ -306,12 +313,13 @@ export async function UpdateOrgProfilePicture(
 
 /**
  * Server Action to update an organization's banner picture URL and file ID in the database.
- * This action is called after a successful ImageKit upload.
+ * This action is intended to be called after a successful ImageKit upload.
  * Requires the user to be the organization owner.
  * @param {number} organizationId - The ID of the organization.
  * @param {string} bannerPictureUrl - The new ImageKit URL for the banner picture.
  * @param {string} bannerPictureFileId - The new ImageKit File ID for the banner picture.
- * @returns {Promise<{ success: boolean; message: string }>} - Result of the operation.
+ * @returns {Promise<{ success: boolean; message: string }>} Result indicating success or failure.
+ * @throws {Error} If a database error occurs during the update.
  */
 export async function UpdateOrgBannerPicture(
   organizationId: number,
@@ -355,10 +363,12 @@ export async function UpdateOrgBannerPicture(
 }
 
 /**
- * Add a member to the organization
- * @param {number} organizationId the id of the organization
- * @param {string} memberIdentifier the username of the member to add
- * @returns {Promise<{ success: boolean; message: string; member?: User; organization?: Organization }>} - The updated organization.
+ * Server Action to add a member to an organization by username.
+ * Requires authentication and checks if the user is the organization owner.
+ * @param {number} organizationId - The ID of the organization.
+ * @param {string} memberIdentifier - The username of the user to add as a member.
+ * @returns {Promise<{ success: boolean; message: string; member?: User; organization?: Organization }>} Result indicating success or failure.
+ * @throws {Error} If a database error occurs during the update.
  */
 export async function AddMemberToOrganization(organizationId: number, memberIdentifier: string) {
   const user = await GetUser(true);
@@ -437,10 +447,13 @@ export async function AddMemberToOrganization(organizationId: number, memberIden
 }
 
 /**
- * Remove a member from the organization. Only the owner can remove members.
- * @param {number} organizationId organizationId to remove member from
- * @param {number} memberIdToRemove memberId to remove
- * @returns {Promise<{ success: boolean; message: string }>} - The result of the operation.
+ * Server Action to remove a member from an organization.
+ * Requires authentication and checks if the user is the organization owner.
+ * Prevents the owner from removing themselves.
+ * @param {number} organizationId - The ID of the organization.
+ * @param {number} memberIdToRemove - The ID of the member to remove.
+ * @returns {Promise<{ success: boolean; message: string }>} Result indicating success or failure.
+ * @throws {Error} If a database error occurs during the update.
  */
 export async function RemoveMemberFromOrganization(
   organizationId: number,
