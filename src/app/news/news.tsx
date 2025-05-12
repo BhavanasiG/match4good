@@ -23,6 +23,13 @@ type Article = {
   description: string;
 };
 
+type NewsApiResponse = {
+  status: string;
+  totalResults: number;
+  articles: Article[];
+  code?: string;
+  message?: string;
+};
 const TOPICS = [
   { label: 'Volunteering', query: 'volunteering' },
   { label: 'Charity', query: 'charity' },
@@ -80,23 +87,44 @@ export default function NewsPage() {
       setError(null);
       try {
         // Compose query
-        let q = `${topic} ${region}`;
-        let from = date === 'any' ? '' : date;
+        const q = `${topic} ${region}`;
+        const from = date === 'any' ? '' : date;
         const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(
           q,
         )}&language=en&sortBy=${sortBy}&pageSize=18${from ? `&from=${from}` : ''}&apiKey=${NEWS_API_KEY}`;
         const res = await fetch(url);
-        const data = await res.json();
-        if (data.status !== 'ok') throw new Error(data.message || 'Failed to fetch news');
+
+        if (!res.ok) {
+          const err = (await res
+            .json()
+            .catch(() => ({ status: 'error', message: 'Failed to parse error response' }))) as {
+            status: string;
+            message: string;
+          };
+          throw new Error(err.message || res.statusText || `Error status: ${res.status}`);
+        }
+
+        const data = (await res.json()) as NewsApiResponse;
+
+        if (data.status !== 'ok') {
+          throw new Error(data.message || 'Failed to fetch news');
+        }
+
         setArticles(data.articles.filter((a: Article) => a.title && a.description));
-      } catch (err: any) {
-        setError(err.message || 'Failed to load news');
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message || 'Failed to load news');
+        } else if (typeof err === 'string') {
+          setError(err);
+        } else {
+          setError('An unknown error occured while fetching news');
+        }
       } finally {
         setLoading(false);
       }
     };
 
-    fetchNews().catch().then();
+    void fetchNews();
   }, [topic, region, date, sortBy, NEWS_API_KEY]);
 
   return (
@@ -189,10 +217,12 @@ export default function NewsPage() {
 
 /**
  *
- * @param {Article} article A news article object
- * @param {string} topic The topic for the news component badge
+ * @param {object} props The component props
+ * @param {Article} props.article A news article object
+ * @param {string} props.topic The topic for the news component badge
  * @returns {Element} NewsComponent element
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 function NewsComponent({ article, topic }: { article: Article; topic: string }) {
   return (
     <Link href={article.url} className="w-full">

@@ -82,7 +82,7 @@ export default function LeaderboardPage() {
     eventSource.addEventListener('initial-data', (event) => {
       console.log('Received initial combined leaderboard data.');
       try {
-        const data: CombinedLeaderboardData = JSON.parse(event.data);
+        const data = JSON.parse(event.data as string) as CombinedLeaderboardData;
         setCombinedLeaderboard(data);
         setError(null);
       } catch (e) {
@@ -96,7 +96,7 @@ export default function LeaderboardPage() {
     eventSource.addEventListener('update', (event) => {
       console.log('Received combined leaderboard update.');
       try {
-        const updatedData: CombinedLeaderboardData = JSON.parse(event.data);
+        const updatedData = JSON.parse(event.data as string) as CombinedLeaderboardData;
         setCombinedLeaderboard(updatedData);
         setError(null);
       } catch (e) {
@@ -116,7 +116,7 @@ export default function LeaderboardPage() {
 
   // Helper to render loading/empty/error states
   const renderTableBodyContent = (
-    data: any[] | null | undefined,
+    data: UserLeaderboardEntry[] | RegionLeaderboardEntry[] | null | undefined,
     colSpan: number,
     type: 'users' | 'regions',
   ) => {

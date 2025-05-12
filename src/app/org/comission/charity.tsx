@@ -50,7 +50,6 @@ export default function CharityList() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [region, setRegion] = useState('all');
-  const [fadeIn, setFadeIn] = useState(false);
 
   const fetchCharities = async () => {
     setLoading(true);
@@ -61,32 +60,27 @@ export default function CharityList() {
       console.log('Query URL:', `/api/charity_api?${queryParams.toString()}`); // Debugging
 
       const res = await fetch(`/api/charity_api?${queryParams}`);
-      const data = await res.json();
+      const data = (await res.json()) as Charity[];
 
       if (Array.isArray(data)) {
         setCharities(data);
       } else {
         setError('Failed to load charities.');
       }
-    } catch (err) {
-      setError('Something went wrong:' + err);
+    } catch (err: unknown) {
+      let errorMessage = 'Something went wrong';
+
+      if (typeof err === 'string') errorMessage = err;
+      setError(errorMessage);
     } finally {
       setLoading(false);
-      setFadeIn(true);
     }
   };
 
   useEffect(() => {
-    fetchCharities().then().catch();
+    void fetchCharities();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // For fade-in animation on grid
-  useEffect(() => {
-    if (charities.length > 0) {
-      setFadeIn(false);
-      setTimeout(() => setFadeIn(true), 100);
-    }
-  }, [charities]);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -131,7 +125,7 @@ export default function CharityList() {
           <Button
             onClick={(e) => {
               e.preventDefault();
-              fetchCharities().then().catch();
+              void fetchCharities();
             }}
             className="cursor-pointer"
           >
@@ -162,6 +156,7 @@ export default function CharityList() {
  * @param {Charity} charity Charity object
  * @returns {Element} Charity component card
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 function CharityComponent({ charity }: { charity: Charity }) {
   return (
     <Link href={charity.url} className="w-full">
