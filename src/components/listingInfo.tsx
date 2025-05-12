@@ -62,7 +62,7 @@ export default async function ListingInfo({ listing }: { listing: Listing }) {
 
   return (
     <div className="w-full">
-      <Card className="hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out h-full flex flex-col justify-between">
+      <Card className="hover:shadow-lg hover:shadow-accent transition-shadow duration-100 ease-in-out h-full flex flex-col justify-between">
         <CardHeader>
           <CardTitle>
             <p className="text-lg">{listing.name}</p>

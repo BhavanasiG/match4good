@@ -226,7 +226,7 @@ export default function NewsPage() {
 function NewsComponent({ article, topic }: { article: Article; topic: string }) {
   return (
     <Link href={article.url} className="w-full">
-      <Card className="p-0 hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out h-full flex flex-col">
+      <Card className="p-0 hover:shadow-lg hover:shadow-accent transition-shadow duration-100 ease-in-out h-full flex flex-col">
         <CardHeader className="p-0 relative h-50 flex">
           {article.urlToImage ? (
             <Image

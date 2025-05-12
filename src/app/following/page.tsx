@@ -71,7 +71,7 @@ export default async function FollowingPage() {
           <div className="grid grid-cols-1 gap-6 w-full justify-center self-center items-center space-y-5">
             {follows.map(({ organization }) => (
               <div className="w-full">
-                <Card className="hover:shadow-lg hover:shadow-gray-300 transition-shadow duration-100 ease-in-out h-full flex flex-col justify-between">
+                <Card className="hover:shadow-lg hover:shadow-accent transition-shadow duration-100 ease-in-out h-full flex flex-col justify-between">
                   <CardHeader>
                     <CardTitle>
                       <div className="text-base text-muted-foreground mt-1 flex items-center space-x-2">
