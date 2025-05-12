@@ -39,6 +39,7 @@ function looksLikeEmail(str: string | null | undefined): boolean {
 /**
  * Updates the user's profile
  * Does NOT attempt to update the username field in Auth0.
+ * Does NOT attempt to update the profile picture field in Auth0.
  * @param {string} username - The new username
  * @param {string} email - The new email
  * @param {string | null} bio - The new bio
@@ -141,15 +142,15 @@ export async function UpdateUser(username: string, email: string, bio: string | 
     );
   }
 
-  // Add picture to update body if it exists locally (syncing local URL to Auth0)
-  // Only include the 'picture' field if user.profilePictureUrl has a value in our DB.
-  // We don't explicitly unset it here
-  // if user.profilePictureUrl becomes null in our DB (that might require sending { picture: null }).
-  if (user.profilePictureUrl) {
-    // Add the 'picture' field to the root of the update body object
-    updateOtherFieldsBody.picture = user.profilePictureUrl;
-    needsOtherFieldsUpdate = true; // We are intending to update the picture field
-  }
+  // // Add picture to update body if it exists locally (syncing local URL to Auth0)
+  // // Only include the 'picture' field if user.profilePictureUrl has a value in our DB.
+  // // We don't explicitly unset it here
+  // // if user.profilePictureUrl becomes null in our DB (that might require sending { picture: null }).
+  // if (user.profilePictureUrl) {
+  //   // Add the 'picture' field to the root of the update body object
+  //   updateOtherFieldsBody.picture = user.profilePictureUrl;
+  //   needsOtherFieldsUpdate = true; // We are intending to update the picture field
+  // }
 
   // Check if email needs updating (prepare its separate body)
   if (email !== user.email) {
