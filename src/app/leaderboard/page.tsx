@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { IconTrophy } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
@@ -14,6 +14,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Image from 'next/image';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { useRouter } from 'next/navigation';
 
 type UserLeaderboardEntry = {
   userId: number;
@@ -42,6 +43,7 @@ export default function LeaderboardPage() {
   ); // State for combined data
   const [error, setError] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     // Establish the Server-Sent Events connection
@@ -146,14 +148,17 @@ export default function LeaderboardPage() {
   };
 
   return (
-    <div className="p-5 md:p-24 space-y-10 w-screen max-w-4xl flex flex-col justify-center self-center">
-      <div className="text-center justify-center flex flex-col">
+    <div className="p-5 md:p-24 space-y-5 w-screen max-w-4xl flex flex-col justify-center self-center">
+      <div className="text-center justify-center flex flex-col space-y-5">
         <IconTrophy className="text-primary self-center" size={60} />
         <h1 className="text-3xl md:text-4xl font-extrabold text-primary mb-2">
           Volunteer Leaderboard
         </h1>
         <p className="text-secondary-foreground text-lg">
-          See who’s making the biggest impact in the community!
+          See who's making the biggest impact in the community!
+        </p>
+        <p className={`${isConnected ? 'text-primary' : 'text-destructive'} font-semibold`}>
+          Connection Status: {isConnected ? 'Live' : 'Disconnected'}
         </p>
       </div>
 
@@ -162,8 +167,12 @@ export default function LeaderboardPage() {
         {/* Tabs List for selecting between Leaderboards */}
         <TabsList className="grid w-full grid-cols-2 mb-4 md:w-[400px] mx-auto">
           {' '}
-          <TabsTrigger value="volunteers">Top Volunteers</TabsTrigger>
-          <TabsTrigger value="regions">Top Regions</TabsTrigger>
+          <TabsTrigger value="volunteers" className="cursor-pointer">
+            Top Volunteers
+          </TabsTrigger>
+          <TabsTrigger value="regions" className="cursor-pointer">
+            Top Regions
+          </TabsTrigger>
         </TabsList>
 
         {/* --- Volunteers Leaderboard Tab Content --- */}
@@ -194,7 +203,8 @@ export default function LeaderboardPage() {
                     combinedLeaderboard.users.map((user, i) => (
                       <TableRow
                         key={user.userId}
-                        className={`${i < 3 ? 'bg-primary/10 font-semibold' : 'hover:bg-muted/50'} transition-colors`}
+                        className={`${i < 3 ? 'bg-primary/10 font-semibold' : 'hover:bg-muted/50'} transition-colors cursor-pointer`}
+                        onClick={() => router.push(`/user/${user.userId}`)}
                       >
                         <TableCell className="text-lg">{i < 3 ? trophyEmojis[i] : i + 1}</TableCell>
                         {/* Display user profile picture and name */}
