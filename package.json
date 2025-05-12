@@ -14,7 +14,6 @@
     "db:deploy": "npx prisma migrate deploy && npx prisma generate && npx prisma db seed",
     "test": "jest",
     "prepare": "husky",
-    "dev:setup": "npm run db:deploy && npm run dev",
     "docs": "typedoc",
     "docs:watch": "nodemon",
     "docs:serve": "serve docs -l 5000",
