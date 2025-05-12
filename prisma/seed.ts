@@ -184,8 +184,8 @@ const orgBannerPicturePlaceholders = [
   'https://picsum.photos/id/102/1200/400',
   'https://picsum.photos/id/103/1200/400',
   'https://picsum.photos/id/104/1200/400',
-  'https://picsum.photos/id/105/1200/400',
   'https://picsum.photos/id/106/1200/400',
+  'https://picsum.photos/id/107/1200/400',
 ];
 
 const prisma = new PrismaClient();
