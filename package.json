@@ -11,7 +11,7 @@
     "lint": "next lint --max-warnings=0",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "db:deploy": "npx prisma migrate deploy && npx prisma generate",
+    "db:deploy": "npx prisma migrate deploy && npx prisma generate && npm run seed:full",
     "test": "jest",
     "prepare": "husky",
     "docs": "typedoc",

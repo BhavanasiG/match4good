@@ -175,7 +175,7 @@ const orgProfilePicturePlaceholders = [
   'https://picsum.photos/id/202/400/400',
   'https://picsum.photos/id/203/400/400',
   'https://picsum.photos/id/204/400/400',
-  'https://picsum.photos/id/205/400/400',
+  // 'https://picsum.photos/id/205/400/400',
 ];
 
 const orgBannerPicturePlaceholders = [
@@ -433,6 +433,13 @@ async function main() {
         }
       }
     }
+    const testUser = await prisma.user.create({
+      data: {
+        userId: 'auth0|681f3ad11329c76548daedc8',
+        username: 'Test User',
+        email: 'text@example.com',
+      },
+    });
     console.log(
       `Total users seeded: ${createdUsers.length}. Each user seeded with random totalPoints and interests.`,
     );
@@ -585,6 +592,11 @@ async function main() {
         }
       }
     }
+
+    const testOrg = await prisma.organization.create({
+      data: { name: 'Test Organization', ownerId: testUser.id },
+    });
+
     console.log(
       `Total organizations seeded: ${createdOrgs.length}. Organizations seeded with approximated regions based on outcode.`,
     );
@@ -634,6 +646,21 @@ async function main() {
         createdListings.push(listing);
       }
     }
+
+    const startDate = faker.date.soon({ days: 60 });
+    const endDate = faker.date.future({ years: 0.1, refDate: startDate });
+
+    const testListing = await prisma.listing.create({
+      data: {
+        name: 'Test Listing',
+        description: 'A test listing',
+        organizationId: testOrg.id,
+        startDatetime: startDate,
+        endDatetime: endDate,
+        pointValue: 1000,
+        status: ListingStatus.acceptingApplications,
+      },
+    });
     console.log(`Total listings seeded: ${createdListings.length}.`);
 
     // --- Seed Applications ---
@@ -673,6 +700,9 @@ async function main() {
         }
       }
     }
+    const testApp = await prisma.application.create({
+      data: { userId: testUser.id, listingId: testListing.id, status: ApplicationStatus.PENDING },
+    });
     console.log(`Total applications seeded: ${seededApplicationCount}.`);
 
     // --- Seed Follows ---
