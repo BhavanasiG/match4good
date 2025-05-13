@@ -1,28 +1,35 @@
-import React from "react";
-import CreateListingForm from "./form";
-import { getUser } from "@/lib/prisma";
-import { forbidden } from "next/navigation";
+﻿import { GetUser, SignupComplete } from '@/lib/prisma';
+import CreateListingForm from './form';
+import { forbidden, redirect } from 'next/navigation';
 
-/**
- * This function shows a forbiden page if user is not logged in, otherwise,
- * it renders the CreateListingForm for the user to create a new listing.
- *
- * @returns forbidden (if user not logged in), else returns the
- * CreateListingForm page
- */
-export default async function CreateOpportunityForm() {
-  // We need to use React useState and useEffect as we need call and obtain data
-  //  whilst allowing the page to load
+import type { Metadata } from 'next';
 
-  const user = await getUser(true);
+export const metadata: Metadata = {
+  title: `Create Listing - Match4Good`,
+};
+
+export default async function App() {
+  const user = await GetUser(true);
 
   if (!user) {
     return forbidden();
   }
+  if (user) {
+    const signupCompleted = await SignupComplete();
+    if (!signupCompleted) {
+      redirect('/user/sign-up');
+    }
+    const organizations = user?.ownerOf.map((organization) => organization.id) || [];
+
+    const num_of_orgs = organizations.length;
+
+    if (num_of_orgs === 0) {
+      return forbidden();
+    }
+  }
 
   return (
-    <div>
-      <b>Create Opportunity Page</b>
+    <div className="self-center flex justify-center p-12 md:p-24 w-screen max-w-4xl">
       <CreateListingForm user={user} />
     </div>
   );

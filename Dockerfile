@@ -1,6 +1,6 @@
 # syntax=docker.io/docker/dockerfile:1
 
-FROM node:18-alpine AS base
+FROM node:24-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -25,7 +25,6 @@ RUN npx prisma generate
 # ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN npm run build
-RUN 
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -39,8 +38,9 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/next.config.ts ./
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=builder /app/src/app/ws ./src/app/ws
+COPY --from=builder /app/src/lib/ws ./src/lib/ws
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing

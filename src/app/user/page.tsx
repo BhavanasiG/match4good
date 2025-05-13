@@ -1,20 +1,13 @@
-import { getUser } from "@/lib/prisma";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { UserInfo } from "./user";
+﻿import { GetUser } from '@/lib/prisma';
+import { redirect } from 'next/navigation';
 
 export default async function App() {
-  const user = await getUser(true);
+  const user = await GetUser();
 
   if (!user) {
-    return notFound();
+    redirect('/auth/login');
   }
 
-  return (
-    <div>
-      <p>Welcome to your profile!</p>
-      <Link href="/user/edit">Edit your information</Link>
-      <UserInfo user={user} />
-    </div>
-  );
+  const userId = user.id;
+  return redirect(`/user/${userId}`);
 }

@@ -5,6 +5,7 @@ stages:
   - docker
   - install
   - lint
+  - prettier
   - test
   - build
   - deploy
@@ -21,20 +22,27 @@ install:
   stage: install
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-  needs: ["check"]
+  needs: ['check']
   script:
     - npm ci
     - npx prisma generate
+  cache:
+    key: "$CI_COMMIT_REF_SLUG-$(sha256sum package-lock.json | cut -d' ' -f1)" # Cache based on package-lock.json hash
+    paths:
+      - node_modules/
+      - generated/
   artifacts:
     paths:
       - node_modules
       - generated
+    expire_in: 12 hours
 
 lint:
   stage: lint
   rules:
+    # - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-  needs: ["install"]
+  needs: ['install']
   script:
     - npm run lint
 
@@ -42,23 +50,39 @@ test:
   stage: test
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-  needs: ["install"]
+  needs: ['install']
   script:
     - npm run test
+
+prettier_format_check:
+  stage: prettier
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  needs: ['install']
+  script:
+    - npm run format:check
 
 build:
   stage: build
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-  needs: ["install", "lint"]
+  needs: ['install', 'prettier_format_check', 'lint', 'test']
   script:
     - npm run build
+  cache:
+    key: "$CI_COMMIT_REF_SLUG-$(sha256sum package-lock.json | cut -d' ' -f1)" # Cache build artifacts if node_modules hasn't changed
+    paths:
+      - .next/cache/
+  artifacts:
+    paths:
+      - .next/cache/
+    expire_in: 12 hours
 
 deploy_static:
   stage: deploy
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_REF_NAME == "release"'
-  needs: ["check"]
+  needs: ['check']
   script:
     - apk add python3 py3-yaml py3-mako
     - python3 /shared/com2027_site.py

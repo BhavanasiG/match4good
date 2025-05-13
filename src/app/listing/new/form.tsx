@@ -1,184 +1,433 @@
-"use client";
+﻿'use client';
 
-import { User } from "@/lib/prisma";
-import { ChangeEvent, FormEvent, useState } from "react";
-import { createListing, CreateListingData } from "./actions";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'sonner';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { CreateListing, GetCategories } from './submit';
+import { User } from '@/lib/prisma';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Cn } from '@/lib/utils';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { IconCalendarWeek, IconClock } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { Toggle } from '@/components/ui/toggle';
+import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
+import { Textarea } from '@/components/ui/textarea';
 
-export interface CreateListingFormProps {
-  user: User;
-}
+/* zod uses ISO 8601 format for date and time, but server only returns YYYY-MM-DDTHH:MM instead of YYYY-MM-DDTHH:MM:SS, so z.string().datetime() is ignored */
+/**
+ * Zod schema for the Create Listing form data.
+ * Validates listing details including name, date range, description, organization, and categories.
+ * @property {string} name - Listing title (min 4, max 32 characters).
+ * @property {object} dateRange - Start and end datetime strings.
+ * @property {string} dateRange.startDatetime - Start date and time (must be in the future).
+ * @property {string} dateRange.endDatetime - End date and time (must be in the future and after start time).
+ * @property {string | undefined} description - Optional listing description (max 500 characters).
+ * @property {number} organization - The ID of the selected organization.
+ * @property {number[]} categories - Array of selected category IDs (at least one).
+ */
+const formSchema = z.object({
+  name: z
+    .string()
+    .min(4, {
+      message: 'Name must be at least 4 characters.',
+    })
+    .max(32, {
+      message: 'Name cannot be longer than 32 characters.',
+    }),
+  dateRange: z
+    .object({
+      startDatetime: z.string().refine((data) => new Date(data) > new Date(), {
+        message: 'Start date and time cannot be in the past.',
+      }),
+      endDatetime: z.string().refine((data) => new Date(data) > new Date(), {
+        message: 'End date and time cannot be in the past.',
+      }),
+    })
+    .refine((data) => data.startDatetime < data.endDatetime, {
+      message: 'End date and time cannot be before start date and time',
+      path: ['endDatetime'],
+    }),
+  description: z.string().max(500).optional(),
+  organization: z.number(),
+  categories: z.array(z.number()).refine((arr) => arr.length >= 1, {
+    message: 'You must select at least one category.',
+  }),
+});
 
 /**
- * Creates form and handles form submission for creating volunteer oppportunity
- * by validating the input fields
- *
- * Completes/Ensures these **client-side** actions:
- * - Ensures the name field is not empty.
- * - Checks that both start and end dates and times are provided.
- * - Validates that the end date and time is the same as or
- * after the start date and time.
- * - Displays an appropriate error message if validation fails.
- * - Logs the form data to the console if all validations pass
- * and passes to the server to create new record in database
- * - Listing is linked to one of the user's organisation
- * @param param0 The user (object) for which a new listing form will be
- * generated
- * @returns HTML form that allows user to create a new listing
+ * Interface for the structure of a Category object.
+ * @property {number} id - The category's unique ID.
+ * @property {string} name - The category's name.
+ * @property {string | null} description - Optional description of the category.
+ * @property {object[]} subcategories - Array of related subcategory objects.
+ * @property {number} subcategories[].id - The subcategory's unique ID.
+ * @property {string} subcategories[].name - The subcategory's name.
+ * @property {string | null} subcategories[].description - Optional description of the subcategory.
  */
-export default function CreateListingForm({ user }: CreateListingFormProps) {
-  const user_orgs = [...new Set([...user.owner_of, ...user.member_of])];
+interface Category {
+  id: number;
+  name: string;
+  description: string | null;
+  subcategories: {
+    id: number;
+    name: string;
+    description: string | null;
+  }[];
+}
 
-  const [error, setError] = useState<string>("");
-  const [success, setSuccess] = useState<string>("");
+/* eslint-disable @typescript-eslint/naming-convention */
 
-  const [form_data, setFormData] = useState<CreateListingData>({
-    name: "",
-    description: "",
-    start_datetime: new Date().toISOString(),
-    end_datetime: new Date().toISOString(),
-    organization_id: user_orgs.length == 0 ? 0 : user_orgs[0].id,
+/**
+ * Client component for creating new volunteering listings.
+ * Provides a form for users associated with organizations to create opportunities.
+ * @param {object} props - Component props.
+ * @param {User} props.user - The current user object, including 'ownerOf' and 'memberOf' organization relations.
+ * @returns {Element} The Create Listing form component UI.
+ */
+export default function CreateListingForm({ user }: { user: User }) {
+  const userOrgs = [...new Set([...user.ownerOf, ...user.memberOf])];
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await GetCategories();
+        setCategories(data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCategories().catch((e: Error) => {
+      console.log('Error fetching categories: ' + e.message);
+    });
+  }, []);
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      description: '',
+      dateRange: {
+        startDatetime: '',
+        endDatetime: '',
+      },
+      categories: [],
+    },
   });
 
-  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    console.log(name, value);
-    setFormData((prev_data) => ({
-      ...prev_data,
-      // Ensure organizationId is a number
-      [name]: name === "organizationId" ? Number(value) : value,
-    }));
-  };
+  /**
+   * Handles the submission of the create listing form.
+   * Calls the server action to create the listing.
+   * @param {z.infer<typeof formSchema>} values - The validated form values.
+   */
+  function OnSubmit(values: z.infer<typeof formSchema>) {
+    CreateListing({
+      name: values.name,
+      description: values.description || '',
+      dateRange: {
+        startDatetime: values.dateRange.startDatetime,
+        endDatetime: values.dateRange.endDatetime,
+      },
+      organizationId: values.organization,
+      categories: values.categories,
+    }).catch((e: Error) => {
+      console.error(e);
+    });
 
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError("");
-    setSuccess("");
-
-    const start_datetime = new Date(form_data.start_datetime);
-    const end_datetime = new Date(form_data.end_datetime);
-    const now = new Date();
-
-    // We need to validate the user's inputs
-    if (!form_data.name.trim()) {
-      setError("Name is required");
-      return;
-    }
-
-    if (!form_data.start_datetime || !form_data.end_datetime) {
-      setError("Both start and end dates are required");
-      return;
-    }
-    if (start_datetime < now) {
-      setError("Start date cannot be in the past");
-      return;
-    }
-
-    if (start_datetime > end_datetime) {
-      setError("End date must be same as or after the start date");
-      return;
-    }
-
-    if (!user_orgs.some((org) => org.id === form_data.organization_id)) {
-      setError("Invalid organization selected.");
-      return;
-    }
-
-    const error = await createListing(form_data);
-    setError(error);
-  };
+    toast.success('Listing created successfully!');
+  }
 
   return (
-    <div className="create-listing-form">
-      <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="name">Opportunity name:</label>
-          <br />
-          <input
-            type="text"
-            name="name"
-            id="name"
-            onChange={onChange}
-            value={form_data.name}
-            required
-          />
-          <br />
-        </div>
-
-        <div>
-          <label htmlFor="description">
-            About this opportunity (not required):
-          </label>
-          <br />
-          <input
-            type="text"
-            name="description"
-            id="description"
-            onChange={onChange}
-            value={form_data.description}
-          />
-          <br />
-        </div>
-
-        <div>
-          <label htmlFor="start_datetime">
-            Opprtunity start date and time (24hr):
-          </label>
-          <br />
-          <input
-            type="datetime-local"
-            name="start_datetime"
-            id="start_datetime"
-            onChange={onChange}
-            value={form_data.start_datetime}
-            required
-          />
-          <br />
-        </div>
-
-        <div>
-          <label htmlFor="end_datetime">
-            Opportunity end date and time (24hr):
-          </label>
-          <br />
-          <input
-            type="datetime-local"
-            name="end_datetime"
-            id="end_datetime"
-            onChange={onChange}
-            value={form_data.end_datetime}
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="organisation_id">
-            Select Organisation opportunity should be listed for:
-          </label>
-          <br />
-          <select
-            name="organisation_id"
-            id="organisation_id"
-            onChange={onChange}
-            value={form_data.organization_id}
-            required
-          >
-            <option value="" disabled>
-              --Select an organization--
-            </option>
-            {user_orgs.map((org) => (
-              <option key={org.id} value={org.id}>
-                {org.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {error && <p className={"text-red-600"}>{error}</p>}
-        {success && <p className={"text-red-600"}>{success}</p>}
-
-        <br />
-        <button type="submit">Submit</button>
-      </form>
+    <div className="self-center p-12 md:p-24 w-screen max-w-4xl">
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle>Create Volunteering Opportunity</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Title</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea {...field} />
+                    </FormControl>
+                    <FormDescription>Describe your volunteering opportunity.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="dateRange.startDatetime"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Start date & time</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={'outline'}
+                            className={Cn(
+                              'w-[240px] font-normal justify-start',
+                              field.value && 'text-muted-foreground',
+                            )}
+                          >
+                            <IconCalendarWeek className="h-4 w-4 opacity-50" />
+                            <p className="w-full flex justify-between">
+                              {field.value ? (
+                                <span>
+                                  {new Date(field.value).toLocaleDateString('en-GB', {
+                                    year: 'numeric',
+                                    month: '2-digit',
+                                    day: '2-digit',
+                                  })}
+                                </span>
+                              ) : (
+                                <span>Select date</span>
+                              )}
+                            </p>
+                            <IconClock className="h-4 w-4 opacity-50" />
+                            <p>
+                              {field.value ? (
+                                <span>
+                                  {new Date(field.value).toLocaleTimeString('en-GB', {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                  })}
+                                </span>
+                              ) : (
+                                <span>Select time</span>
+                              )}
+                            </p>
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="size-fit p-0" align="start">
+                        <input
+                          type="datetime-local"
+                          onChange={field.onChange}
+                          value={field.value}
+                          min={new Date().toISOString().slice(0, 16)}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormDescription>
+                      The start date and time of the volunteering opportunity.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="dateRange.endDatetime"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>End date & time</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={'outline'}
+                            className={Cn(
+                              'w-[240px] font-normal justify-start',
+                              field.value && 'text-muted-foreground',
+                            )}
+                          >
+                            <IconCalendarWeek className="h-4 w-4 opacity-50" />
+                            <p className="w-full flex justify-between">
+                              {field.value ? (
+                                <span>
+                                  {new Date(field.value).toLocaleDateString('en-GB', {
+                                    year: 'numeric',
+                                    month: '2-digit',
+                                    day: '2-digit',
+                                  })}
+                                </span>
+                              ) : (
+                                <span>Select date</span>
+                              )}
+                            </p>
+                            <IconClock className="h-4 w-4 opacity-50" />
+                            <p>
+                              {field.value ? (
+                                <span>
+                                  {new Date(field.value).toLocaleTimeString('en-GB', {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                  })}
+                                </span>
+                              ) : (
+                                <span>Select time</span>
+                              )}
+                            </p>
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <input
+                          type="datetime-local"
+                          onChange={field.onChange}
+                          value={field.value}
+                          min={form.getValues('dateRange.startDatetime')}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormDescription>
+                      The end date and time of the volunteering opportunity.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="organization"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Organization</FormLabel>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant={'outline'}
+                          className={Cn(
+                            'w-[240px] font-normal justify-start',
+                            field.value && 'text-muted-foreground',
+                          )}
+                        >
+                          {userOrgs.find((org) => org.id === field.value)?.name ||
+                            'Select an organization'}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        {userOrgs.map((org) => (
+                          <DropdownMenuItem key={org.id} onClick={() => field.onChange(org.id)}>
+                            {org.name}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="categories"
+                render={() => (
+                  <FormItem>
+                    <FormLabel className="text-sm md:text-base">
+                      Select Category(s) of Listing
+                    </FormLabel>
+                    <FormDescription className="text-sm">
+                      Select at least one category.
+                    </FormDescription>
+                    <div className="space-y-6 mt-4">
+                      <ScrollArea className="h-[300px] md:h-[500px]">
+                        {isLoading ? (
+                          <div>Loading categories...</div>
+                        ) : (
+                          categories.map((category) => (
+                            <div key={category.name}>
+                              <h2 className="font-semibold text-base mb-4">{category.name}</h2>
+                              <div className="flex flex-wrap space-x-2 space-y-2 mb-8">
+                                {category.subcategories.map((subcategory) => (
+                                  <FormField
+                                    key={subcategory.name}
+                                    control={form.control}
+                                    name="categories"
+                                    render={({ field }) => (
+                                      <FormItem key={subcategory.name}>
+                                        <FormControl>
+                                          <Toggle
+                                            size={'sm'}
+                                            variant={'outline'}
+                                            className="w-fit hover:cursor-pointer"
+                                            pressed={field.value?.includes(subcategory.id)}
+                                            onPressedChange={(checked) => {
+                                              const currentValues = field.value || [];
+                                              const newValues = checked
+                                                ? [...currentValues, subcategory.id]
+                                                : currentValues.filter(
+                                                    (value) => value !== subcategory.id,
+                                                  );
+                                              field.onChange(newValues);
+                                            }}
+                                          >
+                                            <TooltipProvider>
+                                              <Tooltip delayDuration={700}>
+                                                <TooltipTrigger asChild>
+                                                  <span>{subcategory.name}</span>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                  <p>{subcategory.description}</p>
+                                                </TooltipContent>
+                                              </Tooltip>
+                                            </TooltipProvider>
+                                          </Toggle>
+                                        </FormControl>
+                                      </FormItem>
+                                    )}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                          ))
+                        )}
+                        <ScrollBar />
+                      </ScrollArea>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" className="hover:cursor-pointer">
+                Create
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -1,20 +1,25 @@
-"use server";
+'use server';
 
-import prisma, { getUser } from "@/lib/prisma";
-import { forbidden, notFound, redirect } from "next/navigation";
+import prisma, { GetUser } from '@/lib/prisma';
+import { forbidden, notFound, redirect } from 'next/navigation';
 
-export default async function createApplication(
-  listing_id: number,
-  description: string | null
-) {
-  const user = await getUser();
+/**
+ * Creates a new application for a listing by the currently authenticated user.
+ * Checks user authentication, listing existence, and prevents duplicate applications.
+ * Triggers navigation or an error response based on the outcome.
+ * @param {number} listingId - The ID of the listing the user is applying for.
+ * @param {string | null} description - The user's description for the application.
+ * @returns {Promise<void>} This Server Action triggers a redirect on success or calls `forbidden()`/`notFound()` on failure. It does not return a value directly to the client.
+ */
+export default async function CreateApplication(listingId: number, description: string | null) {
+  const user = await GetUser();
 
   if (!user) {
     return forbidden();
   }
 
   const listing = await prisma.listing.findUnique({
-    where: { id: listing_id },
+    where: { id: listingId },
   });
 
   if (!listing) {
@@ -24,15 +29,15 @@ export default async function createApplication(
   // check there is not already an application for this listing by this user
   if (
     (await prisma.application.count({
-      where: { listing_id, user_id: user.id },
+      where: { listingId, userId: user.id },
     })) > 0
   ) {
     return forbidden();
   }
 
   await prisma.application.create({
-    data: { listing_id, user_id: user.id, description },
+    data: { listingId, userId: user.id, description },
   });
 
-  return redirect(`/listing/${listing_id}`);
+  return redirect(`/listing/${listingId}`);
 }

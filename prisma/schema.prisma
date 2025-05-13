@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma_client"
@@ -15,26 +9,94 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  user_id  String @unique
-  username String @unique
-
-  owner_of  Organization[] @relation("ownership")
-  member_of Organization[] @relation("membership")
-
-  application Application[]
+  id                      Int            @id @default(autoincrement())
+  userId                  String         @unique
+  username                String         @unique
+  email                   String?        @unique
+  profilePictureUrl       String?
+  profilePictureFileId    String?
+  backgroundPictureUrl    String?
+  backgroundPictureFileId String?
+  bio                     String?
+  totalPoints             Int            @default(0)
+  signupCompleted         Boolean        @default(false)
+  ownerOf                 Organization[] @relation("ownership")
+  memberOf                Organization[] @relation("membership")
+  application             Application[]
+  region                  Region?        @relation(fields: [regionId], references: [id])
+  regionId                Int?
+  follows                 Follow[]
+  interests               Subcategory[]
 }
 
 model Organization {
   id          Int     @id @default(autoincrement())
   name        String  @unique
   description String?
+  ownerId     Int
+  address     String?
+  postcode    String?
 
-  owner    User @relation("ownership", fields: [owner_id], references: [id])
-  owner_id Int
+  orgPictureUrl       String?
+  orgPictureFileId    String?
+  bannerPictureUrl    String?
+  bannerPictureFileId String?
 
-  members  User[]    @relation("membership")
-  listings Listing[]
+  followers Follow[]
+  listings  Listing[]
+  owner     User      @relation("ownership", fields: [ownerId], references: [id])
+  members   User[]    @relation("membership")
+  Region    Region?   @relation(fields: [regionId], references: [id])
+  regionId  Int?
+
+  @@index([ownerId])
+  @@index([regionId])
+}
+
+model Follow {
+  id             Int          @id @default(autoincrement())
+  userId         Int
+  organizationId Int
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  user           User         @relation(fields: [userId], references: [id])
+
+  @@unique([userId, organizationId])
+}
+
+model Application {
+  id          Int               @id @default(autoincrement())
+  description String?
+  status      ApplicationStatus @default(PENDING)
+  listing     Listing           @relation(fields: [listingId], references: [id])
+  user        User              @relation(fields: [userId], references: [id])
+  listingId   Int
+  userId      Int
+}
+
+model Listing {
+  id             Int           @id @default(autoincrement())
+  name           String
+  description    String?
+  startDatetime  DateTime
+  endDatetime    DateTime
+  status         ListingStatus @default(acceptingApplications)
+  pointValue     Int           @default(0)
+  scored         Boolean       @default(false)
+  organization   Organization  @relation(fields: [organizationId], references: [id])
+  organizationId Int
+
+  categories Subcategory[]
+
+  applications Application[]
+}
+
+model Region {
+  id     Int    @id @default(autoincrement())
+  name   String @unique
+  points Int    @default(0)
+
+  users         User[]
+  organizations Organization[]
 }
 
 enum ApplicationStatus {
@@ -43,26 +105,28 @@ enum ApplicationStatus {
   REJECTED
 }
 
-model Application {
-  id          Int               @id @default(autoincrement())
-  description String?
-  status      ApplicationStatus @default(PENDING)
-
-  listing    Listing @relation(fields: [listing_id], references: [id])
-  user       User    @relation(fields: [user_id], references: [id])
-  listing_id Int     @map("listingId")
-  user_id    Int     @map("userId")
+enum ListingStatus {
+  acceptingApplications
+  applicationsClosed
+  completed
+  cancelled
 }
 
-model Listing {
-  id             Int      @id @default(autoincrement())
-  name           String
-  description    String?
-  start_datetime DateTime
-  end_datetime   DateTime
+model Category {
+  id            Int           @id @default(autoincrement())
+  name          String        @unique
+  description   String?
+  subcategories Subcategory[]
+  listingId     Int?
+}
 
-  organization    Organization @relation(fields: [organization_id], references: [id])
-  organization_id Int
-
-  applications Application[]
+model Subcategory {
+  id                Int      @id @default(autoincrement())
+  name              String   @unique
+  description       String?
+  primaryCategoryId Int
+  primaryCategory   Category @relation(fields: [primaryCategoryId], references: [id])
+  users             User[]
+  Listing           Listing? @relation(fields: [listingId], references: [id])
+  listingId         Int?
 }

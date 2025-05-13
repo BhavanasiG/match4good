@@ -1,92 +1,85 @@
-"use server";
+'use server';
 
-import prisma, { getUser } from "@/lib/prisma";
-import { redirect } from "next/navigation";
-import { Organization } from "@/../generated/prisma_client";
+import prisma, { GetUser } from '@/lib/prisma';
+import { redirect } from 'next/navigation';
+import { Organization } from '@/../generated/prisma_client';
 
+/**
+ * Interface for the data expected when creating a new listing.
+ * @property {string} name - The name of the listing.
+ * @property {string} description - The description of the listing.
+ * @property {string} startDatetime - The start date and time string.
+ * @property {string} endDatetime - The end date and time string.
+ * @property {number} organizationId - The ID of the organization hosting the listing.
+ */
 export interface CreateListingData {
   name: string;
   description: string;
-  start_datetime: string;
-  end_datetime: string;
-  organization_id: number;
+  startDatetime: string;
+  endDatetime: string;
+  organizationId: number;
 }
 
 /**
- * This method returns an array containing the organizations a user is linked
- * with or null
- * @returns Array of organizations linked with user or null if no user logged in
+ * Fetches the organizations that the currently authenticated user owns or is a member of.
+ * Requires user authentication via GetUser.
+ * @returns {Promise<Organization[] | null>} A promise resolving to an array of organizations, or null if no user is logged in.
  */
 async function getUserOrganizations(): Promise<Organization[] | null> {
-  // Makes sense to do appropriate checks before checking for organizaions
-  // linked with user
-  const user = await getUser(true);
+  const user = await GetUser(true);
   if (!user) {
     return null;
   }
 
-  // We use a set for de-duplication as it naturally has unique elements
-  const user_orgs = [...new Set([...user.owner_of, ...user.member_of])];
+  const userOrgs = [...new Set([...user.ownerOf, ...user.memberOf])];
 
-  return user_orgs;
+  return userOrgs;
 }
 
 /**
- * Creates form and handles form submission for creating volunteer oppportunity
- * by validating the input fields
- *
- * Completes/Ensures these **server-side** actions:
- * - Ensures the name field is not empty.
- * - Checks that both start and end dates and times are provided.
- * - Validates that the end date and time is the same as or
- * after the start date and time.
- * - Displays an appropriate error message if validation fails.
- * - Logs the form data to the console if all validations pass
- * and passes to the server to create new record in database
- * - Listing is linked to one of the user's organisation
- * @param form_data Form data inputted/submitted by user.
- * @returns redirection to new created listing (if valid data inputted),
- * else returns an error message.
+ * Server Action to create a new volunteer listing.
+ * Performs basic validation and creates the listing linked to a user's organization.
+ * @param {CreateListingData} formData - The data submitted from the new listing form.
+ * @returns {Promise<string | void>} Returns a string error message on validation failure, or triggers a redirect on success.
  */
-export async function createListing(form_data: CreateListingData) {
-  if (!form_data.name.trim()) {
-    return "Name is required";
+export async function CreateListing(formData: CreateListingData) {
+  if (!formData.name.trim()) {
+    return 'Name is required';
   }
 
-  const start_datetime = new Date(form_data.start_datetime);
-  const end_datetime = new Date(form_data.end_datetime);
+  const startDatetime = new Date(formData.startDatetime);
+  const endDatetime = new Date(formData.endDatetime);
   const now = new Date();
 
-  if (!form_data.start_datetime || !form_data.end_datetime) {
-    return "Both start and end dates are required";
+  if (!formData.startDatetime || !formData.endDatetime) {
+    return 'Both start and end dates are required';
   }
 
-  if (start_datetime < now) {
-    return "Start date cannot be in the past";
+  if (startDatetime < now) {
+    return 'Start date cannot be in the past';
   }
 
-  if (start_datetime > end_datetime) {
-    return "End date must be same as or after the start date";
+  if (startDatetime > endDatetime) {
+    return 'End date must be the same as or after the start date';
   }
 
-  const user_orgs = await getUserOrganizations();
-  if (!user_orgs || user_orgs.length === 0) {
-    return "No organizations associated with account";
+  const userOrgs = await getUserOrganizations();
+  if (!userOrgs || userOrgs.length === 0) {
+    return 'No organizations associated with the account';
   }
 
-  if (!user_orgs.some((org) => org.id === form_data.organization_id)) {
-    return "Invalid organization selected.";
+  if (!userOrgs.some((org) => org.id === formData.organizationId)) {
+    return 'Invalid organization selected.';
   }
 
-  // We have to manually destructure data as we have converted the datetime
-  // from a string to a date object since Prisma expects Date objects
+  // Save the listing
   const listing = await prisma.listing.create({
     data: {
-      name: form_data.name,
-      description: form_data.description,
-      start_datetime: start_datetime,
-      end_datetime: start_datetime,
-      organization_id: form_data.organization_id,
+      name: formData.name,
+      description: formData.description,
+      startDatetime: startDatetime,
+      endDatetime: endDatetime,
+      organizationId: formData.organizationId,
     },
   });
 
