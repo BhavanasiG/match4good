@@ -175,7 +175,7 @@ const orgProfilePicturePlaceholders = [
   'https://picsum.photos/id/202/400/400',
   'https://picsum.photos/id/203/400/400',
   'https://picsum.photos/id/204/400/400',
-  'https://picsum.photos/id/205/400/400',
+  // 'https://picsum.photos/id/205/400/400',
 ];
 
 const orgBannerPicturePlaceholders = [

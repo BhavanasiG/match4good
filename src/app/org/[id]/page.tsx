@@ -47,6 +47,10 @@ export default async function App(props: { params: t_params }) {
     },
   });
 
+  if (org === null) {
+    notFound();
+  }
+
   const listings = await prisma.listing.findMany({
     where: {
       organizationId: org_id,
@@ -54,15 +58,15 @@ export default async function App(props: { params: t_params }) {
     include: { organization: true, categories: true },
   });
 
-  if (org === null) {
-    notFound();
-  }
+  const region = org.regionId
+    ? await prisma.region.findUnique({
+        where: {
+          id: org.regionId,
+        },
+      })
+    : null;
 
-  const region = await prisma.region.findUnique({
-    where: {
-      id: org.regionId || undefined,
-    },
-  });
+  console.log(org);
 
   return (
     <div className="p-5 md:p-24 space-y-5 w-screen max-w-5xl flex flex-col justify-center self-center">
