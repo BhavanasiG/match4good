@@ -122,7 +122,7 @@ const startBroadcastingUpdates = () => {
   }
 
   updateInterval = setInterval(async () => {
-    console.log('Fetching and broadcasting combined leaderboard update...');
+    // console.log('Fetching and broadcasting combined leaderboard update...');
     const latestLeaderboardData = await fetchCombinedLeaderboardData();
 
     // Send the update to all connected clients
